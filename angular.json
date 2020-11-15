@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "lpdv"
+  "defaultProject": "lpdv",
+  "cli": {
+    "analytics": false
+  }
 }

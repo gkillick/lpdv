@@ -1,11 +1,13 @@
 const { app, BrowserWindow } = require('electron')
 const url = require("url");
 const path = require("path");
+const isDev = require('electron-is-dev')
 
 let mainWindow
 
 function createWindow() {
     mainWindow = new BrowserWindow({
+        backgroundColor: '#FFF',
         width: 800,
         height: 600,
         webPreferences: {
@@ -13,13 +15,19 @@ function createWindow() {
         }
     })
 
-    mainWindow.loadURL(
-        url.format({
-            pathname: path.join(__dirname, `/dist/lpdv/index.html`),
-            protocol: "file:",
-            slashes: true
-        })
-    );
+    if(isDev){
+        mainWindow.loadURL('http://localhost:4200/index.html')
+    }else{
+        mainWindow.loadURL(
+            url.format({
+                pathname: path.join(__dirname, `/dist/lpdv/index.html`),
+                protocol: "file:",
+                slashes: true
+            })
+        );
+    }
+
+
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 

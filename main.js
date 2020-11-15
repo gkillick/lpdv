@@ -3,6 +3,11 @@ const url = require("url");
 const path = require("path");
 const isDev = require('electron-is-dev')
 
+try {
+    require('electron-reloader')(module)
+  } catch (_) {}
+
+
 let mainWindow
 
 function createWindow() {

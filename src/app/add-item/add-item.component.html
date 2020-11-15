@@ -1,0 +1,14 @@
+<H1>Add a new Item</H1>
+<form [formGroup]="myForm" (ngSubmit)="submitHandler()">
+
+    <mat-form-field>
+        <input matInput placeholder="name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="type" formControlName="type">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="price" formControlName="price">
+    </mat-form-field>
+    <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Add Item</button>
+</form>

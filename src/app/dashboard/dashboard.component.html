@@ -1,0 +1,58 @@
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Items for Date</h2><button class="btn btn-primary">Tomorrow</button>
+
+            <table mat-table [dataSource]="items" matSort class="mat-elevation-z8 mt-3 table-max">
+
+                <!-- Item name -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                    <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+                </ng-container>
+
+                <!-- Count -->
+                <ng-container matColumnDef="count">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
+                    <td mat-cell *matCellDef="let item"> {{item.count}} </td>
+                </ng-container>
+
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+        </div>
+        <div class="col-sm">
+            <h2>Orders for Date</h2>
+
+            <table mat-table [dataSource]="orders" matSort class="mat-elevation-z8 mt-3 table-max">
+                <ng-container matColumnDef="orderNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Order No. </th>
+                    <td mat-cell *matCellDef="let item"> {{item.orderNumber}} </td>
+                </ng-container>
+                <!-- Item name -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                    <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+                </ng-container>
+
+                <!-- Count -->
+                <ng-container matColumnDef="summary">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
+                    <td mat-cell *matCellDef="let item"> {{item.summary}} </td>
+                </ng-container>
+                <ng-container matColumnDef="details">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Details </th>
+                    <td mat-cell *matCellDef="let item"> <button class="btn btn-primary">View</button> </td>
+                </ng-container>
+
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedOrderColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedOrderColumns;"></tr>
+            </table>
+        </div>
+    </div>
+</div>

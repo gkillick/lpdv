@@ -1,8 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ɵBrowserDomAdapter } from '@angular/platform-browser';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table'
 import { AddItemComponent } from '../add-item/add-item.component';
 import { ItemsService } from '../services/items.service';
+import {Item} from '../models/item.model'
 
 @Component({
   selector: 'app-items',
@@ -13,18 +15,16 @@ export class ItemsComponent implements OnInit {
 
   constructor(private itemService: ItemsService,public dialog: MatDialog, private changeDetection: ChangeDetectorRef) { }
 
-  items = []
+  dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>()
 
   ngOnInit(): void {
 
+    this.dataSource.data = this.itemService.getItems()
 
-    this.items = this.itemService.getItems()
 
-    this.itemService.itemChangedSubject.subscribe(items => {
-      
-      console.log(items)
+    this.itemService.itemChangedSubject.subscribe((items: Item[]) => {
 
-      this.items = items
+      this.dataSource.data = items
 
       this.changeDetection.detectChanges()
     })
@@ -42,8 +42,6 @@ export class ItemsComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
-
-  
 
 }
 

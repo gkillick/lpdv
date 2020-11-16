@@ -32,6 +32,8 @@ export class ItemsService {
 
   }
 
+
+
   getStoredData(){
 
     this.ipc.on(RESPONSE_KEYS, (event, keys) => {
@@ -44,6 +46,7 @@ export class ItemsService {
 
     this.ipc.on(RESPONSE_ITEM, (event, data) => {
       this.items.push(data)
+      this.itemChangedSubject.next(this.items)
     })
 
     this.ipc.send(GET_KEYS)

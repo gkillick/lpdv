@@ -1,14 +1,15 @@
-const { app, BrowserWindow, ipcMain} = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const url = require("url");
 const path = require("path");
 const isDev = require('electron-is-dev')
 
 try {
     require('electron-reloader')(module)
-  } catch (_) {}
+} catch (_) {}
 
 
 let mainWindow
+
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -20,9 +21,9 @@ function createWindow() {
         }
     })
 
-    if(isDev){
+    if (isDev) {
         mainWindow.loadURL('http://localhost:4200/index.html')
-    }else{
+    } else {
         mainWindow.loadURL(
             url.format({
                 pathname: path.join(__dirname, `/dist/lpdv/index.html`),
@@ -52,16 +53,19 @@ app.on('activate', function() {
 })
 
 
-const {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} = require('./src/message-types.js')
+const { SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM } = require('./src/message-types.js')
 const storage = require('electron-json-storage')
+console.log(storage.getDefaultDataPath())
+console.log("HI")
 
 ipcMain.on(SENDING_ITEM, (event, arg) => {
 
-    const {key, data} = arg
+    const { key, data } = arg
 
     storage.set(key, data, (error) => {
 
         console.log('saved data')
+
 
     })
 
@@ -70,10 +74,10 @@ ipcMain.on(SENDING_ITEM, (event, arg) => {
 
 ipcMain.on(GET_KEYS, (event, arg) => {
 
-   
+
     storage.keys((error, keys) => {
         if (error) throw error
-        
+
         event.reply(RESPONSE_KEYS, keys)
     })
 })
@@ -82,7 +86,7 @@ ipcMain.on(REQUEST_ITEM, (event, key) => {
 
     storage.get(key, (error, data) => {
 
-        if(error) throw error;
+        if (error) throw error;
 
         event.reply(RESPONSE_ITEM, data)
     })

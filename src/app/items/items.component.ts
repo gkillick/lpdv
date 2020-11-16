@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ɵBrowserDomAdapter } from '@angular/platform-browser';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
+import { ItemsService } from '../services/items.service';
 
 @Component({
   selector: 'app-items',
@@ -10,14 +11,20 @@ import { AddItemComponent } from '../add-item/add-item.component';
 })
 export class ItemsComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(private itemService: ItemsService,public dialog: MatDialog) { }
+
+  items = []
 
   ngOnInit(): void {
+
+    this.items = this.itemService.getItems()
+
+    this.itemService.itemChangedSubject.subscribe(items => {
+      this.items = items
+    })
+
   }
 
-  items = [
-    {name: "bread", type: "Baked good", price: "5.39" }
-  ]
   displayedItemColumns = ["name", "type", "price"]
 
   openDialog(): void {

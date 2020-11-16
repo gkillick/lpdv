@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { NewOrderComponent } from '../new-order/new-order.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -23,5 +25,16 @@ export class DashboardComponent implements OnInit {
   ]
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "name", "summary", "details"]
+
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(NewOrderComponent, {
+      width: '80%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 
 }

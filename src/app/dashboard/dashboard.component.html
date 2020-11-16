@@ -1,6 +1,7 @@
 <div class="container-fluid mt-3">
     <div class="row">
         <div class="col-sm">
+            <button (click)="openDialog()" class="btn btn-primary">New Order</button>
             <h2>Items for Date</h2><button class="btn btn-primary">Tomorrow</button>
 
             <table mat-table [dataSource]="items" matSort class="mat-elevation-z8 mt-3 table-max">

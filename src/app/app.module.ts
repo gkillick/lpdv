@@ -18,6 +18,9 @@ import { AddItemComponent } from './add-item/add-item.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { NewOrderComponent } from './new-order/new-order.component';
+
+
 
 
 @NgModule({
@@ -26,6 +29,7 @@ import { MatInputModule } from '@angular/material/input';
     DashboardComponent,
     ItemsComponent,
     AddItemComponent,
+    NewOrderComponent,
   ],
   imports: [
     BrowserModule,

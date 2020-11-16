@@ -26,6 +26,7 @@
         "@angular/router": "~11.0.0",
         "bootstrap": "^4.5.3",
         "electron-is-dev": "^1.2.0",
+        "electron-json-storage": "^4.3.0",
         "electron-reloader": "^1.0.1",
         "ngx-bootstrap": "^6.2.0",
         "rxjs": "~6.6.0",

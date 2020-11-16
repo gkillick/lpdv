@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain} = require('electron')
 const url = require("url");
 const path = require("path");
 const isDev = require('electron-is-dev')
@@ -49,4 +49,41 @@ app.on('window-all-closed', function() {
 
 app.on('activate', function() {
     if (mainWindow === null) createWindow()
+})
+
+
+const {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} = require('./src/message-types.js')
+const storage = require('electron-json-storage')
+
+ipcMain.on(SENDING_ITEM, (event, arg) => {
+
+    const {key, data} = arg
+
+    storage.set(key, data, (error) => {
+
+        console.log('saved data')
+
+    })
+
+
+})
+
+ipcMain.on(GET_KEYS, (event, arg) => {
+
+   
+    storage.keys((error, keys) => {
+        if (error) throw error
+        
+        event.reply(RESPONSE_KEYS, keys)
+    })
+})
+
+ipcMain.on(REQUEST_ITEM, (event, key) => {
+
+    storage.get(key, (error, data) => {
+
+        if(error) throw error;
+
+        event.reply(RESPONSE_ITEM, data)
+    })
 })

@@ -1,1 +1,25 @@
-<p>new-order works!</p>
+<h1>New Order</h1>
+
+<form [formGroup]="myForm" (ngSubmit)="submitHandler()">
+    <div class="row">
+        <mat-form-field>
+            <input matInput placeholder="name" formControlName="name">
+        </mat-form-field>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <h4>Breads</h4>
+            <mat-form-field class="w-100" *ngFor="let item of items.breads">
+                <input type="number" matInput placeholder=" {{item}} " formControlName="{{item}}">
+            </mat-form-field>
+        </div>
+        <div class="col-sm">
+            <h4>Breads</h4>
+            <mat-form-field class="w-100" *ngFor="let item of items.baked_goods">
+                <input type="number" matInput placeholder=" {{item}} " formControlName="{{item}}">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>
+</form>

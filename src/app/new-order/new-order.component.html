@@ -14,9 +14,9 @@
             </mat-form-field>
         </div>
         <div class="col-sm">
-            <h4>Breads</h4>
+            <h4>Baked Goods</h4>
             <mat-form-field class="w-100" *ngFor="let item of items.baked_goods">
-                <input type="number" matInput placeholder=" {{item}} " formControlName="{{item}}">
+                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
             </mat-form-field>
         </div>
     </div>

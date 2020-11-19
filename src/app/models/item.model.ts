@@ -11,12 +11,12 @@ export class Item{
 
 
 export class Order{
-    constructor(public id:number, public name:string){}
+    constructor(public name:string, public itemOrders: ItemOrder[]){}
 }
 export class ItemOrder{
     constructor(
-        public datype: string,
         public item: Item,
+        public amount: number
        
         
 

@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import {Item} from '../models/item.model'
 import {IpcRenderer} from 'electron'
 import {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} from '../../message-types'
+import { DataService } from './data.service';
 //import storage from 'electron-json-storage'
 
  
@@ -16,57 +17,36 @@ export class ItemsService {
   itemChangedSubject: Subject<Item[]> = new Subject<Item[]>()
   ipc: IpcRenderer
 
-  constructor() { 
 
-    if ((<any>window).require) {
-      try {
-        this.ipc = (<any>window).require('electron').ipcRenderer;
-      } catch (e) {
-        throw e;
-      }
-    } else {
-      console.warn('App not running inside Electron!');
-    }
+  itemTypesChangedSubject: Subject<any> = new Subject<any>()
 
-  
+  constructor(private dataService: DataService) { 
 
   }
 
 
-
-  getStoredData(){
-
-    this.ipc.on(RESPONSE_KEYS, (event, keys) => {
-
-      for(let key of keys){
-        this.ipc.send(REQUEST_ITEM, key)
-      }
-
-    })
-
-    this.ipc.on(RESPONSE_ITEM, (event, data) => {
-      this.items.push(data)
-      this.itemChangedSubject.next(this.items)
-    })
-
-    this.ipc.send(GET_KEYS)
-  }
 
 
 
 
   addItem(item: Item){
 
+    console.log(item)
     this.items.push(item)
     this.itemChangedSubject.next(this.items)
 
-    const key: string = (this.items.length - 1).toString()
+    const key: string = this.dataService.idTraker.toString()
 
-    console.log(key)
+    const itemWithId = {
+      key: key, 
+        payload: {
+          type: 'ITEM',
+          data : item
+      }
+    }
 
-    const itemWithId = {key: key, data: item}
 
-    this.ipc.send(SENDING_ITEM,  itemWithId)
+    this.dataService.ipc.send(SENDING_ITEM,  itemWithId)
 
   }
 

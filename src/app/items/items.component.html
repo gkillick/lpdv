@@ -1,7 +1,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm mt-3">
-            <h4>Items</h4>
             <button (click)="openDialog()" class="btn btn-primary">Add Item</button>
             <table mat-table [dataSource]="dataSource" matSort class="table-max mat-elevation-z8 mt-3 table-max">
                 <ng-container matColumnDef="name">

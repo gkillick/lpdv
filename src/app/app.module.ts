@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-
-
-
+import {MatSelectModule} from '@angular/material/select';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +17,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NewOrderComponent } from './new-order/new-order.component';
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 
 
@@ -42,7 +41,9 @@ import { NewOrderComponent } from './new-order/new-order.component';
     MatTableModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
+    MatFormFieldModule
 
 
   ],

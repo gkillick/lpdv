@@ -27,7 +27,7 @@ export class NewOrderComponent implements OnInit {
   }
   
 
-  constructor(private dataService: DataService, private ordersServie: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
+  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
 
 
   ngOnInit(): void {
@@ -78,7 +78,7 @@ export class NewOrderComponent implements OnInit {
     }
     console.log(order)
 
-    this.ordersServie.addOrder(order)
+    this.dataService.addOrder(order)
     
 
     try {

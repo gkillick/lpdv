@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Item } from '../models/item.model';
+import { DataService } from '../services/data.service';
 import { ItemsService } from '../services/items.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class AddItemComponent implements OnInit {
     {value: 'pains', viewValue: 'Pains'},
   ];
 
-  constructor(private itemService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }
+  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
@@ -39,7 +40,7 @@ export class AddItemComponent implements OnInit {
 
     try {
       //use this object to create product
-      this.itemService.addItem(formValue)
+      this.dataService.addItem(formValue)
       console.log(formValue)
       this.success = true;
       this.dialogRef.close()

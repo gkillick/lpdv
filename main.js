@@ -53,7 +53,8 @@ app.on('activate', function() {
 })
 
 
-const { SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM } = require('./src/message-types.js')
+const {SENDING_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER}  = require('./src/message-types.js')
+
 const storage = require('electron-json-storage')
 console.log(storage.getDefaultDataPath())
 console.log("HI")
@@ -73,15 +74,26 @@ ipcMain.on(SENDING_ITEM, (event, arg) => {
 
 })
 
-ipcMain.on(GET_KEYS, (event, arg) => {
+ipcMain.on(GET_KEYS_ITEMS, (event, arg) => {
 
 
     storage.keys((error, keys) => {
         if (error) throw error
 
-        event.reply(RESPONSE_KEYS, keys)
+        event.reply(RESPONSE_KEYS_ITEMS, keys)
     })
 })
+
+ipcMain.on(GET_KEYS_ORDERS, (event, arg) => {
+
+
+    storage.keys((error, keys) => {
+        if (error) throw error
+
+        event.reply(RESPONSE_KEYS_ORDERS, keys)
+    })
+})
+
 
 ipcMain.on(REQUEST_ITEM, (event, key) => {
 
@@ -90,5 +102,15 @@ ipcMain.on(REQUEST_ITEM, (event, key) => {
         if (error) throw error;
 
         event.reply(RESPONSE_ITEM, payload)
+    })
+})
+
+ipcMain.on(REQUEST_ORDER, (event, key) => {
+
+    storage.get(key, (error, payload) => {
+
+        if (error) throw error;
+
+        event.reply(RESPONSE_ORDER, payload)
     })
 })

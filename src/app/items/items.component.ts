@@ -22,12 +22,6 @@ export class ItemsComponent implements OnInit {
 
     this.dataSource.data = this.dataService.items
 
-    this.itemService.itemChangedSubject.subscribe((items: Item[]) => {
-      this.dataSource.data = items
-
-      this.changeDetection.detectChanges()
-    })
-
 
     this.dataService.itemsChanged.subscribe((items: Item[]) => {
 

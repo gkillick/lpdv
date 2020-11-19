@@ -44,13 +44,14 @@ export class NewOrderComponent implements OnInit {
 
 
 
-
+    var tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate()+1);
 
     this.myForm = this.fb.group({
       name: ['', Validators.required],
       client_number: ['', Validators.required],
       telephone: ['', Validators.required],
-      date: ['', Validators.required],
+      date: [tomorrow, Validators.required],
     });
     for (var key in this.items) {
       this.items[key].forEach(element => {

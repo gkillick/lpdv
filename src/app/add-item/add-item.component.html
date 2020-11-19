@@ -4,8 +4,13 @@
     <mat-form-field>
         <input matInput placeholder="name" formControlName="name">
     </mat-form-field>
-    <mat-form-field>
-        <input matInput placeholder="type of item" formControlName="item_type">
+    <mat-form-field appearance="fill">
+        <mat-label>Type of item</mat-label>
+        <mat-select formControlName="item_type">
+            <mat-option *ngFor="let type of types" [value]="type.value">
+                {{type.viewValue}}
+            </mat-option>
+        </mat-select>
     </mat-form-field>
     <mat-form-field>
         <input matInput placeholder="price" formControlName="price">

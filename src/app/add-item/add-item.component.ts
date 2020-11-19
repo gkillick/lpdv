@@ -16,6 +16,12 @@ export class AddItemComponent implements OnInit {
   loading = false;
   success = false;
 
+  //types of foods
+  types: any[] = [
+    {value: 'viennoiserie', viewValue: 'Viennoiserie'},
+    {value: 'pains', viewValue: 'Pains'},
+  ];
+
   constructor(private itemService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }
 
   ngOnInit(): void {

@@ -22,8 +22,8 @@ export class NewOrderComponent implements OnInit {
   success = false;
 
   items = {
-    "baked_goods": [],
-    "breads": []
+    "viennoiserie": [],
+    "pains": []
   }
   
 
@@ -35,10 +35,10 @@ export class NewOrderComponent implements OnInit {
 
     for(let item of this.dataService.items){
       console.log(item.item_type)
-      if(item.item_type === "baked_goods"){
-        this.items["baked_goods"].push(item)
-      }else if(item.item_type === "breads"){
-        this.items["breads"].push(item)
+      if(item.item_type === "viennoiserie"){
+        this.items["viennoiserie"].push(item)
+      }else if(item.item_type === "pains"){
+        this.items["pains"].push(item)
       }
     }
 
@@ -48,6 +48,9 @@ export class NewOrderComponent implements OnInit {
 
     this.myForm = this.fb.group({
       name: ['', Validators.required],
+      client_number: ['', Validators.required],
+      telephone: ['', Validators.required],
+      date: ['', Validators.required],
     });
     for (var key in this.items) {
       this.items[key].forEach(element => {

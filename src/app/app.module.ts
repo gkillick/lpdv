@@ -18,6 +18,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NewOrderComponent } from './new-order/new-order.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 
 
@@ -43,7 +46,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule
 
 
   ],

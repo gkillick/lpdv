@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NewOrderComponent, {
-      width: '80%',
+      width: '100%',
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -15,7 +15,6 @@ export class DashboardComponent implements OnInit {
   constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef ) { }
 
   ngOnInit(): void {
-    console.log('hello')
     this.orderTraker = 1
 
     this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
@@ -38,7 +37,6 @@ export class DashboardComponent implements OnInit {
 
   formatOrder(order){
 
-      console.log(order)
       var description = ""
       for(let item_order of order.itemOrders){
         description = description + item_order.item.name + " "

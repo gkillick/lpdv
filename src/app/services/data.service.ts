@@ -37,6 +37,7 @@ export class DataService {
 
     this.orders.push(order)
     this.orderChanged.next(this.orders)
+    console.log('order changed')
 
     const key: string = this.idTraker.toString()
 

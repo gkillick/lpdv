@@ -2,8 +2,19 @@
     <div class="row">
         <div class="col-sm">
             <button (click)="openDialog()" class="btn btn-primary">New Order</button>
-            <h2>Items for Date</h2><button class="btn btn-primary">Tomorrow</button>
 
+            <button class="ml-1 btn btn-secondary">Tomorrow</button>
+            <mat-form-field class="ml-2 mr-1">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm mt-3">
+            <h4>Item Quantities</h4>
             <table mat-table [dataSource]="items" matSort class="mat-elevation-z8 mt-3 table-max">
 
                 <!-- Item name -->
@@ -25,8 +36,8 @@
             </table>
 
         </div>
-        <div class="col-sm">
-            <h2>Orders for Date</h2>
+        <div class="col-sm-9 mt-3">
+            <h4>Orders</h4>
 
             <table mat-table [dataSource]="orders" matSort class="mat-elevation-z8 mt-3 table-max">
                 <ng-container matColumnDef="orderNumber">

@@ -15,6 +15,8 @@ export class DataService {
   orders: Order[] = []
   orderChanged: Subject<Order[]> = new Subject<Order[]>()
   idTraker = 0
+  orderCounts = []
+  orderCountChanged: Subject<any> = new Subject<any>()
 
 
   constructor() { 
@@ -52,6 +54,30 @@ export class DataService {
     this.idTraker++
 
     this.ipc.send(SENDING_ITEM,  itemWithId)
+
+
+    for(let item of this.items){
+      for(let itemOrder of order.itemOrders){
+        if(item.name === itemOrder.item.name){
+          var foundItemType = false
+          for(let orderCount of this.orderCounts){
+            if(orderCount['name'] === item.name){
+              foundItemType = true
+              orderCount['count'] += +itemOrder.amount
+            }
+          }
+          if(!foundItemType){
+            this.orderCounts.push({name: item.name, count: +itemOrder.amount})
+          }
+        }
+      }
+    }
+
+    this.orderCountChanged.next(this.orderCounts)
+
+    console.log(this.orderCounts)
+
+
 
   }
 
@@ -128,21 +154,32 @@ export class DataService {
       const {type, data} = msg 
 
       if(type === "ORDER"){
-        console.log(data)
         const order =new Order(data.name, [])
         for(let item of this.items){
           for(let itemOrder of data.itemOrders){
-            console.log(itemOrder)
             if(item.name === itemOrder.item.name){
               order.itemOrders.push(new ItemOrder(item, +itemOrder.amount))
+              var foundItemType = false
+              for(let orderCount of this.orderCounts){
+                if(orderCount['name'] === item.name){
+                  foundItemType = true
+                  orderCount['count'] += +itemOrder.amount
+                }
+              }
+              if(!foundItemType){
+                this.orderCounts.push({name: item.name, count: +itemOrder.amount})
+              }
             }
           }
         }
         this.orders.push(order)
         this.orderChanged.next(this.orders)
+        this.orderCountChanged.next(this.orderCounts)
       }
 
       console.log(this.orders)
+
+      console.log(this.orderCounts)
     })
 
 

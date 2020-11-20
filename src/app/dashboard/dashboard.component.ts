@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
 
@@ -16,6 +17,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderTraker = 1
+    this.items.data = this.dataService.orderCounts
 
     this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
 
@@ -26,10 +28,16 @@ export class DashboardComponent implements OnInit {
 
       this.changeDetection.detectChanges()
     })
+
+    this.dataService.orderCountChanged.subscribe(itemCount => {
+      this.items.data = itemCount
+
+      this.changeDetection.detectChanges()
+    })
   }
 
 
-  items =  [{name: "donut", count: 31}, {name: "bread", count: 42}];
+  items: MatTableDataSource<any> = new MatTableDataSource<any>()
   orders = []
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "name", "summary", "details"]

@@ -12,8 +12,27 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Tax classification</mat-label>
+        <mat-select formControlName="tax_catagory">
+            <mat-option *ngFor="let type of tax_classifications" [value]="type.value">
+                {{type.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-select formControlName="sliced">
+            <mat-option [value]="false">
+                No Slice Option
+            </mat-option>
+            <mat-option [value]="true">
+                Include sliced Option
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     <mat-form-field>
         <input matInput placeholder="price" formControlName="price">
     </mat-form-field>
+
     <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Add Item</button>
 </form>

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {SENDING_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER} from '../../message-types'
 import {IpcRenderer} from 'electron'
-import { Item, ItemOrder, Order } from '../models/item.model';
 import { Subject } from 'rxjs';
+import { Item } from '../models/item.model';
+import { Order } from '../models/order.model';
+import { ItemOrder } from '../models/item_order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +42,7 @@ export class DataService {
     this.orders.push(order)
     this.orderChanged.next(this.orders)
     console.log('order changed')
+    console.log(order)
 
     const key: string = this.idTraker.toString()
 
@@ -138,7 +141,8 @@ export class DataService {
       const {type, data} = msg 
 
       if(type === "ITEM"){
-        const item = new Item(data.name, data.item_type, data.price)
+        //data.name, data.item_type, data.price
+        const item = new Item(null,data.name, data.item_type, data.price, data.sliced, data.tax_catagory)
         this.items.push(item)
         this.itemsChanged.next(this.items)
         console.log(this.items)
@@ -154,11 +158,14 @@ export class DataService {
       const {type, data} = msg 
 
       if(type === "ORDER"){
-        const order =new Order(data.name, [])
+
+        //find id for order here and pass id to item order
+        const order = new Order(null, data.user_id, data.first_name, data.last_name, data.telephone,data.date, [])
+        
         for(let item of this.items){
           for(let itemOrder of data.itemOrders){
             if(item.name === itemOrder.item.name){
-              order.itemOrders.push(new ItemOrder(item, +itemOrder.amount))
+              order.itemOrders.push(new ItemOrder(null, null, item, +itemOrder.amount, itemOrder.sliced))
               var foundItemType = false
               for(let orderCount of this.orderCounts){
                 if(orderCount['name'] === item.name){
@@ -177,9 +184,7 @@ export class DataService {
         this.orderCountChanged.next(this.orderCounts)
       }
 
-      console.log(this.orders)
 
-      console.log(this.orderCounts)
     })
 
 

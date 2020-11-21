@@ -4,7 +4,10 @@
     <div class="row">
         <div class="col-sm">
             <mat-form-field>
-                <input matInput placeholder="name" formControlName="name">
+                <input matInput placeholder="First Name" formControlName="first_name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Last Name" formControlName="last_name">
             </mat-form-field>
 
             <mat-form-field>
@@ -16,10 +19,11 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-
+            <!-- Don't think we need this field
             <mat-form-field>
                 <input type="telephone" matInput placeholder="Numéro client" formControlName="client_number">
             </mat-form-field>
+            -->
         </div>
     </div>
     <div class="row">

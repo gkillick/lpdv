@@ -3,7 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef } from '@angular/material/dialog';
 import { ɵELEMENT_PROBE_PROVIDERS__POST_R3__ } from '@angular/platform-browser';
 import { Item } from 'electron/main';
-import { ItemOrder, Order } from '../models/item.model';
+import { getMaxListeners } from 'process';
+import { ItemOrder } from '../models/item_order.model';
+import { Order } from '../models/order.model';
+import { User } from '../models/user.model';
 import { DataService } from '../services/data.service';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
@@ -25,6 +28,7 @@ export class NewOrderComponent implements OnInit {
     "viennoiserie": [],
     "pains": []
   }
+  current_user = new User(1, "Montreal lpdv", "gkillick@gmail.com")
   
 
   constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
@@ -48,8 +52,9 @@ export class NewOrderComponent implements OnInit {
     tomorrow.setDate(new Date().getDate()+1);
 
     this.myForm = this.fb.group({
-      name: ['', Validators.required],
-      client_number: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      //client_number: ['', Validators.required],
       telephone: ['', Validators.required],
       date: [tomorrow, Validators.required],
     });
@@ -67,17 +72,15 @@ export class NewOrderComponent implements OnInit {
     this.loading = true;
 
     const formValue = this.myForm.value;
-
-    const order = new Order(formValue.name, [])
-
+    var itemOrders = [];
+    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, this.formatDate(formValue.date), [])
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
         console.log(formValue[item.name])
-        order.itemOrders.push(new ItemOrder(item, formValue[item.name])) 
+        order.itemOrders.push(new ItemOrder(null,null, item, formValue[item.name], false)) 
       }
     }
-    console.log(order)
 
     this.dataService.addOrder(order)
     
@@ -93,6 +96,20 @@ export class NewOrderComponent implements OnInit {
 
     this.loading = false;
     
+  }
+
+  formatDate(date: Date): string{
+    var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+    if (month.length < 2) 
+      month = '0' + month;
+    if (day.length < 2) 
+      day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 
 }

@@ -22,6 +22,11 @@ export class AddItemComponent implements OnInit {
     {value: 'viennoiserie', viewValue: 'Viennoiserie'},
     {value: 'pains', viewValue: 'Pains'},
   ];
+  tax_classifications: any[] = [
+    {value: 'normal', viewValue: 'normal'},
+    {value: 'no_tax_6', viewValue: 'tax before 6'},
+    {value: 'no_tax', viewValue: 'no tax'},
+  ]
 
   constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }
 
@@ -30,6 +35,8 @@ export class AddItemComponent implements OnInit {
       name: ['', Validators.required],
       item_type: ['', Validators.required],
       price: ['', Validators.required],
+      sliced: ['', Validators.required],
+      tax_catagory: ['', Validators.required]
     });
   }
 

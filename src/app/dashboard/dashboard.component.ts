@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
   items: MatTableDataSource<any> = new MatTableDataSource<any>()
   orders = []
   displayedColumns = ["name", "count"];
-  displayedOrderColumns = ["orderNumber", "name", "summary", "details"]
+  displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
 
 
   formatOrder(order){
@@ -50,8 +50,10 @@ export class DashboardComponent implements OnInit {
         description = description + item_order.item.name + " "
         description = description + item_order.amount+ " "
       }
-      return {orderNumber: this.orderTraker++, name: order.name, summary: description}
+      return {orderNumber: this.orderTraker++, first_name: order.first_name, last_name: order.last_name, telephone: order.telephone, summary: description}
   }
+
+
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NewOrderComponent, {

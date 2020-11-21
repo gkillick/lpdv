@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Order } from '../models/item.model';
 import { DataService } from './data.service';
 import {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} from '../../message-types'
+import { Order } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +20,8 @@ export class OrderService {
 
 
   addOrder(order: Order){
-
     this.order.push(order)
     this.orderChangedSubject.next(this.order)
-
     const key: string = this.dataService.idTraker.toString()
 
     const itemWithId = {

@@ -73,6 +73,7 @@ export class NewOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
+    console.log(new Date(formValue.date))
     const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, this.formatDate(formValue.date), [])
     for(let key in this.items){
       console.log(key)

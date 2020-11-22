@@ -9,5 +9,9 @@ export class Order{
         public telephone: number,
         public date: Date,
         public itemOrders: 
-        ItemOrder[]){}
+        ItemOrder[],
+        public before_tax: number,
+        public tax: number,
+        public total: number,
+        ){}
 }

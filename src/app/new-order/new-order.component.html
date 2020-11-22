@@ -40,6 +40,18 @@
             </mat-form-field>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm">
+            <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>
+        </div>
+        <div class="col-sm">
+            <div class="total_price">
+                <span class="subheading">Subtotal: </span><span class="subheadingbold">{{formatter.format(total_before_tax)}} </span>
+                <span class="subheading">Tax: </span><span class="subheadingbold">{{formatter.format(total_tax)}} </span>
+                <span class="subheading">Total: </span><span class="subheadingbold">{{formatter.format(total_price)}} </span>
 
-    <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>
+            </div>
+        </div>
+    </div>
+
 </form>

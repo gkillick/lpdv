@@ -153,7 +153,7 @@ export class DataService {
       if(type === "ORDER"){
 
         //find id for order here and pass id to item order
-        const order = new Order(id, data.user_id, data.first_name, data.last_name, data.telephone,data.date, [], data.before_tax, data.tax, data.total)
+        const order = new Order(id, data.user_id, data.first_name, data.last_name, data.telephone, new Date(data.date), [], data.before_tax, data.tax, data.total)
         
         for(let item of this.items){
           for(let itemOrder of data.itemOrders){

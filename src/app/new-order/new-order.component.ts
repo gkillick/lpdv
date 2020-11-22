@@ -50,6 +50,7 @@ export class NewOrderComponent implements OnInit {
 
     var tomorrow = new Date();
     tomorrow.setDate(new Date().getDate()+1);
+    tomorrow.setHours(0,0,0,0);
 
     this.myForm = this.fb.group({
       first_name: ['', Validators.required],
@@ -73,7 +74,7 @@ export class NewOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, this.formatDate(formValue.date), [])
+    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [])
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){

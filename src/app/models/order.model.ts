@@ -7,7 +7,7 @@ export class Order{
         public first_name:string, 
         public last_name:string,
         public telephone: number,
-        public date: string,
+        public date: Date,
         public itemOrders: 
         ItemOrder[]){}
 }

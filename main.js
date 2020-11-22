@@ -110,6 +110,7 @@ ipcMain.on(REQUEST_ORDER, (event, key) => {
     storage.get(key, (error, payload) => {
 
         if (error) throw error;
+        payload.id = key
 
         event.reply(RESPONSE_ORDER, payload)
     })

@@ -22,9 +22,13 @@ export class DashboardComponent implements OnInit {
     this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
 
     this.dataService.orderChanged.subscribe(orders => {
-      console.log('order changed')
+
+      var sortedOrders = orders.sort((a,b) => {
+        return +a.id-+b.id
+      })
+
       this.orderTraker = 1
-      this.orders = orders.map(this.formatOrder.bind(this))
+      this.orders = sortedOrders.map(this.formatOrder.bind(this))
 
       this.changeDetection.detectChanges()
     })

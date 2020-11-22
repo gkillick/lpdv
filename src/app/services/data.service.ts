@@ -108,13 +108,6 @@ export class DataService {
 
 
 
-  getStoredItems(){
-
-  }
-
-
-
-
   getStoredData(){
 
     this.ipc.on(RESPONSE_KEYS_ITEMS, (event, keys) => {
@@ -155,12 +148,12 @@ export class DataService {
 
     this.ipc.on(RESPONSE_ORDER, (event, msg) => {
 
-      const {type, data} = msg 
+      const {type, data, id} = msg 
 
       if(type === "ORDER"){
 
         //find id for order here and pass id to item order
-        const order = new Order(null, data.user_id, data.first_name, data.last_name, data.telephone,data.date, [])
+        const order = new Order(id, data.user_id, data.first_name, data.last_name, data.telephone,data.date, [])
         
         for(let item of this.items){
           for(let itemOrder of data.itemOrders){
@@ -179,6 +172,7 @@ export class DataService {
             }
           }
         }
+
         this.orders.push(order)
         this.orderChanged.next(this.orders)
         this.orderCountChanged.next(this.orderCounts)
@@ -186,8 +180,6 @@ export class DataService {
 
 
     })
-
-
 
 
     this.ipc.send(GET_KEYS_ITEMS)

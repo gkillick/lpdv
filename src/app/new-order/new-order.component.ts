@@ -23,6 +23,9 @@ export class NewOrderComponent implements OnInit {
 
   loading = false;
   success = false;
+  total_price = 0;
+  total_before_tax = 0;
+  total_tax = 0;
 
   items = {
     "viennoiserie": [],
@@ -48,8 +51,11 @@ export class NewOrderComponent implements OnInit {
 
 
 
+
+
     var tomorrow = new Date();
     tomorrow.setDate(new Date().getDate()+1);
+    tomorrow.setHours(0,0,0,0);
 
     this.myForm = this.fb.group({
       first_name: ['', Validators.required],
@@ -64,6 +70,7 @@ export class NewOrderComponent implements OnInit {
         this.myForm.addControl(element.name, new FormControl('', ))
       });
   }
+  this.onChanges();
 
 
   }
@@ -73,8 +80,7 @@ export class NewOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    console.log(new Date(formValue.date))
-    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, this.formatDate(formValue.date), [])
+    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
@@ -112,5 +118,58 @@ export class NewOrderComponent implements OnInit {
 
     return [year, month, day].join('-');
   }
+
+  tax_classifications: any[] = [
+    {value: 'normal', viewValue: 'normal'},
+    {value: 'no_tax_6', viewValue: 'tax before 6'},
+    {value: 'no_tax', viewValue: 'no tax'},
+  ]
+
+
+  //functions for calculating order totals with relevant taxes
+
+  onChanges(): void {
+    this.myForm.valueChanges.subscribe(val => {
+      var before_tax = 0;
+      var tax = 0;
+      var tax_items = {
+        "no_tax": {"count": 0, "total": 0},
+        "normal": {"count": 0, "total": 0},
+        "no_tax_6": {"count": 0, "total": 0},
+      }
+      let formValue = this.myForm.value;
+      for(let key in this.items){
+        for(let item of this.items[key]){
+          if(formValue[item.name] > 0 && item.tax_catagory != null){
+            tax_items[item.tax_catagory]["count"] += formValue[item.name];
+            tax_items[item.tax_catagory]["total"] += (formValue[item.name] * item.price)
+          }
+        }
+      }
+      before_tax += tax_items.no_tax_6.total + tax_items.no_tax.total + tax_items.normal.total
+
+      //calculate individual taxes 
+      if(tax_items.no_tax_6.count < 6){
+        tax += tax_items.no_tax_6.total * .14975
+      }
+      console.log(tax)
+      tax += tax_items.normal.total * .14975
+      this.total_tax = tax;
+      this.total_before_tax = before_tax;
+      this.total_price = this.total_tax + this.total_before_tax;
+      });
+
+  }
+// Create our number formatter.
+formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0,
+  //maximumFractionDigits: 0,
+});
+
+  
 
 }

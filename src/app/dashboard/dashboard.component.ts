@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { EditOrderComponent } from '../edit-order/edit-order.component';
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
 
@@ -13,10 +13,8 @@ import { DataService } from '../services/data.service';
 export class DashboardComponent implements OnInit {
 
   orderTraker = 1
-  currentlySelctedDate: Date
 
   constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef ) { }
-
 
   ngOnInit(): void {
     this.orderTraker = 1
@@ -25,15 +23,9 @@ export class DashboardComponent implements OnInit {
     this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
 
     this.dataService.orderChanged.subscribe(orders => {
-
-      var sortedOrders = orders.sort((a,b) => {
-        return +b.id - +a.id
-      })
-
-      console.log(orders)
-
+      console.log('order changed')
       this.orderTraker = 1
-      this.orders = sortedOrders.map(this.formatOrder.bind(this))
+      this.orders = orders.map(this.formatOrder.bind(this))
 
       this.changeDetection.detectChanges()
     })
@@ -45,16 +37,11 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+
   items: MatTableDataSource<any> = new MatTableDataSource<any>()
   orders = []
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
-
-  onDateSelected(event){
-
-    this.currentlySelctedDate = event.value
-    console.log(event.value)
-  }
 
 
   formatOrder(order){
@@ -71,6 +58,16 @@ export class DashboardComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NewOrderComponent, {
+      width: '100%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(EditOrderComponent, {
       width: '100%',
     });
 

@@ -1,22 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ɵELEMENT_PROBE_PROVIDERS__POST_R3__ } from '@angular/platform-browser';
-import { Item } from 'electron/main';
-import { getMaxListeners } from 'process';
 import { ItemOrder } from '../models/item_order.model';
 import { Order } from '../models/order.model';
 import { User } from '../models/user.model';
+import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
-import { ItemsService } from '../services/items.service';
-import { OrderService } from '../services/order.service';
 
 @Component({
-  selector: 'app-new-order',
-  templateUrl: './new-order.component.html',
-  styleUrls: ['./new-order.component.scss']
+  selector: 'app-edit-order',
+  templateUrl: './edit-order.component.html',
+  styleUrls: ['./edit-order.component.scss']
 })
-export class NewOrderComponent implements OnInit {
+export class EditOrderComponent implements OnInit {
 
   //form object
   myForm: FormGroup;
@@ -34,7 +30,7 @@ export class NewOrderComponent implements OnInit {
   current_user = new User(1, "Montreal lpdv", "gkillick@gmail.com")
   
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
+  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>) { }
 
 
   ngOnInit(): void {

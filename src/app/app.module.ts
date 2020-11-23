@@ -20,6 +20,7 @@ import { NewOrderComponent } from './new-order/new-order.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { EditOrderComponent } from './edit-order/edit-order.component';
 
 
 
@@ -32,6 +33,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     ItemsComponent,
     AddItemComponent,
     NewOrderComponent,
+    EditOrderComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,58 @@
+<h1>New Order</h1>
+
+<form [formGroup]="myForm" (ngSubmit)="submitHandler()">
+    <div class="row">
+        <div class="col-sm">
+            <mat-form-field>
+                <input matInput placeholder="First Name" formControlName="first_name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Last Name" formControlName="last_name">
+            </mat-form-field>
+
+            <mat-form-field>
+                <input type="telephone" matInput placeholder="téléphone" formControlName="telephone">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <!-- Don't think we need this field
+            <mat-form-field>
+                <input type="telephone" matInput placeholder="Numéro client" formControlName="client_number">
+            </mat-form-field>
+            -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <h4>Viennoiserie</h4>
+            <mat-form-field class="w-100" *ngFor="let item of items.viennoiserie">
+                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
+            </mat-form-field>
+        </div>
+        <div class="col-sm">
+            <h4>Pains</h4>
+            <mat-form-field class="w-100" *ngFor="let item of items.pains">
+                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Update Order</button>
+            <button type="button" class="ml-1 btn btn-danger">Danger</button>
+        </div>
+        <div class="col-sm">
+            <div class="total_price">
+                <span class="subheading">Subtotal: </span><span class="subheadingbold">{{formatter.format(total_before_tax)}} </span>
+                <span class="subheading">Tax: </span><span class="subheadingbold">{{formatter.format(total_tax)}} </span>
+                <span class="subheading">Total: </span><span class="subheadingbold">{{formatter.format(total_price)}} </span>
+
+            </div>
+        </div>
+    </div>
+
+</form>

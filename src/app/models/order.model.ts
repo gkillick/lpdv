@@ -1,6 +1,8 @@
 import { ItemOrder } from './item_order.model';
 
 export class Order{
+
+    static traker: number = 1
     constructor(
         public id: string,
         public user_id: number,
@@ -14,9 +16,10 @@ export class Order{
         public tax: number,
         public total: number,
         public description: string,
+        public orderNumber: number
         ){
-
-
+            this.orderNumber = Order.traker
+            Order.traker+=1
             this.description = ""
             for(let item_order of this.itemOrders){
             this.description = this.description + item_order.item.name + " "

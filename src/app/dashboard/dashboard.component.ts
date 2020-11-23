@@ -24,6 +24,10 @@ export class DashboardComponent implements OnInit {
     this.orderTraker = 1
     this.items.data = this.dataService.orderCounts
 
+
+    this.currentlySelctedDate = new Date();
+    this.currentlySelctedDate.setHours(0,0,0,0);
+
     this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
 
     this.dataService.orderChanged.subscribe(orders => {
@@ -32,11 +36,11 @@ export class DashboardComponent implements OnInit {
         return +b.id - +a.id
       })
 
-      console.log(orders)
-
       this.orderTraker = 1
       this.orders = sortedOrders.map(this.formatOrder.bind(this))
       this.ordersToDisplay = this.orders
+
+      this.filterOrdersForDisplay()
 
       this.changeDetection.detectChanges()
     })
@@ -57,12 +61,13 @@ export class DashboardComponent implements OnInit {
   onDateSelected(event){
     this.currentlySelctedDate = event.value
 
+    this.filterOrdersForDisplay()
+  }
+
+  filterOrdersForDisplay(){
     this.ordersToDisplay = this.orders.filter(order => {
       return order.date.toDateString() === this.currentlySelctedDate.toDateString() 
     })
-
-    //this.changeDetection.detectChanges()
-
   }
 
 

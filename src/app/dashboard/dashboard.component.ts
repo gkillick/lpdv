@@ -1,12 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-<<<<<<< HEAD
-import { EditOrderComponent } from '../edit-order/edit-order.component';
-=======
 import { Subject } from 'rxjs';
+import { EditOrderComponent } from '../edit-order/edit-order.component';
 import { Order } from '../models/order.model';
->>>>>>> c2790677a47eae8f94fab098c9261e742a3931ad
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
 
@@ -18,6 +15,7 @@ import { DataService } from '../services/data.service';
 export class DashboardComponent implements OnInit {
 
   orderTraker = 1
+  currentlySelctedDate: Date
 
   constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef ) { }
 
@@ -32,11 +30,6 @@ export class DashboardComponent implements OnInit {
     this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
 
     this.dataService.orderChanged.subscribe(orders => {
-<<<<<<< HEAD
-      console.log('order changed')
-      this.orderTraker = 1
-      this.orders = orders.map(this.formatOrder.bind(this))
-=======
 
       var sortedOrders = orders.sort((a,b) => {
         return +b.id - +a.id
@@ -47,7 +40,6 @@ export class DashboardComponent implements OnInit {
       this.ordersToDisplay = this.orders
 
       this.filterOrdersForDisplay()
->>>>>>> c2790677a47eae8f94fab098c9261e742a3931ad
 
       this.changeDetection.detectChanges()
     })
@@ -66,8 +58,6 @@ export class DashboardComponent implements OnInit {
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
 
-<<<<<<< HEAD
-=======
   onDateSelected(event){
     this.currentlySelctedDate = event.value
 
@@ -80,7 +70,6 @@ export class DashboardComponent implements OnInit {
     })
   }
 
->>>>>>> c2790677a47eae8f94fab098c9261e742a3931ad
 
   formatOrder(order){
 
@@ -104,7 +93,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  openEditDialog(): void {
+  openEditDialog(id: number): void {
     const dialogRef = this.dialog.open(EditOrderComponent, {
       width: '100%',
     });

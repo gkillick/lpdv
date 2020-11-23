@@ -3,6 +3,9 @@ import { ItemOrder } from './item_order.model';
 export class Order{
 
     static traker: number = 1
+    description: string
+    orderNumber: number
+
     constructor(
         public id: string,
         public user_id: number,
@@ -15,8 +18,7 @@ export class Order{
         public before_tax: number,
         public tax: number,
         public total: number,
-        public description: string,
-        public orderNumber: number
+
         ){
             this.orderNumber = Order.traker
             Order.traker+=1

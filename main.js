@@ -64,6 +64,7 @@ ipcMain.on(SENDING_ITEM, (event, arg) => {
     const { key, payload} = arg
     console.log(payload)
 
+    console.log(key)
     storage.set(key, payload, (error) => {
 
         console.log('saved data')

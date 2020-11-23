@@ -36,25 +36,20 @@ export class DataService {
   }
 
 
-  getOrdersForDate(date: Date){
+  getOrderById(id: number){
 
-    return this.orders.filter(order => {
-      return order.date.toDateString() === date.toDateString()
-    })
+    for(let order of this.orders){
+      if(+order.id == id){
+        return order
+      }
+    }
 
+    return null
   }
 
-  getItemQuantitiesForDate(date: Date){
-    var itemQuantitiesMap = []
-    var ordersForDate = this.getOrdersForDate(date)
 
-    for(let order of ordersForDate){
-      for(let itemOrder of order.itemOrders)
-        itemQuantitiesMap.push({'name': itemOrder.item.name, 'amount': itemOrder.amount})
-      }
 
-      return itemQuantitiesMap
-    }
+    
 
 
   addOrder(order: Order){
@@ -78,34 +73,42 @@ export class DataService {
 
     this.ipc.send(SENDING_ITEM,  itemWithId)
 
-    /*
+  }
 
-    for(let item of this.items){
-      for(let itemOrder of order.itemOrders){
-        if(item.name === itemOrder.item.name){
-          var foundItemType = false
-          for(let orderCount of this.orderCounts){
-            if(orderCount['name'] === item.name){
-              foundItemType = true
-              orderCount['count'] += +itemOrder.amount
-            }
-          }
-          if(!foundItemType){
-            this.orderCounts.push({name: item.name, count: +itemOrder.amount})
-          }
-        }
+  saveOrder(order: Order){
+
+    console.log(order)
+    var index = 0
+    for(let ord of this.orders){
+      if(ord.id == order.id){
+        console.log(index)
+        break
+      }
+      index +=1
+    }
+
+    this.orders[index] = order
+
+    order.updateSummary()
+
+    this.orderChanged.next(this.orders)
+
+    const key: string = order.id
+
+    const orderWithId = {
+      key: key,
+        payload: {
+          type: 'ORDER',
+          data : order 
       }
     }
 
-    this.orderCountChanged.next(this.orderCounts)
-    */
-
+    this.ipc.send(SENDING_ITEM,  orderWithId)
   }
 
 
   addItem(item: Item){
 
-    console.log(item)
     this.items.push(item)
     this.itemsChanged.next(this.items)
 
@@ -175,6 +178,7 @@ export class DataService {
       if(type === "ORDER"){
 
         //find id for order here and pass id to item order
+        console.log(id)
         const order = new Order(id, data.user_id, data.first_name, data.last_name, data.telephone, new Date(data.date), [], data.before_tax, data.tax, data.total)
         
 

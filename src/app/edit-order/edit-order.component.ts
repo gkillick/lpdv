@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Item } from 'electron/main';
 import { ItemOrder } from '../models/item_order.model';
 import { Order } from '../models/order.model';
 import { User } from '../models/user.model';
@@ -16,6 +17,7 @@ export class EditOrderComponent implements OnInit {
 
   //form object
   myForm: FormGroup;
+  order: Order
 
   loading = false;
   success = false;
@@ -30,7 +32,10 @@ export class EditOrderComponent implements OnInit {
   current_user = new User(1, "Montreal lpdv", "gkillick@gmail.com")
   
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>) { }
+  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
+    this.order = this.dataService.getOrderById(data.id)
+    console.log("constructor running")
+   }
 
 
   ngOnInit(): void {
@@ -45,25 +50,33 @@ export class EditOrderComponent implements OnInit {
       }
     }
 
-
-
-
-
     var tomorrow = new Date();
     tomorrow.setDate(new Date().getDate()+1);
     tomorrow.setHours(0,0,0,0);
 
+    console.log(this.order.first_name)
+
     this.myForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
+      first_name: [this.order.first_name, Validators.required],
+      last_name: [this.order.last_name, Validators.required],
       //client_number: ['', Validators.required],
-      telephone: ['', Validators.required],
-      date: [tomorrow, Validators.required],
+      telephone: [this.order.telephone, Validators.required],
+      date: [this.order.date, Validators.required],
     });
     for (var key in this.items) {
       this.items[key].forEach(element => {
         console.log(element.item_type)
-        this.myForm.addControl(element.name, new FormControl('', ))
+        var found = false
+        for(let itemOrder of this.order.itemOrders){
+          if(itemOrder.item.name == element.name){
+            found = true
+            this.myForm.addControl(element.name, new FormControl(itemOrder.amount, ))
+          }
+        }
+        if(!found){
+            this.myForm.addControl(element.name, new FormControl('', ))
+        }
+
       });
   }
   this.onChanges();
@@ -71,12 +84,14 @@ export class EditOrderComponent implements OnInit {
 
   }
 
-  async submitHandler() {
+
+
+  submitHandler() {
     this.loading = true;
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
+    const order = new Order(this.order.id,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
@@ -85,7 +100,7 @@ export class EditOrderComponent implements OnInit {
       }
     }
 
-    this.dataService.addOrder(order)
+    this.dataService.saveOrder(order)
     
 
     try {

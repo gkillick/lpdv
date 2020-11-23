@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -6,6 +7,7 @@ import { EditOrderComponent } from '../edit-order/edit-order.component';
 import { Order } from '../models/order.model';
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,14 +23,19 @@ export class DashboardComponent implements OnInit {
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
   currentlySelctedDate: Date
+  startDate: any
+  dateForm: FormControl
 
-  constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef ) { }
-
-  ngOnInit(): void {
+  constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
     this.currentlySelctedDate = new Date();
     this.currentlySelctedDate.setHours(0,0,0,0);
+    this.dateForm = new FormControl(this.currentlySelctedDate)
+  }
 
-    this.itemQuantities.data = this.dataService.getItemQuantitiesForDate(this.currentlySelctedDate)
+  ngOnInit(): void {
+
+
+    this.getOrdersForCurrentlySelectedDate()
 
     this.orders = this.dataService.orders
 
@@ -126,9 +133,22 @@ export class DashboardComponent implements OnInit {
   }
 
   openEditDialog(id: number): void {
-    const dialogRef = this.dialog.open(EditOrderComponent, {
-      width: '100%',
-    });
+
+    console.log(id)
+
+    var dialogRef
+    this.zone.run(() => {
+      
+      dialogRef = this.dialog.open(EditOrderComponent, {
+        width: '100%',
+        data: {
+          id: id
+        }
+      });
+    })
+
+
+
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');

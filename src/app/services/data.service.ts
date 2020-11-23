@@ -17,8 +17,9 @@ export class DataService {
   orders: Order[] = []
   orderChanged: Subject<Order[]> = new Subject<Order[]>()
   idTraker = 0
-  orderCounts = []
-  orderCountChanged: Subject<any> = new Subject<any>()
+  orderQuantities = []
+  orderCountQuantities: Subject<any> = new Subject<any>()
+  itemNames = []
 
 
   constructor() { 
@@ -43,6 +44,18 @@ export class DataService {
 
   }
 
+  getItemQuantitiesForDate(date: Date){
+    var itemQuantitiesMap = []
+    var ordersForDate = this.getOrdersForDate(date)
+
+    for(let order of ordersForDate){
+      for(let itemOrder of order.itemOrders)
+        itemQuantitiesMap.push({'name': itemOrder.item.name, 'amount': itemOrder.amount})
+      }
+
+      return itemQuantitiesMap
+    }
+
 
   addOrder(order: Order){
 
@@ -65,6 +78,7 @@ export class DataService {
 
     this.ipc.send(SENDING_ITEM,  itemWithId)
 
+    /*
 
     for(let item of this.items){
       for(let itemOrder of order.itemOrders){
@@ -84,6 +98,7 @@ export class DataService {
     }
 
     this.orderCountChanged.next(this.orderCounts)
+    */
 
   }
 
@@ -103,6 +118,8 @@ export class DataService {
           data : item
       }
     }
+
+    this.itemNames.push(item.name)
 
     this.idTraker++
 
@@ -139,6 +156,7 @@ export class DataService {
 
       if(type === "ITEM"){
         //data.name, data.item_type, data.price
+        this.itemNames.push(data.name)
         const item = new Item(null,data.name, data.item_type, data.price, data.sliced, data.tax_catagory)
         this.items.push(item)
         this.itemsChanged.next(this.items)
@@ -159,27 +177,17 @@ export class DataService {
         //find id for order here and pass id to item order
         const order = new Order(id, data.user_id, data.first_name, data.last_name, data.telephone, new Date(data.date), [], data.before_tax, data.tax, data.total)
         
+
         for(let item of this.items){
           for(let itemOrder of data.itemOrders){
             if(item.name === itemOrder.item.name){
-              order.itemOrders.push(new ItemOrder(null, null, item, +itemOrder.amount, itemOrder.sliced))
-              var foundItemType = false
-              for(let orderCount of this.orderCounts){
-                if(orderCount['name'] === item.name){
-                  foundItemType = true
-                  orderCount['count'] += +itemOrder.amount
-                }
-              }
-              if(!foundItemType){
-                this.orderCounts.push({name: item.name, count: +itemOrder.amount})
-              }
+              order.addItemOrder(new ItemOrder(null, null, item, +itemOrder.amount, itemOrder.sliced))
             }
           }
         }
 
         this.orders.push(order)
         this.orderChanged.next(this.orders)
-        this.orderCountChanged.next(this.orderCounts)
       }
 
 

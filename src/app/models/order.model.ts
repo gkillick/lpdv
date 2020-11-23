@@ -3,7 +3,7 @@ import { ItemOrder } from './item_order.model';
 export class Order{
 
     static traker: number = 1
-    description: string
+    summary: string
     orderNumber: number
 
     constructor(
@@ -22,11 +22,17 @@ export class Order{
         ){
             this.orderNumber = Order.traker
             Order.traker+=1
-            this.description = ""
+            this.summary= ""
             for(let item_order of this.itemOrders){
-            this.description = this.description + item_order.item.name + " "
-            this.description = this.description + item_order.amount+ " "
+            this.summary= this.summary+ item_order.item.name + " "
+            this.summary= this.summary+ item_order.amount+ " "
             }
         }
+
+
+    addItemOrder(itemOrder: ItemOrder){
+        this.itemOrders.push(itemOrder)
+        this.summary = this.summary + itemOrder.item.name + " " + itemOrder.amount + " "
+    }
 }
 

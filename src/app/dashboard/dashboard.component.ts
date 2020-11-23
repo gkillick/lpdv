@@ -14,72 +14,104 @@ import { DataService } from '../services/data.service';
 })
 export class DashboardComponent implements OnInit {
 
-  orderTraker = 1
+  itemQuantities: MatTableDataSource<any> = new MatTableDataSource<any>()
+  orders = []
+  orderItemCountsList = []
+  orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
+  displayedColumns = ["name", "count"];
+  displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
   currentlySelctedDate: Date
 
   constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef ) { }
 
   ngOnInit(): void {
-    this.orderTraker = 1
-    this.items.data = this.dataService.orderCounts
-
-
     this.currentlySelctedDate = new Date();
     this.currentlySelctedDate.setHours(0,0,0,0);
 
-    this.orders = this.dataService.orders.map(this.formatOrder.bind(this))
+    this.itemQuantities.data = this.dataService.getItemQuantitiesForDate(this.currentlySelctedDate)
+
+    this.orders = this.dataService.orders
 
     this.dataService.orderChanged.subscribe(orders => {
 
-      var sortedOrders = orders.sort((a,b) => {
-        return +b.id - +a.id
+      var filteredOrders = orders.filter(order => {
+        return order.date.toDateString() === this.currentlySelctedDate.toDateString()
       })
 
-      this.orderTraker = 1
-      this.orders = sortedOrders.map(this.formatOrder.bind(this))
-      this.ordersToDisplay = this.orders
+      var sortedOrders = filteredOrders.sort((a,b) => {
+        return +a.orderNumber - +b.orderNumber
+      })
 
-      this.filterOrdersForDisplay()
+      this.orders = sortedOrders
 
-      this.changeDetection.detectChanges()
-    })
 
-    this.dataService.orderCountChanged.subscribe(itemCount => {
-      this.items.data = itemCount
+      this.orderItemCountsList = []
+      this.orderItemCounts.data = this.orderItemCountsList
+
+      for(let itemName of this.dataService.itemNames){
+        this.orderItemCountsList.push({name: itemName, amount: 0})
+      }
+
+      for(let order of this.orders){
+        for(let itemOrder of order.itemOrders){
+          for(let orderItemCount of this.orderItemCountsList){
+            if(itemOrder.item.name === orderItemCount.name){
+              orderItemCount.amount += itemOrder.amount
+            }
+          }
+        }
+      }
+
+      this.orderItemCounts.data = this.orderItemCountsList
 
       this.changeDetection.detectChanges()
     })
   }
 
 
-  items: MatTableDataSource<any> = new MatTableDataSource<any>()
-  orders = []
-  ordersToDisplay = []
-  displayedColumns = ["name", "count"];
-  displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
 
   onDateSelected(event){
     this.currentlySelctedDate = event.value
 
-    this.filterOrdersForDisplay()
+    this.getOrdersForCurrentlySelectedDate()
   }
 
-  filterOrdersForDisplay(){
-    this.ordersToDisplay = this.orders.filter(order => {
-      return order.date.toDateString() === this.currentlySelctedDate.toDateString() 
-    })
-  }
+  getOrdersForCurrentlySelectedDate(){
 
+      var orders = this.dataService.orders
 
-  formatOrder(order){
+      var filteredOrders = orders.filter(order => {
+        return order.date.toDateString() === this.currentlySelctedDate.toDateString()
+      })
 
-      var description = ""
-      for(let item_order of order.itemOrders){
-        description = description + item_order.item.name + " "
-        description = description + item_order.amount+ " "
+      var sortedOrders = filteredOrders.sort((a,b) => {
+        return +a.orderNumber - +b.orderNumber
+      })
+
+      this.orders = sortedOrders
+
+      this.orderItemCountsList = []
+      this.orderItemCounts.data = this.orderItemCountsList
+
+      for(let itemName of this.dataService.itemNames){
+        this.orderItemCountsList.push({name: itemName, amount: 0})
       }
-      return {orderNumber: this.orderTraker++, first_name: order.first_name, last_name: order.last_name, telephone: order.telephone, summary: description, date: order.date}
+
+      for(let order of this.orders){
+        for(let itemOrder of order.itemOrders){
+          for(let orderItemCount of this.orderItemCountsList){
+            if(itemOrder.item.name === orderItemCount.name){
+              orderItemCount.amount += itemOrder.amount
+            }
+          }
+      }
+    }
+
+    this.orderItemCounts.data = this.orderItemCountsList
+
   }
+
+
 
 
 

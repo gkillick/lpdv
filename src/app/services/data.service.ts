@@ -32,10 +32,17 @@ export class DataService {
     } else {
       console.warn('App not running inside Electron!');
     }
+  }
 
-  
+
+  getOrdersForDate(date: Date){
+
+    return this.orders.filter(order => {
+      return order.date.toDateString() === date.toDateString()
+    })
 
   }
+
 
   addOrder(order: Order){
 
@@ -78,11 +85,8 @@ export class DataService {
 
     this.orderCountChanged.next(this.orderCounts)
 
-    console.log(this.orderCounts)
-
-
-
   }
+
 
   addItem(item: Item){
 

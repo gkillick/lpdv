@@ -13,5 +13,15 @@ export class Order{
         public before_tax: number,
         public tax: number,
         public total: number,
-        ){}
+        public description: string,
+        ){
+
+
+            this.description = ""
+            for(let item_order of this.itemOrders){
+            this.description = this.description + item_order.item.name + " "
+            this.description = this.description + item_order.amount+ " "
+            }
+        }
 }
+

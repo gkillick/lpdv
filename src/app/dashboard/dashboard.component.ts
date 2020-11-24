@@ -23,7 +23,6 @@ export class DashboardComponent implements OnInit {
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
   currentlySelctedDate: Date
-  startDate: any
   dateForm: FormControl
 
   constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
@@ -38,41 +37,9 @@ export class DashboardComponent implements OnInit {
 
     this.getOrdersForCurrentlySelectedDate()
 
-    this.orders = this.dataService.orders
-
     this.dataService.orderChanged.subscribe(orders => {
 
-      console.log(orders)
-
-      var filteredOrders = orders.filter(order => {
-        return order.date.toDateString() === this.currentlySelctedDate.toDateString()
-      })
-
-      var sortedOrders = filteredOrders.sort((a,b) => {
-        return +a.orderNumber - +b.orderNumber
-      })
-
-      this.orders = sortedOrders
-
-
-      this.orderItemCountsList = []
-      this.orderItemCounts.data = this.orderItemCountsList
-
-      for(let itemName of this.dataService.itemNames){
-        this.orderItemCountsList.push({name: itemName, amount: 0})
-      }
-
-      for(let order of this.orders){
-        for(let itemOrder of order.itemOrders){
-          for(let orderItemCount of this.orderItemCountsList){
-            if(itemOrder.item.name === orderItemCount.name){
-              orderItemCount.amount += itemOrder.amount
-            }
-          }
-        }
-      }
-
-      this.orderItemCounts.data = this.orderItemCountsList
+      this.getOrdersForCurrentlySelectedDate()
 
       this.changeDetection.detectChanges()
     })

@@ -27,13 +27,14 @@ export class DashboardComponent implements OnInit {
   dateForm: FormControl
 
   constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
-    this.currentlySelctedDate = new Date();
-    this.currentlySelctedDate.setHours(0,0,0,0);
-    this.dateForm = new FormControl(this.currentlySelctedDate)
+
   }
 
   ngOnInit(): void {
 
+    this.currentlySelctedDate = new Date();
+    this.currentlySelctedDate.setHours(0,0,0,0);
+    this.dateForm = new FormControl(this.currentlySelctedDate)
 
     this.getOrdersForCurrentlySelectedDate()
 

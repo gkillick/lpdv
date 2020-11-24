@@ -41,6 +41,8 @@ export class DashboardComponent implements OnInit {
 
     this.dataService.orderChanged.subscribe(orders => {
 
+      console.log(orders)
+
       var filteredOrders = orders.filter(order => {
         return order.date.toDateString() === this.currentlySelctedDate.toDateString()
       })

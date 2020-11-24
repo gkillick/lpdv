@@ -53,7 +53,7 @@ app.on('activate', function() {
 })
 
 
-const {SENDING_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER}  = require('./src/message-types.js')
+const {DELETE_ITEM, SENDING_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER}  = require('./src/message-types.js')
 
 const storage = require('electron-json-storage')
 console.log(storage.getDefaultDataPath())
@@ -114,5 +114,12 @@ ipcMain.on(REQUEST_ORDER, (event, key) => {
         payload.id = key
 
         event.reply(RESPONSE_ORDER, payload)
+    })
+})
+
+ipcMain.on(DELETE_ITEM, (event, key) => {
+    console.log(key)
+    storage.remove(key, err => {
+        console.log(err)
     })
 })

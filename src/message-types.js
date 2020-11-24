@@ -8,5 +8,6 @@ module.exports = {
     RESPONSE_ORDER: 'resp-order',
     REQUEST_ORDER: 'request-order',
     GET_KEYS_ITEMS: 'get-key-items',
-    GET_KEYS_ORDERS: 'get-key-orders'
+    GET_KEYS_ORDERS: 'get-key-orders',
+    DELETE_ITEM: 'delete-item'
 }

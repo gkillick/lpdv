@@ -116,6 +116,13 @@ export class EditOrderComponent implements OnInit {
     
   }
 
+  delete(){
+    this.dataService.deleteOrderById(this.order.id)
+
+    this.dialogRef.close()
+  
+  }
+
   formatDate(date: Date): string{
     var d = new Date(date),
     month = '' + (d.getMonth() + 1),

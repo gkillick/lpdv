@@ -43,7 +43,7 @@
     <div class="row">
         <div class="col-sm">
             <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Update Order</button>
-            <button type="button" class="ml-1 btn btn-danger">Danger</button>
+            <button type="button" class="ml-1 btn btn-danger" (click)="delete()">Delete</button>
         </div>
         <div class="col-sm">
             <div class="total_price">

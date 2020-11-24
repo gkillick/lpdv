@@ -80,7 +80,8 @@ export class NewOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    const order = new Order(null,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
+    const order = new Order(this.dataService.idTraker.toString(),this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
+    this.dataService.idTraker +=1
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){

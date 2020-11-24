@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {SENDING_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER} from '../../message-types'
+import {SENDING_ITEM, DELETE_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER} from '../../message-types'
 import {IpcRenderer} from 'electron'
 import { Subject } from 'rxjs';
 import { Item } from '../models/item.model';
@@ -59,19 +59,35 @@ export class DataService {
     console.log('order changed')
     console.log(order)
 
-    const key: string = this.idTraker.toString()
-
     const itemWithId = {
-      key: key, 
+      key: order.id, 
         payload: {
           type: 'ORDER',
           data : order 
       }
     }
 
-    this.idTraker++
+
 
     this.ipc.send(SENDING_ITEM,  itemWithId)
+
+  }
+
+  deleteOrderById(id: string){
+
+
+    this.orders = this.orders.filter(order => {
+      console.log(+order.id == +id)
+      return +order.id !== +id
+    })
+
+    this.orderChanged.next(this.orders)
+
+    console.log(this.orders)
+    console.log(id)
+
+
+    this.ipc.send(DELETE_ITEM, id)
 
   }
 
@@ -139,7 +155,9 @@ export class DataService {
 
       for(let key of keys){
         this.ipc.send(REQUEST_ITEM, key)
-        this.idTraker+=1
+        if(this.idTraker <= key){
+          this.idTraker = +key + 1
+        }
       }
     this.ipc.send(GET_KEYS_ORDERS)
 
@@ -149,7 +167,9 @@ export class DataService {
 
       for(let key of keys){
         this.ipc.send(REQUEST_ORDER, key)
-        this.idTraker+=1
+        if(this.idTraker <= key){
+          this.idTraker = +key + 1
+        }
       }
     })
 

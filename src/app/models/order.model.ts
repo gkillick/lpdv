@@ -24,22 +24,29 @@ export class Order{
             Order.traker+=1
             this.summary= ""
             for(let item_order of this.itemOrders){
-            this.summary= this.summary+ item_order.item.name + " "
-            this.summary= this.summary+ item_order.amount+ " "
+                if(item_order.amount > 0){
+                    this.summary= this.summary+ item_order.item.name + " "
+                    this.summary= this.summary+ item_order.amount+ " "
+                }
             }
         }
 
 
+
     addItemOrder(itemOrder: ItemOrder){
         this.itemOrders.push(itemOrder)
+        if(itemOrder.amount > 0){
         this.summary = this.summary + itemOrder.item.name + " " + itemOrder.amount + " "
+        }
     }
 
     updateSummary(){
             this.summary= ""
             for(let item_order of this.itemOrders){
-            this.summary= this.summary+ item_order.item.name + " "
-            this.summary= this.summary+ item_order.amount+ " "
+                if(item_order.amount > 0){
+                    this.summary= this.summary+ item_order.item.name + " "
+                    this.summary= this.summary+ item_order.amount+ " "
+                }
             }
     }
 }

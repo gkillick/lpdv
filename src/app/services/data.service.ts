@@ -203,6 +203,7 @@ export class DataService {
         
 
         for(let item of this.items){
+          console.log(data.itemOrders)
           for(let itemOrder of data.itemOrders){
             if(item.name === itemOrder.item.name){
               order.addItemOrder(new ItemOrder(null, null, item, +itemOrder.amount, itemOrder.sliced))

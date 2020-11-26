@@ -1,3 +1,4 @@
+import { DataService } from '../services/data.service';
 import { ItemOrder } from './item_order.model';
 
 export class Order{
@@ -16,35 +17,16 @@ export class Order{
         ItemOrder[],
         public before_tax: number,
         public tax: number,
-        public total: number,
-
+        public total: number
+        
         ){
-            this.summary= ""
-            for(let item_order of this.itemOrders){
-                if(item_order.amount > 0){
-                    this.summary= this.summary+ item_order.item.name + " "
-                    this.summary= this.summary+ item_order.amount+ " "
-                }
-            }
-        }
-
-
+    }
 
     addItemOrder(itemOrder: ItemOrder){
+
         this.itemOrders.push(itemOrder)
-        if(itemOrder.amount > 0){
-        this.summary = this.summary + itemOrder.item.name + " " + itemOrder.amount + " "
-        }
+
     }
 
-    updateSummary(){
-            this.summary= ""
-            for(let item_order of this.itemOrders){
-                if(item_order.amount > 0){
-                    this.summary= this.summary+ item_order.item.name + " "
-                    this.summary= this.summary+ item_order.amount+ " "
-                }
-            }
-    }
 }
 

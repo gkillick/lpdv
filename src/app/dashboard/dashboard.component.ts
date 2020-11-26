@@ -70,8 +70,9 @@ export class DashboardComponent implements OnInit {
       this.orderItemCountsList = []
       this.orderItemCounts.data = this.orderItemCountsList
 
-      for(let itemName of this.dataService.itemNames){
-        this.orderItemCountsList.push({name: itemName, amount: 0})
+      for(let item of this.dataService.items){
+        console.log(item)
+        this.orderItemCountsList.push({id: item.id, name: item.name, amount: 0})
       }
 
       for(let order of this.orders){
@@ -79,7 +80,7 @@ export class DashboardComponent implements OnInit {
         console.log(order)
         for(let itemOrder of order.itemOrders){
           for(let orderItemCount of this.orderItemCountsList){
-            if(itemOrder.item.name === orderItemCount.name){
+            if(+itemOrder.item_id === +orderItemCount.id){
               orderItemCount.amount += itemOrder.amount
             }
           }
@@ -131,12 +132,14 @@ export class DashboardComponent implements OnInit {
     var itemOrders = order.itemOrders;
     itemOrders.sort((a,b) => {
       //not working
-      return ('' + a.item.name).localeCompare(b.item.name);
+      return ('' + a.name).localeCompare(b.name);
     })
+
     var summary = "";
     for(let item_order of itemOrders){
       if(item_order.amount > 0){
-          summary= summary+ item_order.item.name + " "
+          const name = this.dataService.getItemById(item_order.item_id).name
+          summary= summary+ name + " "
           summary= summary+ item_order.amount+ " "
       }
   }

@@ -68,7 +68,7 @@ export class EditOrderComponent implements OnInit {
         console.log(element.item_type)
         var found = false
         for(let itemOrder of this.order.itemOrders){
-          if(itemOrder.item.name == element.name){
+          if(itemOrder.item_id == element.id){
             found = true
             this.myForm.addControl(element.name, new FormControl(itemOrder.amount, ))
           }
@@ -86,7 +86,6 @@ export class EditOrderComponent implements OnInit {
   }
 
 
-
   submitHandler() {
     this.loading = true;
 
@@ -97,7 +96,7 @@ export class EditOrderComponent implements OnInit {
       console.log(key)
       for(let item of this.items[key]){
         console.log(formValue[item.name])
-        order.itemOrders.push(new ItemOrder(null,null, item, formValue[item.name], false)) 
+        order.itemOrders.push(new ItemOrder(null , item.name ,null , item.id , formValue[item.name], false)) 
       }
     }
 

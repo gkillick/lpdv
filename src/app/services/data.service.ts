@@ -47,6 +47,17 @@ export class DataService {
     return null
   }
 
+  getItemById(id: number){
+
+    for(let item of this.items){
+      if(+item.id == id){
+        return item
+      }
+    }
+
+    return null
+  }
+
 
   addOrder(order: Order){
 
@@ -101,7 +112,6 @@ export class DataService {
 
     this.orders[index] = order
 
-    order.updateSummary()
 
     this.orderChanged.next(this.orders)
 
@@ -164,8 +174,22 @@ export class DataService {
           data :item 
       }
     }
+    
+    this.updateItemNames()
+
 
     this.ipc.send(SENDING_ITEM,  itemWithId)
+  }
+
+  updateItemNames(){
+
+    this.itemNames = []
+
+    for(let item of this.items){
+      this.itemNames.push(item.name)
+    }
+
+    console.log(this.itemNames)
   }
 
   deleteItemById(id: string){
@@ -245,8 +269,9 @@ export class DataService {
         for(let item of this.items){
           console.log(data.itemOrders)
           for(let itemOrder of data.itemOrders){
-            if(item.name === itemOrder.item.name){
-              order.addItemOrder(new ItemOrder(null, null, item, +itemOrder.amount, itemOrder.sliced))
+            if(item.id === itemOrder.item_id){
+
+              order.addItemOrder(new ItemOrder(null, item.name, null , +item.id, +itemOrder.amount, itemOrder.sliced))
             }
           }
         }

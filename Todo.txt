@@ -1,0 +1,7 @@
+Micah:
+- fix order numbers so they are unique and increment logically, order num 1 order num 2
+- Item id numbers, increment logically
+
+Graeme 
+- edit items/delete items 
+- make sure tables displaying in consistant order

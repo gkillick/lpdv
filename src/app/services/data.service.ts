@@ -48,10 +48,6 @@ export class DataService {
   }
 
 
-
-    
-
-
   addOrder(order: Order){
 
     this.orders.push(order)
@@ -123,15 +119,16 @@ export class DataService {
   }
 
 
+
   addItem(item: Item){
 
     this.items.push(item)
     this.itemsChanged.next(this.items)
 
-    const key: string = this.idTraker.toString()
+    console.log(item)
 
     const itemWithId = {
-      key: key, 
+      key: item.id, 
         payload: {
           type: 'ITEM',
           data : item
@@ -140,9 +137,51 @@ export class DataService {
 
     this.itemNames.push(item.name)
 
-    this.idTraker++
+    this.ipc.send(SENDING_ITEM,  itemWithId)
+
+  }
+
+  saveItem(item: Item){
+
+
+    var index = 0
+    for(let it of this.items){
+      if(it.id == item.id){
+        console.log(index)
+        break
+      }
+      index +=1
+    }
+
+    this.items[index] = item
+
+    this.itemsChanged.next(this.items)
+
+    const itemWithId= {
+      key: item.id,
+        payload: {
+          type: 'ITEM',
+          data :item 
+      }
+    }
 
     this.ipc.send(SENDING_ITEM,  itemWithId)
+  }
+
+  deleteItemById(id: string){
+
+    console.log(this.items)
+    this.items = this.items.filter(item=> {
+      console.log(+item.id !== +id)
+      return +item.id !== +id
+    })
+
+    console.log(this.items)
+
+
+    this.ipc.send(DELETE_ITEM, id)
+
+    this.itemsChanged.next(this.items)
 
   }
 
@@ -180,7 +219,8 @@ export class DataService {
       if(type === "ITEM"){
         //data.name, data.item_type, data.price
         this.itemNames.push(data.name)
-        const item = new Item(null,data.name, data.item_type, data.price, data.sliced, data.tax_catagory)
+        console.log(data)
+        const item = new Item(data.id ,data.name, data.item_type, data.price, data.sliced, data.tax_catagory)
         this.items.push(item)
         this.itemsChanged.next(this.items)
         console.log(this.items)

@@ -21,6 +21,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { EditOrderComponent } from './edit-order/edit-order.component';
+import {EditItemComponent} from './edit-item/edit-item.component'
 
 
 
@@ -34,6 +35,7 @@ import { EditOrderComponent } from './edit-order/edit-order.component';
     AddItemComponent,
     NewOrderComponent,
     EditOrderComponent,
+    EditItemComponent,
   ],
   imports: [
     BrowserModule,

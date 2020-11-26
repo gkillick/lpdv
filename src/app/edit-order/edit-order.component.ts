@@ -29,7 +29,7 @@ export class EditOrderComponent implements OnInit {
     "viennoiserie": [],
     "pains": []
   }
-  current_user = new User(1, "Montreal lpdv", "gkillick@gmail.com")
+  current_user = new User("1", "Montreal lpdv", "gkillick@gmail.com")
   
 
   constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
@@ -92,7 +92,7 @@ export class EditOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    const order = new Order(this.order.id,this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
+    const order = new Order(this.order.id,+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){

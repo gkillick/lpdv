@@ -75,6 +75,8 @@ export class DashboardComponent implements OnInit {
       }
 
       for(let order of this.orders){
+        console.log("Here:")
+        console.log(order)
         for(let itemOrder of order.itemOrders){
           for(let orderItemCount of this.orderItemCountsList){
             if(itemOrder.item.name === orderItemCount.name){
@@ -123,6 +125,22 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+  //one order summary no need for database
+  orderSummary(order: any){
+    var itemOrders = order.itemOrders;
+    itemOrders.sort((a,b) => {
+      //not working
+      return ('' + a.item.name).localeCompare(b.item.name);
+    })
+    var summary = "";
+    for(let item_order of itemOrders){
+      if(item_order.amount > 0){
+          summary= summary+ item_order.item.name + " "
+          summary= summary+ item_order.amount+ " "
+      }
+  }
+  return summary;
   }
 
 }

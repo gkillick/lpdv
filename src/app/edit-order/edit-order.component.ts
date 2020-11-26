@@ -79,6 +79,7 @@ export class EditOrderComponent implements OnInit {
 
       });
   }
+  this.updateTotals();
   this.onChanges();
 
 
@@ -148,7 +149,18 @@ export class EditOrderComponent implements OnInit {
 
   onChanges(): void {
     this.myForm.valueChanges.subscribe(val => {
-      var before_tax = 0;
+      this.updateTotals()
+      });
+
+  }
+// Create our number formatter.
+formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+//function to update total prices 
+updateTotals(){
+  var before_tax = 0;
       var tax = 0;
       var tax_items = {
         "no_tax": {"count": 0, "total": 0},
@@ -175,15 +187,8 @@ export class EditOrderComponent implements OnInit {
       this.total_tax = tax;
       this.total_before_tax = before_tax;
       this.total_price = this.total_tax + this.total_before_tax;
-      });
 
-  }
-// Create our number formatter.
-formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
+}
   
 
 }

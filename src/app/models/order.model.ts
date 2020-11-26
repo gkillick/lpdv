@@ -2,7 +2,6 @@ import { ItemOrder } from './item_order.model';
 
 export class Order{
 
-    static traker: number = 1
     summary: string
     orderNumber: number
 
@@ -20,8 +19,6 @@ export class Order{
         public total: number,
 
         ){
-            this.orderNumber = Order.traker
-            Order.traker+=1
             this.summary= ""
             for(let item_order of this.itemOrders){
             this.summary= this.summary+ item_order.item.name + " "

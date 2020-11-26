@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
       })
 
       var sortedOrders = filteredOrders.sort((a,b) => {
-        return +a.orderNumber - +b.orderNumber
+        return +a.id - +b.id
       })
 
       this.orders = sortedOrders

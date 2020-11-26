@@ -19,7 +19,7 @@
             <table mat-table [dataSource]="orders" matSort class="mat-elevation-z8 mt-3 table-max">
                 <ng-container matColumnDef="orderNumber">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Order No. </th>
-                    <td mat-cell *matCellDef="let item"> {{item.orderNumber}} </td>
+                    <td mat-cell *matCellDef="let item"> {{item.id}} </td>
                 </ng-container>
                 <!-- Item name -->
                 <ng-container matColumnDef="first_name">

@@ -85,8 +85,9 @@ export class NewOrderComponent implements OnInit {
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
+        console.log(item.id)
         console.log(formValue[item.name])
-        order.itemOrders.push(new ItemOrder(null,null, item, formValue[item.name], false)) 
+        order.itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
       }
     }
 

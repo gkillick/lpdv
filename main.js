@@ -63,11 +63,12 @@ ipcMain.on(SENDING_ITEM, (event, arg) => {
 
     const { key, payload} = arg
     console.log(payload)
-
     console.log(key)
+
     storage.set(key, payload, (error) => {
 
-        console.log('saved data')
+        console.log(error)
+
 
 
     })
@@ -79,6 +80,7 @@ ipcMain.on(GET_KEYS_ITEMS, (event, arg) => {
 
 
     storage.keys((error, keys) => {
+        console.log(keys)
         if (error) throw error
 
         event.reply(RESPONSE_KEYS_ITEMS, keys)

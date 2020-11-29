@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   orderItemCountsList = []
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
   displayedColumns = ["name", "count"];
-  displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "details"]
+  displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total", "details"]
   currentlySelctedDate: Date
   dateForm: FormControl
 
@@ -32,6 +32,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
 
     this.currentlySelctedDate = new Date();
+    this.currentlySelctedDate.setDate(new Date().getDate()+1);
+ 
     this.currentlySelctedDate.setHours(0,0,0,0);
     this.dateForm = new FormControl(this.currentlySelctedDate)
 
@@ -145,5 +147,11 @@ export class DashboardComponent implements OnInit {
   }
   return summary;
   }
+
+  // Create our number formatter.
+formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
 }

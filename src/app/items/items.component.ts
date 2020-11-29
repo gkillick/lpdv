@@ -56,7 +56,7 @@ export class ItemsComponent implements OnInit {
     this.zone.run(() => {
       
       dialogRef = this.dialog.open(EditItemComponent, {
-        width: '100%',
+        width: '250px',
         data: {
           item: item
         }

@@ -286,6 +286,12 @@ export class DataService {
 
     this.ipc.send(GET_KEYS_ITEMS)
   }
+
+  sendDataToPrint(data: any){
+
+    console.log(data)
+    this.ipc.send("printPDF", data)
+  }
   
 
 }

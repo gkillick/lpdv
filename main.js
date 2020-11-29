@@ -1,7 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, protocol } = require('electron')
 const url = require("url");
 const path = require("path");
 const isDev = require('electron-is-dev')
+const fs = require('fs')
+const os = require('os')
+const shell = require('electron').shell
 
 try {
     require('electron-reloader')(module)
@@ -9,6 +12,7 @@ try {
 
 
 let mainWindow
+let workerWindow 
 
 
 function createWindow() {
@@ -40,6 +44,33 @@ function createWindow() {
     mainWindow.on('closed', function() {
         mainWindow = null
     })
+
+
+    //Create worker window for printing
+
+    workerWindow = new BrowserWindow({
+        backgroundColor: '#FFF',
+        width: 400,
+        height: 300,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+    workerWindow.loadURL(
+        url.format({
+            pathname: path.join(__dirname, '/worker.html'),
+            protocol: "file:",
+            slashes: true
+        })
+    )
+
+    workerWindow.webContents.openDevTools()
+    workerWindow.hide()
+    
+    
+    workerWindow.on('closed', () => {
+        workerWindow = null
+    })
 }
 
 app.on('ready', createWindow)
@@ -55,7 +86,8 @@ app.on('activate', function() {
 
 const {DELETE_ITEM, SENDING_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER}  = require('./src/message-types.js')
 
-const storage = require('electron-json-storage')
+const storage = require('electron-json-storage');
+const { worker } = require('cluster');
 console.log(storage.getDefaultDataPath())
 console.log("HI")
 
@@ -125,3 +157,37 @@ ipcMain.on(DELETE_ITEM, (event, key) => {
         console.log(err)
     })
 })
+
+
+
+
+
+//Endpoints for printing
+
+
+ipcMain.on("printPDF", (event, content) => {
+    console.log(content);
+    workerWindow.webContents.send("printPDF", content);
+});
+
+
+// when worker window is ready
+ipcMain.on("readyToPrintPDF", (event) => {
+    const pdfPath = url.format({
+        pathname: path.join(__dirname, '/print.pdf'),
+    })
+    // Use default printing options
+    workerWindow.webContents.printToPDF({}).then((data) => {
+        fs.writeFile(pdfPath, data, function (error) {
+            if (error) {
+                throw error
+            }
+            shell.openExternal(pdfPath)
+            event.sender.send('wrote-pdf', pdfPath)
+        })
+    }).catch((error) => {
+        console.log(error)
+       throw error;
+    })
+});
+

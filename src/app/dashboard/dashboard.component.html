@@ -55,7 +55,7 @@
                     </table>
                 </mat-tab>
                 <mat-tab label="Production Quantities">
-                    <table mat-table [dataSource]="orderItemCounts" matSort class="mat-elevation-z8 mt-3 table-max">
+                    <table id="orderAmountTable" mat-table [dataSource]="orderItemCounts" matSort class="mat-elevation-z8 mt-3 table-max">
 
                         <!-- Item name -->
                         <ng-container matColumnDef="name">
@@ -74,6 +74,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
+                    <button class="btn btn-primary" (click)="printPage()">Print</button>
                 </mat-tab>
             </mat-tab-group>
         </div>

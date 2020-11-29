@@ -51,7 +51,7 @@ function createWindow() {
     workerWindow = new BrowserWindow({
         backgroundColor: '#FFF',
         width: 400,
-        height: 300,
+        height: 600,
         webPreferences: {
             nodeIntegration: true
         }
@@ -65,7 +65,7 @@ function createWindow() {
     )
 
     workerWindow.webContents.openDevTools()
-    workerWindow.hide()
+    //workerWindow.hide()
     
     
     workerWindow.on('closed', () => {
@@ -173,21 +173,32 @@ ipcMain.on("printPDF", (event, content) => {
 
 // when worker window is ready
 ipcMain.on("readyToPrintPDF", (event) => {
+    console.log(event)
     const pdfPath = url.format({
         pathname: path.join(__dirname, '/print.pdf'),
     })
+    /*
     // Use default printing options
     workerWindow.webContents.printToPDF({}).then((data) => {
         fs.writeFile(pdfPath, data, function (error) {
             if (error) {
+                console.log('error')
                 throw error
             }
-            shell.openExternal(pdfPath)
-            event.sender.send('wrote-pdf', pdfPath)
         })
     }).catch((error) => {
         console.log(error)
        throw error;
+    })
+    */
+
+    workerWindow.webContents.print((success, failure) => {
+
+        console.log(success)
+
+        if(failure){
+            throw failure
+        }
     })
 });
 

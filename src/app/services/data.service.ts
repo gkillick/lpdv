@@ -289,7 +289,6 @@ export class DataService {
 
   sendDataToPrint(data: any){
 
-    console.log(data)
     this.ipc.send("printPDF", data)
   }
   

@@ -22,6 +22,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { EditOrderComponent } from './edit-order/edit-order.component';
 import {EditItemComponent} from './edit-item/edit-item.component'
+import {MatTabsModule} from '@angular/material/tabs';
+
 
 
 
@@ -52,7 +54,8 @@ import {EditItemComponent} from './edit-item/edit-item.component'
     MatSelectModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTabsModule
 
 
   ],

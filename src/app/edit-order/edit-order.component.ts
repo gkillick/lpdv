@@ -29,11 +29,11 @@ export class EditOrderComponent implements OnInit {
     "viennoiserie": [],
     "pains": []
   }
-  current_user = new User("1", "Montreal lpdv", "gkillick@gmail.com")
+  current_user = new User("1", "Montreal lpdv", "bob")
   
 
   constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
-    this.order = this.dataService.getOrderById(data.id)
+    //this.order = this.dataService.getOrderById(data.id)
     console.log("constructor running")
    }
 
@@ -100,7 +100,7 @@ export class EditOrderComponent implements OnInit {
       }
     }
 
-    this.dataService.saveOrder(order)
+    //this.dataService.saveOrder(order)
     
 
     try {
@@ -117,7 +117,7 @@ export class EditOrderComponent implements OnInit {
   }
 
   delete(){
-    this.dataService.deleteOrderById(this.order.id)
+    //this.dataService.deleteOrderById(this.order.id)
 
     this.dialogRef.close()
   

@@ -23,7 +23,7 @@ export class DataService {
 
 
   constructor() { 
-
+/*
     if ((<any>window).require) {
       try {
         this.ipc = (<any>window).require('electron').ipcRenderer;
@@ -33,8 +33,9 @@ export class DataService {
     } else {
       console.warn('App not running inside Electron!');
     }
+    */
   }
-
+/*
 
   getOrderById(id: number){
 
@@ -292,5 +293,5 @@ export class DataService {
     this.ipc.send("printPDF", data)
   }
   
-
+*/
 }

@@ -31,7 +31,7 @@ export class NewOrderComponent implements OnInit {
     "viennoiserie": [],
     "pains": []
   }
-  current_user = new User("1", "Montreal lpdv", "gkillick@gmail.com")
+  current_user = new User("1", "Montreal lpdv", "hi")
   
 
   constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
@@ -39,7 +39,7 @@ export class NewOrderComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('init')
-
+/*
     for(let item of this.dataService.items){
       console.log(item.item_type)
       if(item.item_type === "viennoiserie"){
@@ -48,6 +48,7 @@ export class NewOrderComponent implements OnInit {
         this.items["pains"].push(item)
       }
     }
+    */
 
 
 
@@ -91,7 +92,7 @@ export class NewOrderComponent implements OnInit {
       }
     }
 
-    this.dataService.addOrder(order)
+    //this.dataService.addOrder(order)
     
 
     try {

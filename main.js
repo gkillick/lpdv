@@ -25,17 +25,12 @@ function createWindow() {
         }
     })
 
-    if (isDev) {
-        mainWindow.loadURL('http://localhost:4200/index.html')
-    } else {
         mainWindow.loadURL(
             url.format({
                 pathname: path.join(__dirname, `/dist/lpdv/index.html`),
                 protocol: "file:",
                 slashes: true
-            })
-        );
-    }
+            }))
 
 
     // Open the DevTools.

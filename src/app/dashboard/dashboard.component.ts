@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
  
     this.currentlySelctedDate.setHours(0,0,0,0);
     this.dateForm = new FormControl(this.currentlySelctedDate)
-
+/*
     this.getOrdersForCurrentlySelectedDate()
 
     this.dataService.orderChanged.subscribe(orders => {
@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
 
       this.changeDetection.detectChanges()
     })
+    */
   }
 
 
@@ -71,7 +72,7 @@ export class DashboardComponent implements OnInit {
 
       this.orderItemCountsList = []
       this.orderItemCounts.data = this.orderItemCountsList
-
+/*
       for(let item of this.dataService.items){
         console.log(item)
         this.orderItemCountsList.push({id: item.id, name: item.name, amount: 0})
@@ -88,6 +89,7 @@ export class DashboardComponent implements OnInit {
           }
       }
     }
+    */
 
     this.orderItemCounts.data = this.orderItemCountsList
 
@@ -140,7 +142,7 @@ export class DashboardComponent implements OnInit {
     var summary = "";
     for(let item_order of itemOrders){
       if(item_order.amount > 0){
-          const name = this.dataService.getItemById(item_order.item_id).name
+          //const name = this.dataService.getItemById(item_order.item_id).name
           summary= summary+ name + " "
           summary= summary+ item_order.amount+ " "
       }
@@ -158,7 +160,7 @@ formatter = new Intl.NumberFormat('en-US', {
 printPage(){
   const html: HTMLElement = document.getElementById('orderAmountTable')
 
-  this.dataService.sendDataToPrint(html.innerHTML)
+  //this.dataService.sendDataToPrint(html.innerHTML)
 
 }
 

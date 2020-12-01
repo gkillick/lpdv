@@ -50,7 +50,7 @@ export class AddItemComponent implements OnInit {
       console.log(formValue)
       const item: Item = new Item(this.dataService.idTraker.toString(), formValue.name, formValue.item_type, formValue.price, formValue.sliced, formValue.tax_catagory)
       this.dataService.idTraker += 1
-      this.dataService.addItem(item)
+      //this.dataService.addItem(item)
       this.success = true;
       this.dialogRef.close()
     } catch(err) {

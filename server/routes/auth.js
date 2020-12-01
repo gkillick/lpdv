@@ -8,13 +8,14 @@ router.post('/register', async (req,res) => {
 
     const userData = await req.body
 
+
+    console.log(req.body)
+
     const userFound = await db.getUserByName(req.body.name)
 
-    console.log(userFound)
-    console.log(req.body.password)
 
     if(userFound){
-        res.send('user already exists')
+        res.status(409).send({error: 'USER_EXISTS'})
         return
     }
 
@@ -30,7 +31,7 @@ router.post('/register', async (req,res) => {
 
     const id = await db.addUser(user)
     console.log(id)
-    res.send(id)
+    res.send({id: id})
 
 })
 
@@ -41,7 +42,7 @@ router.post('/login', async (req, res) => {
 
     //Check if name is correct
     if(!user){
-        res.status(400).send('INVALID_USERNAME')
+        res.status(400).send({error: 'INVALID_USERNAME'})
     }
 
 
@@ -52,10 +53,11 @@ router.post('/login', async (req, res) => {
     const validPass = await bcrypt.compare(req.body.password, user.data.password)
 
     if(!validPass){
-        res.status(400).send("INVALID_PASSWORD")
+        res.status(400).send({error: "INVALID_PASSWORD"})
     }
 
     //Create and assign a token
+    console.log(process.env.TOKEN_SECRET)
     const token = jwt.sign({_id:user.id}, process.env.TOKEN_SECRET)
 
     userData = {

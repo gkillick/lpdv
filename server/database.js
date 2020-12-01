@@ -1,5 +1,4 @@
 const admin = require('firebase-admin')
-const { getHeapSnapshot } = require('v8')
 const serviceAccount = require('./lpdv-cdf2e-firebase-adminsdk-mf06f-7e1ca62523.json')
 
 class FirestoreClient{
@@ -54,6 +53,89 @@ class FirestoreClient{
 
         const queryRef = users.where('id', '==', id)
 
+    }
+
+
+    async addItem(item) {
+        const res = await this.db.collection('items').add(item)
+
+        console.log(res.id)
+
+        return res.id
+    }
+
+
+    async getItemByName(name){
+
+        const items = this.db.collection('items')
+
+
+        const queryRef = await items.where('name', '==', name).get()
+
+
+        if(queryRef.empty){
+            return null
+        }else{
+            const data = []
+            queryRef.forEach(doc =>{
+                data.push({
+                    id: doc.id,
+                    data: doc.data()
+                })
+            })
+
+            return data
+        }
+    }
+
+    async getItemByUserId(id){
+
+        const items = this.db.collection('items')
+
+        const queryRef = await items.where('user_id', '==', id).get()
+
+
+        if(queryRef.empty){
+            return null
+        }else{
+            const data = []
+            queryRef.forEach(doc =>{
+                data.push({
+                    id: doc.id,
+                    data: doc.data()
+                })
+            })
+
+            return data
+        }
+    }
+
+    async addOrder(order){
+        const res = await this.db.collection('orders').add(order)
+
+        return res.id
+    }
+
+    async getOrdersByUserId(id){
+
+        const orders = this.db.collection('orders')
+
+        const queryRef = await orders.where('user_id', '==', id).get()
+
+
+        if(queryRef.empty){
+            return null
+        }else{
+            const data = []
+            queryRef.forEach(doc =>{
+                data.push({
+                    id: doc.id,
+                    data: doc.data()
+                })
+            })
+
+            return data
+        }
     }
 }
 

@@ -53,7 +53,7 @@ export class EditItemComponent implements OnInit {
       //use this object to create product
 
       const item: Item = new Item(this.item.id, formValue.name, formValue.item_type, formValue.price, formValue.sliced, formValue.tax_catagory)
-      this.dataService.saveItem(item)
+      //this.dataService.saveItem(item)
       this.success = true;
       this.dialogRef.close()
     } catch(err) {
@@ -66,7 +66,7 @@ export class EditItemComponent implements OnInit {
 
   delete(){
 
-    this.dataService.deleteItemById(this.item.id)
+    //this.dataService.deleteItemById(this.item.id)
 
     this.dialogRef.close()
   }

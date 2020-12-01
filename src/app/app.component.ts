@@ -19,6 +19,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     console.log('getting data')
-    this.dataService.getStoredData()
+    //this.dataService.getStoredData()
   }
 }

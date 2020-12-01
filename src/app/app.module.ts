@@ -23,6 +23,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { EditOrderComponent } from './edit-order/edit-order.component';
 import {EditItemComponent} from './edit-item/edit-item.component'
 import {MatTabsModule} from '@angular/material/tabs';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import {FormsModule} from '@angular/forms'
+import {HttpClientModule} from '@angular/common/http'
 
 
 
@@ -38,8 +42,11 @@ import {MatTabsModule} from '@angular/material/tabs';
     NewOrderComponent,
     EditOrderComponent,
     EditItemComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     MatToolbarModule,
@@ -55,8 +62,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTabsModule
-
+    MatTabsModule,
+    HttpClientModule
 
   ],
   providers: [],

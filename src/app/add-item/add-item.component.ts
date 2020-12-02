@@ -28,7 +28,7 @@ export class AddItemComponent implements OnInit {
     {value: 'no_tax', viewValue: 'no tax'},
   ]
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }
+  constructor(private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
@@ -48,8 +48,9 @@ export class AddItemComponent implements OnInit {
     try {
       //use this object to create product
       console.log(formValue)
-      const item: Item = new Item(this.dataService.idTraker.toString(), formValue.name, formValue.item_type, formValue.price, formValue.sliced, formValue.tax_catagory)
-      this.dataService.idTraker += 1
+      const item: Item = Item.newItem(formValue)
+ 
+      this.itemsService.addItem(formValue);
       //this.dataService.addItem(item)
       this.success = true;
       this.dialogRef.close()

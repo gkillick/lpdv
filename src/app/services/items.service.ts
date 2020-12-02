@@ -1,10 +1,10 @@
 import { Injectable, OnInit} from '@angular/core';
-import { Subject } from 'rxjs';
-import {Item} from '../models/item.model'
-import {IpcRenderer} from 'electron'
-import {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} from '../../message-types'
-import { DataService } from './data.service';
-//import storage from 'electron-json-storage'
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Item } from '../models/item.model';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { AuthService } from '../auth.service';
+
 
  
 
@@ -13,46 +13,36 @@ import { DataService } from './data.service';
 })
 export class ItemsService {
 
-  items: Item[] = []
-  itemChangedSubject: Subject<Item[]> = new Subject<Item[]>()
-  ipc: IpcRenderer
-
-
-  itemTypesChangedSubject: Subject<any> = new Subject<any>()
-
-  constructor(private dataService: DataService) { 
-
-  }
-
-
-
-
-
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   addItem(item: Item){
+    //assign user id to item
+    this.authService.user.subscribe(user => {
+      item.user_id = user.id;
+    })
+    return this.http.post('/api/items/add', item).pipe(catchError(this.handleErrors))
+  }
 
-    console.log(item)
-    this.items.push(item)
-    this.itemChangedSubject.next(this.items)
 
-    const key: string = this.dataService.idTraker.toString()
 
-    const itemWithId = {
-      key: key, 
-        payload: {
-          type: 'ITEM',
-          data : item
-      }
+  handleErrors(errorRes: HttpErrorResponse){
+
+
+    let errorMessage = "an unknown error occured"
+
+    if(!errorRes.error || !errorRes.error.error){
+      return throwError(errorRes)
     }
 
+    switch(errorRes.error.error){
+      case "ITEM_EXISTS":
+        errorMessage = "The item already exists"
 
-    this.dataService.ipc.send(SENDING_ITEM,  itemWithId)
+    }
 
-  }
+    throw(errorRes)
 
-  getItems(){
+}
 
-    return this.items.slice()
-
-  }
+  
 }

@@ -4,7 +4,7 @@ const db = require('../database')
 
 
 
-router.post('/', verifyToken, async (req,res) => {
+router.post('/add', verifyToken, async(req, res) => {
 
     console.log(req.user)
     console.log(req.body)
@@ -13,7 +13,7 @@ router.post('/', verifyToken, async (req,res) => {
 
     console.log(itemFound)
 
-    if(itemFound){
+    if (itemFound) {
         res.send('item already exists')
         return
     }
@@ -32,7 +32,7 @@ router.post('/', verifyToken, async (req,res) => {
 })
 
 
-router.get('/', verifyToken, async (req,res) => {
+router.get('/', verifyToken, async(req, res) => {
 
     const items = await db.getItemByUserId(req.user._id)
 

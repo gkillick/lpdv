@@ -52,7 +52,7 @@ export class EditItemComponent implements OnInit {
     try {
       //use this object to create product
 
-      const item: Item = new Item(this.item.id, formValue.name, formValue.item_type, formValue.price, formValue.sliced, formValue.tax_catagory)
+      const item: Item = Item.newItem(formValue)
       //this.dataService.saveItem(item)
       this.success = true;
       this.dialogRef.close()

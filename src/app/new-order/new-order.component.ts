@@ -34,13 +34,12 @@ export class NewOrderComponent implements OnInit {
   current_user = new User("1", "Montreal lpdv", "hi")
   
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
+  constructor(private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
 
 
   ngOnInit(): void {
     console.log('init')
-/*
-    for(let item of this.dataService.items){
+    for(let item of this.itemsService.items){
       console.log(item.item_type)
       if(item.item_type === "viennoiserie"){
         this.items["viennoiserie"].push(item)
@@ -48,7 +47,6 @@ export class NewOrderComponent implements OnInit {
         this.items["pains"].push(item)
       }
     }
-    */
 
 
 
@@ -65,7 +63,9 @@ export class NewOrderComponent implements OnInit {
       telephone: ['', Validators.required],
       date: [tomorrow, Validators.required],
     });
+    console.log(this.items)
     for (var key in this.items) {
+
       this.items[key].forEach(element => {
         console.log(element.item_type)
         this.myForm.addControl(element.name, new FormControl('', ))
@@ -81,14 +81,14 @@ export class NewOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    const order = new Order(this.dataService.idTraker.toString(),+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
-    this.dataService.idTraker +=1
+    //const order = new Order(this.dataService.idTraker.toString(),+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
+    //this.dataService.idTraker +=1
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
         console.log(item.id)
         console.log(formValue[item.name])
-        order.itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
+        //order.itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
       }
     }
 

@@ -38,4 +38,36 @@ router.get('/', verifyToken, async(req, res) => {
 
 })
 
+router.put('/', verifyToken, async (req,res) => {
+
+    console.log('request')
+
+    console.log(req.body)
+    const newItem = await db.updateItem(req.body.id, req.body)
+
+    console.log(newItem) 
+
+
+    const item = req.body
+
+    res.send(item)
+
+
+})
+
+
+router.delete('/:id', verifyToken, async (req, res) => {
+
+
+    const del = await db.deleteItemByIdForUser(req.params.id, req.user._id)
+    console.log(del)
+
+    if(!del){
+        res.status(400).send({error: 'ITEM_NOT_FOUND'})
+    }
+
+    res.send({id: req.params.id})
+
+})
+
 module.exports = router

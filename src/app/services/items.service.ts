@@ -11,12 +11,23 @@ import { AuthService } from '../auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ItemsService {
+export class ItemsService implements OnInit{
 
   items: Item[] = []
   itemsSubject: Subject<Item[]> = new Subject<Item[]>()
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) { 
+    
+  }
+  ngOnInit(){
+    this.authService.user.subscribe(user => {
+      if(user){
+        this.fetchItems().subscribe(res => {
+          console.log(res)
+        })
+      }
+    })
+  }
 
   addItem(item: Item){
     //assign user id to item
@@ -36,12 +47,42 @@ export class ItemsService {
   fetchItems(){
     return this.http.get('/api/items').pipe(catchError(this.handleErrors), tap(res => {
 
+      this.items = []
       for(let item of res['items']){
         this.items.push(item)
       }
 
       this.itemsSubject.next(this.items)
     }))
+  }
+
+  editItem(item: Item){
+
+    console.log(item)
+    return this.http.put('api/items', item).pipe(catchError(this.handleErrors), tap(res => {
+
+      this.items = this.items.map((item: Item) => {
+        if(item.id = res['id']){
+          return Item.newItem(res)
+        }else{
+          return Item.newItem(item)
+        }
+      })
+
+      this.itemsSubject.next(this.items)
+    }))
+  }
+
+  deleteItem(item: Item){
+
+    return this.http.delete('api/items/'+item.id).pipe(catchError(this.handleErrors), tap(res => {
+
+      this.items = this.items.filter(item => {
+        return !(item.id === res['id'])
+      })
+      this.itemsSubject.next(this.items)
+    }))
+
   }
 
 

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Item } from '../models/item.model';
 import { DataService } from '../services/data.service';
+import { ItemsService } from '../services/items.service';
 
 @Component({
   selector: 'app-edit-item',
@@ -28,7 +29,7 @@ export class EditItemComponent implements OnInit {
     {value: 'no_tax', viewValue: 'no tax'},
   ]
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditItemComponent>, @Inject(MAT_DIALOG_DATA) data) {
+  constructor(private itemService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditItemComponent>, @Inject(MAT_DIALOG_DATA) data) {
     console.log(data)
     this.item = data.item
    }
@@ -53,6 +54,12 @@ export class EditItemComponent implements OnInit {
       //use this object to create product
 
       const item: Item = Item.newItem(formValue)
+      item.id = this.item.id
+      item.user_id = this.item.user_id
+
+      this.itemService.editItem(item).subscribe(res => {
+        console.log(res)
+      })
       //this.dataService.saveItem(item)
       this.success = true;
       this.dialogRef.close()
@@ -66,7 +73,9 @@ export class EditItemComponent implements OnInit {
 
   delete(){
 
-    //this.dataService.deleteItemById(this.item.id)
+    this.itemService.deleteItem(this.item).subscribe(res => {
+      console.log(res)
+    })
 
     this.dialogRef.close()
   }

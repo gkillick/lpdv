@@ -5,6 +5,7 @@ import { BehaviorSubject, throwError } from 'rxjs';
 import { User } from './models/user.model';
 import jwt_decode from 'jwt-decode'
 import { Router } from '@angular/router';
+import { ItemsService } from './services/items.service';
 
 @Injectable({
   providedIn: 'root'

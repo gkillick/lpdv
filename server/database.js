@@ -89,6 +89,56 @@ class FirestoreClient{
         }
     }
 
+    async updateItem(item_id, item){
+
+        const items = this.db.collection('items')
+
+        const queryRef = await items.where('user_id', '==', item.user_id).get()
+
+        if(queryRef.empty){
+            return null
+        }else{
+            queryRef.forEach( async doc =>{
+                const d = doc.data()
+                console.log(doc.id)
+                if(item_id === doc.id){
+                    const res = await items.doc(doc.id).update(item)
+                    console.log(res)
+                }
+            })
+        }
+        return 'updated'
+
+    }
+
+    async deleteItemByIdForUser(item_id, user_id){
+
+        const items = this.db.collection('items')
+
+
+        const queryRef = await items.where('user_id', '==', user_id).get()
+
+        
+
+
+
+        if(queryRef.empty){
+            return null
+        }else{
+
+            queryRef.forEach( async doc =>{
+                const d = await doc.data()
+                console.log(doc.id)
+                console.log(item_id)
+                if(doc.id === item_id){
+                    const res = await items.doc(doc.id).delete()
+                }
+            })
+
+            return "deleted"
+        }
+    }
+
     async getItemByUserId(id){
 
         const items = this.db.collection('items')

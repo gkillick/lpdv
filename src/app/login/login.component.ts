@@ -14,9 +14,14 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
+
+    if(this.authService.user){
+      this.authService.autoLogin()
+    }
   }
 
   onSubmit(form: NgForm){
+
     console.log(form)
 
     const {username, password} = form.value

@@ -15,11 +15,16 @@ export class AppComponent implements OnInit {
 
 
   constructor(private dataService: DataService, private authService: AuthService){
-    this.authService.autoLogin()
+
   }
 
   ngOnInit(){
+    this.authService.autoLogin()
     console.log('getting data')
     //this.dataService.getStoredData()
+  }
+
+  logout(){
+    this.authService.logout()
   }
 }

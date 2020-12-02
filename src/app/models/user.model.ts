@@ -12,7 +12,7 @@ export class User{
     setExpiaryTime(issuedTime: number){
         console.log(issuedTime)
         this.expiaryTime = new Date(0)
-        this.expiaryTime.setUTCSeconds(issuedTime+3000)
+        this.expiaryTime.setUTCSeconds(issuedTime+86400)
         console.log(this.expiaryTime)
     }
 

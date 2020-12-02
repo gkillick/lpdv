@@ -48,37 +48,55 @@ export class AuthService {
 
     localStorage.setItem('userData', JSON.stringify(user))
 
-    this.router.navigate(['/dashboard'])
+    this.autoLogout()
+
   }
 
   autoLogin(){
 
-    const {id, name, token, expiaryTime} = JSON.parse(localStorage.getItem('userData'))
+    if(localStorage.getItem('userData')){
 
-    const user = new User(id, name, token)
+      const {id, name, token, expiaryTime} = JSON.parse(localStorage.getItem('userData'))
 
-    const expiaryDate = new Date(expiaryTime).getTime()/1000
-    user.setExpiaryTime(expiaryDate)
+      const user = new User(id, name, token)
 
-    if(user.getToken()){
-      this.user.next(user)
-      console.log('login worked')
-      this.autoLogout(expiaryDate)
-      this.router.navigate(['/dashboard'])
+      const expiaryDate = new Date(expiaryTime).getTime()/1000
+      user.setExpiaryTime(expiaryDate)
+
+      if(user.getToken()){
+        this.user.next(user)
+        this.router.navigate(['/dashboard'])
+        console.log('login worked')
+        this.autoLogout()
+
+      }else{
+        console.log('the token expired')
+      }
     }else{
-      console.log('the token expired')
+      console.log('no user data saved')
     }
+
+
+
+
 
   }
 
-  autoLogout(expirationDuration: number){
+  autoLogout(){
     this.tokenExpirationTimer = setTimeout(() => {
-      this.logout
-    }, expirationDuration)
+      this.logout()
+    }, 86400000)
   }
 
   logout(){
+
+    console.log('logout called')
     this.user.next(null)
+    this.router.navigate(['/login'])
+    localStorage.removeItem('userData')
+    if(this.tokenExpirationTimer){
+      clearTimeout(this.tokenExpirationTimer)
+    }
   }
 
 

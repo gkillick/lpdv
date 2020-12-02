@@ -18,8 +18,11 @@ export class ItemsService {
   addItem(item: Item){
     //assign user id to item
     this.authService.user.subscribe(user => {
+      console.log(user)
       item.user_id = user.id;
     })
+
+    console.log(item)
     return this.http.post('/api/items/add', item).pipe(catchError(this.handleErrors))
   }
 

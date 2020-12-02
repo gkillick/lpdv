@@ -51,7 +51,9 @@ export class AddItemComponent implements OnInit {
       const item: Item = Item.newItem(formValue)
  
       this.itemsService.addItem(formValue).subscribe(
-        response => {console.log(response)}
+        response => {console.log(response)}, errorRes => {
+          console.log(errorRes)
+        }
       )
       //this.dataService.addItem(item)
       this.success = true;

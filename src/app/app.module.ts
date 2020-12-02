@@ -4,6 +4,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {MatSelectModule} from '@angular/material/select';
+import {HTTP_INTERCEPTORS} from '@angular/common/http'
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,7 +28,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {FormsModule} from '@angular/forms'
 import {HttpClientModule} from '@angular/common/http'
-
+import {AuthInterceptorService} from './auth-interceptor.service'
 
 
 
@@ -66,7 +67,9 @@ import {HttpClientModule} from '@angular/common/http'
     HttpClientModule
 
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

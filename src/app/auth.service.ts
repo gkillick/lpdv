@@ -11,12 +11,13 @@ import jwt_decode from 'jwt-decode'
 export class AuthService {
 
   user: BehaviorSubject<User> = new BehaviorSubject<User>(null)
+  tokenExpirationTimer: any
 
   constructor(private http: HttpClient) { }
 
 
   signup(username: string, password:string){
-    return this.http.post('http://localhost:3000/api/user/register', {
+    return this.http.post('/api/user/register', {
       name: username,
       password: password
   }).pipe(catchError(this.handleErrors))
@@ -24,7 +25,7 @@ export class AuthService {
   }
 
   login(username: string, password: string){
-    return this.http.post<User>('http://localhost:3000/api/user/login', {
+    return this.http.post<User>('/api/user/login', {
       name: username,
       password: password
     } ).pipe(catchError(this.handleErrors), tap(resData => {
@@ -36,11 +37,45 @@ export class AuthService {
   handleAuthentication(id: string, name: string, token: string){
 
     const data = jwt_decode(token)
-    console.log(data)
 
+
+    const user = new User(id, name, token)
+    //user.setExpiaryTime(Date(data['iat']))
+    user.setExpiaryTime(data['iat'])
 
     this.user.next(new User(id, name, token))
 
+    localStorage.setItem('userData', JSON.stringify(user))
+
+  }
+
+  autoLogin(){
+
+    const {id, name, token, expiaryTime} = JSON.parse(localStorage.getItem('userData'))
+
+    const user = new User(id, name, token)
+
+    const expiaryDate = new Date(expiaryTime).getTime()/1000
+    user.setExpiaryTime(expiaryDate)
+
+    if(user.getToken()){
+      this.user.next(user)
+      console.log('login worked')
+      this.autoLogout(expiaryDate)
+    }else{
+      console.log('the token expired')
+    }
+
+  }
+
+  autoLogout(expirationDuration: number){
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout
+    }, expirationDuration)
+  }
+
+  logout(){
+    this.user.next(null)
   }
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from './auth.service';
 import { DataService } from './services/data.service';
 import { ItemsService } from './services/items.service';
 
@@ -13,8 +14,8 @@ export class AppComponent implements OnInit {
   isCollapsed = true;
 
 
-  constructor(private dataService: DataService){
-
+  constructor(private dataService: DataService, private authService: AuthService){
+    this.authService.autoLogin()
   }
 
   ngOnInit(){

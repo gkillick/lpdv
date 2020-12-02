@@ -4,6 +4,7 @@ import {catchError, tap} from 'rxjs/operators'
 import { BehaviorSubject, throwError } from 'rxjs';
 import { User } from './models/user.model';
 import jwt_decode from 'jwt-decode'
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   user: BehaviorSubject<User> = new BehaviorSubject<User>(null)
   tokenExpirationTimer: any
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
 
   signup(username: string, password:string){
@@ -47,6 +48,7 @@ export class AuthService {
 
     localStorage.setItem('userData', JSON.stringify(user))
 
+    this.router.navigate(['/dashboard'])
   }
 
   autoLogin(){
@@ -62,6 +64,7 @@ export class AuthService {
       this.user.next(user)
       console.log('login worked')
       this.autoLogout(expiaryDate)
+      this.router.navigate(['/dashboard'])
     }else{
       console.log('the token expired')
     }

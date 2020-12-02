@@ -45,6 +45,7 @@ export class ItemsService implements OnInit{
 
 
   fetchItems(){
+    console.log("getting items")
     return this.http.get('/api/items').pipe(catchError(this.handleErrors), tap(res => {
 
       this.items = []

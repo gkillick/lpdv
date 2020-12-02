@@ -27,7 +27,8 @@ export class EditOrderComponent implements OnInit {
 
   items = {
     "viennoiserie": [],
-    "pains": []
+    "pains": [],
+    "nöel": []
   }
   current_user = new User("1", "Montreal lpdv", "bob")
   
@@ -47,6 +48,8 @@ export class EditOrderComponent implements OnInit {
         this.items["viennoiserie"].push(item)
       }else if(item.item_type === "pains"){
         this.items["pains"].push(item)
+      }else if(item.item_type === "nöel"){
+        this.items["nöel"].push(item)
       }
     }
 

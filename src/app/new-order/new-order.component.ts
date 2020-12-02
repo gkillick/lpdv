@@ -29,9 +29,10 @@ export class NewOrderComponent implements OnInit {
 
   items = {
     "viennoiserie": [],
-    "pains": []
+    "pains": [],
+    "noel": []
   }
-  current_user = new User("1", "Montreal lpdv", "hi")
+
   
 
   constructor(private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
@@ -45,6 +46,8 @@ export class NewOrderComponent implements OnInit {
         this.items["viennoiserie"].push(item)
       }else if(item.item_type === "pains"){
         this.items["pains"].push(item)
+      }else if(item.item_type === "nöel"){
+        this.items["noel"].push(item)
       }
     }
 

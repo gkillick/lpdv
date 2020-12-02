@@ -62,7 +62,7 @@ export class ItemsService implements OnInit{
     return this.http.put('api/items', item).pipe(catchError(this.handleErrors), tap(res => {
 
       this.items = this.items.map((item: Item) => {
-        if(item.id = res['id']){
+        if(item.id === res['id']){
           return Item.newItem(res)
         }else{
           return Item.newItem(item)

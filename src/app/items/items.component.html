@@ -1,4 +1,8 @@
 <div class="container-fluid">
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+    <p>{{errorMessage}}</p>
+    </div>
     <div class="row">
         <div class="col-sm mt-3">
             <button (click)="openDialog()" class="btn btn-primary">Add Item</button>

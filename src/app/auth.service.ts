@@ -18,10 +18,12 @@ export class AuthService {
 
 
   signup(username: string, password:string){
-    return this.http.post('/api/user/register', {
+    return this.http.post<User>('/api/user/register', {
       name: username,
       password: password
-  }).pipe(catchError(this.handleErrors))
+  }).pipe(catchError(this.handleErrors), tap(resData => {
+    this.handleAuthentication(resData.id, resData.name, resData.token)
+    }))
 
   }
 
@@ -128,7 +130,7 @@ export class AuthService {
   
       }
 
-      throw(errorRes)
+      throw(errorMessage)
 
   }
 }

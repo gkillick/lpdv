@@ -29,9 +29,19 @@ router.post('/register', async (req,res) => {
     }
 
 
+
     const id = await db.addUser(user)
-    console.log(id)
-    res.send({id: id})
+
+
+    const token = jwt.sign({_id:id}, process.env.TOKEN_SECRET)
+
+    const userDataResp = {
+        id: id,
+        name: req.body.name,
+        token: token
+    }
+
+    res.header('auth-token', token).send(userDataResp)
 
 })
 

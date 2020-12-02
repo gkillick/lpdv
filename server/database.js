@@ -65,7 +65,7 @@ class FirestoreClient{
     }
 
 
-    async getItemByName(name){
+    async getItemByNameForUserId(name, id){
 
         const items = this.db.collection('items')
 
@@ -78,13 +78,14 @@ class FirestoreClient{
         }else{
             const data = []
             queryRef.forEach(doc =>{
-                data.push({
-                    id: doc.id,
-                    data: doc.data()
-                })
+                const d = doc.data()
+                if(d.user_id === id){
+                    d.id = doc.id
+                    data.push(d)
+                }
             })
 
-            return data
+            return data[0]
         }
     }
 
@@ -100,10 +101,9 @@ class FirestoreClient{
         }else{
             const data = []
             queryRef.forEach(doc =>{
-                data.push({
-                    id: doc.id,
-                    data: doc.data()
-                })
+                const d = doc.data()
+                d.id = doc.id
+                data.push(d)
             })
 
             return data

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Item } from '../models/item.model';
@@ -14,6 +14,7 @@ export class AddItemComponent implements OnInit {
 
   myForm: FormGroup;
 
+  errorMessage: string
   loading = false;
   success = false;
 
@@ -51,13 +52,17 @@ export class AddItemComponent implements OnInit {
       const item: Item = Item.newItem(formValue)
  
       this.itemsService.addItem(formValue).subscribe(
-        response => {console.log(response)}, errorRes => {
+        response => {
+          console.log(response)
+          this.dialogRef.close()
+        }, errorRes => {
           console.log(errorRes)
+          this.dialogRef.close(errorRes)
         }
       )
       //this.dataService.addItem(item)
       this.success = true;
-      this.dialogRef.close()
+
     } catch(err) {
       console.error(err)
     }

@@ -15,16 +15,23 @@ import { EditItemComponent } from '../edit-item/edit-item.component';
 })
 export class ItemsComponent implements OnInit {
 
+  errorMessage: string
+
   constructor(private dataService: DataService,private itemService: ItemsService,public dialog: MatDialog, private changeDetection: ChangeDetectorRef, private zone: NgZone) { }
 
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>()
 
   ngOnInit(): void {
 
+    this.itemService.fetchItems().subscribe(items => {
+      console.log(items)
+    })
+
+
     this.dataSource.data = this.dataService.items
 
 
-    this.dataService.itemsChanged.subscribe((items: Item[]) => {
+    this.itemService.itemsSubject.subscribe((items: Item[]) => {
 
       this.dataSource.data = items.sort((a,b) => {
         return +b.id - +a.id
@@ -44,6 +51,7 @@ export class ItemsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       //refresh table
+      this.errorMessage = result
     });
   }
 

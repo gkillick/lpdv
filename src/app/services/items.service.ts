@@ -1,6 +1,6 @@
 import { Injectable, OnInit} from '@angular/core';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { catchError, tap} from 'rxjs/operators';
 import { Item } from '../models/item.model';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { AuthService } from '../auth.service';
@@ -13,6 +13,9 @@ import { AuthService } from '../auth.service';
 })
 export class ItemsService {
 
+  items: Item[] = []
+  itemsSubject: Subject<Item[]> = new Subject<Item[]>()
+
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   addItem(item: Item){
@@ -23,7 +26,22 @@ export class ItemsService {
     })
 
     console.log(item)
-    return this.http.post('/api/items/add', item).pipe(catchError(this.handleErrors))
+    return this.http.post<Item>('/api/items/add', item).pipe(catchError(this.handleErrors), tap(res => {
+      this.items.push(res)
+      this.itemsSubject.next(this.items)
+    }))
+  }
+
+
+  fetchItems(){
+    return this.http.get('/api/items').pipe(catchError(this.handleErrors), tap(res => {
+
+      for(let item of res['items']){
+        this.items.push(item)
+      }
+
+      this.itemsSubject.next(this.items)
+    }))
   }
 
 
@@ -43,7 +61,7 @@ export class ItemsService {
 
     }
 
-    throw(errorRes)
+    throw(errorMessage)
 
 }
 

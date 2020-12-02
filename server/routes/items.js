@@ -9,21 +9,17 @@ router.post('/add', verifyToken, async(req, res) => {
     console.log(req.user)
     console.log(req.body)
     console.log('requesting item')
-    const itemFound = await db.getItemByName(req.body.name)
+    const itemFound = await db.getItemByNameForUserId(req.body.name, req.body.user_id)
 
+    console.log('item found')
     console.log(itemFound)
 
     if (itemFound) {
-        res.send('item already exists')
+        res.status(409).send({error:'ITEM_EXISTS'})
         return
     }
 
-    const item = {
-        name: req.body.name,
-        user_id: req.user._id,
-        price: req.body.price
-    }
-
+    const item = req.body
 
     const id = await db.addItem(item)
     console.log(id)
@@ -38,7 +34,7 @@ router.get('/', verifyToken, async(req, res) => {
 
     console.log(items)
 
-    res.send(items)
+    res.send({items: items})
 
 })
 

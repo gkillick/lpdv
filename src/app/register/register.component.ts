@@ -10,6 +10,8 @@ import { AuthService } from '../auth.service';
 })
 export class RegisterComponent implements OnInit {
 
+  errorMessage: string
+
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -28,13 +30,20 @@ export class RegisterComponent implements OnInit {
 
     const passwordConsitent = password === passwordConf
 
+    if(!passwordConsitent){
+      this.errorMessage = "password must be the same as confirmation password"
+    }
+
     if(passwordConsitent && form.valid){
       this.authService.signup(username, password).subscribe(res => {
         console.log(res)
+        this.router.navigate(['/dashboard'])
       }, errorRes => {
-        console.log(errorRes)
+        this.errorMessage = errorRes
       })
     }
+
+
 
     form.reset()
   }

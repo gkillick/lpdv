@@ -50,7 +50,9 @@ export class AddItemComponent implements OnInit {
       console.log(formValue)
       const item: Item = Item.newItem(formValue)
  
-      this.itemsService.addItem(formValue);
+      this.itemsService.addItem(formValue).subscribe(
+        response => {console.log(response)}
+      )
       //this.dataService.addItem(item)
       this.success = true;
       this.dialogRef.close()

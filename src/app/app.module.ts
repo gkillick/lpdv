@@ -29,6 +29,8 @@ import { RegisterComponent } from './register/register.component';
 import {FormsModule} from '@angular/forms'
 import {HttpClientModule} from '@angular/common/http'
 import {AuthInterceptorService} from './auth-interceptor.service'
+import {MatSortModule} from '@angular/material/sort';
+
 
 
 
@@ -64,7 +66,8 @@ import {AuthInterceptorService} from './auth-interceptor.service'
     MatDatepickerModule,
     MatNativeDateModule,
     MatTabsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSortModule
 
   ],
   providers: [

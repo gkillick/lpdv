@@ -11,7 +11,10 @@ import { AuthService } from '../auth.service';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class ItemsService implements OnInit{
+
 
   items: Item[] = []
   itemsSubject: Subject<Item[]> = new Subject<Item[]>()
@@ -31,6 +34,7 @@ export class ItemsService implements OnInit{
 
   addItem(item: Item){
     //assign user id to item
+    item.name = item.name.toLowerCase()
     this.authService.user.subscribe(user => {
       console.log(user)
       item.user_id = user.id;
@@ -60,6 +64,7 @@ export class ItemsService implements OnInit{
   editItem(item: Item){
 
     console.log(item)
+    item.name = item.name.toLowerCase()
     return this.http.put('api/items', item).pipe(catchError(this.handleErrors), tap(res => {
 
       this.items = this.items.map((item: Item) => {

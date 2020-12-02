@@ -39,6 +39,13 @@
                 <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
             </mat-form-field>
         </div>
+        <div class="col-sm">
+            <h4>Nöel</h4>
+            <mat-form-field class="w-100" *ngFor="let item of items.noel">
+                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
+            </mat-form-field>
+        </div>
+
     </div>
     <div class="row">
         <div class="col-sm">

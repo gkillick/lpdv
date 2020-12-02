@@ -8,6 +8,7 @@ import { Order } from '../models/order.model';
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
 import { NgZone } from '@angular/core';
+import { ItemsService } from '../services/items.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,12 +26,15 @@ export class DashboardComponent implements OnInit {
   currentlySelctedDate: Date
   dateForm: FormControl
 
-  constructor(public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
+  constructor(private itemsService: ItemsService, public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
 
   }
 
   ngOnInit(): void {
 
+    this.itemsService.fetchItems().subscribe()
+
+ 
     this.currentlySelctedDate = new Date();
     this.currentlySelctedDate.setDate(new Date().getDate()+1);
  

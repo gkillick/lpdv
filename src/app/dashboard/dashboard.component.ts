@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
         console.log(item)
         this.orderItemCountsList.push({id: item.id, name: item.name, amount: 0})
       }
-
+      /*
       for(let order of this.orders){
         console.log("Here:")
         console.log(order)
@@ -100,6 +100,8 @@ export class DashboardComponent implements OnInit {
           }
       }
     }
+    */
+
 
     this.orderItemCounts.data = this.orderItemCountsList
 
@@ -142,12 +144,16 @@ export class DashboardComponent implements OnInit {
     });
   }
   //one order summary no need for database
+  
   orderSummary(order: any){
+    let summary = "summary goes here"
+    /*
     var itemOrders = order.itemOrders;
     itemOrders.sort((a,b) => {
       //not working
       return ('' + a.name).localeCompare(b.name);
     })
+  
 
     var summary = "";
     for(let item_order of itemOrders){
@@ -157,8 +163,11 @@ export class DashboardComponent implements OnInit {
           summary= summary+ item_order.amount+ " "
       }
   }
+     */
+  
   return summary;
   }
+ 
 
   // Create our number formatter.
 formatter = new Intl.NumberFormat('en-US', {

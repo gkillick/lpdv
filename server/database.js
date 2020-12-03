@@ -233,7 +233,7 @@ class FirestoreClient{
 
         const itemOrders = await this.db.collection('itemOrders').add(itemOrder)
 
-        return itemOrder.id
+        return itemOrders.id
     }
 /*
     async getItemOrdersForOrderId(order_id){

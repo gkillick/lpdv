@@ -66,7 +66,13 @@ export class DashboardComponent implements OnInit {
       var filteredOrders = orders.filter(order => {
         console.log(order.date)
         console.log(this.currentlySelctedDate.setHours(0,0,0,0))
-        return order.date.toDateString() === this.currentlySelctedDate.toDateString()
+        let selectedDate = this.currentlySelctedDate
+        selectedDate.setHours(0,0,0,0)
+        console.log("date below")
+        console.log(order.date)
+        console.log(order.date)
+        console.log(order.date == this.currentlySelctedDate)
+        return order.date === this.currentlySelctedDate
       })
 
       var sortedOrders = filteredOrders.sort((a,b) => {

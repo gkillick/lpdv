@@ -186,6 +186,63 @@ class FirestoreClient{
             return data
         }
     }
+
+    async updateOrder(order){
+
+        const orders= this.db.collection('orders')
+
+        const queryRef = await orders.where('user_id', '==', order.user_id).get()
+
+        if(queryRef.empty){
+            return null
+        }else{
+            queryRef.forEach( async doc =>{
+                const d = doc.data()
+                console.log(doc.id)
+                if(order.id === doc.id){
+                    const res = await orders.doc(doc.id).update(order)
+                    console.log(res)
+                }
+            })
+        }
+        return 'updated'
+
+    }
+
+    async deleteOrder(order){
+
+        const orders = this.db.collection('orders')
+
+        const queryRef = await orders.where('user_id', '==', order.user_id).get()
+
+        if(queryRef.empty){
+            return null
+        }else{
+            queryRef.forEach( async doc =>{
+                if(order.id === doc.id){
+                    const res = await orders.doc(doc.id).delete()
+                    console.log(res)
+                }
+            })
+        }
+        return 'deleted'
+
+    }
+
+    async addItemOrder(itemOrder){
+
+        const itemOrders = await this.db.collection('itemOrders').add(itemOrder)
+
+        return itemOrder.id
+    }
+/*
+    async getItemOrdersForOrderId(order_id){
+
+        const itemOrders = await this.db.collection('itemOrders')
+
+        itemOrders.
+    }
+    */
 }
 
 const client = new FirestoreClient()

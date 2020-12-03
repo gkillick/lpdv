@@ -24,8 +24,6 @@ export class OrderService {
 
 
   addOrder(order: Order){
-
-
     //assign user id to item
     this.authService.user.subscribe((user: User)=> {
       console.log(user)
@@ -37,9 +35,44 @@ export class OrderService {
       this.orders.push(res)
       this.orderChangedSubject.next(this.orders)
     }))
+  }
 
+  getOrders(){
+    return this.http.get('/api/orders/add').pipe(catchError(this.handleErrors), tap(res => {
+      this.orders = []
 
+      for(let order of res['orders']){
+        this.orders.push(Order.newOrder(order))
+      }
+      this.orderChangedSubject.next(this.orders)
+    }))
+  }
 
+  editOrder(order: Order){
+
+    return this.http.put('api/orders', order).pipe(catchError(this.handleErrors), tap(res => {
+
+      this.orders = this.orders.map((order: Order) => {
+        if(order.id === res['id']){
+          return Order.newOrder(res)
+        }else{
+          return Order.newOrder(order)
+        }
+      })
+
+      this.orderChangedSubject.next(this.orders)
+    }))
+  }
+
+  deleteOrder(order: Order){
+
+    return this.http.delete('api/orders/'+order.id).pipe(catchError(this.handleErrors), tap(res => {
+
+      this.orders= this.orders.filter(item => {
+        return !(item.id === res['id'])
+      })
+      this.orderChangedSubject.next(this.orders)
+    }))
   }
 
 

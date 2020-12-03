@@ -94,12 +94,12 @@ export class EditOrderComponent implements OnInit {
 
     const formValue = this.myForm.value;
     var itemOrders = [];
-    const order = new Order(this.order.id,+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
+    //const order = new Order(this.order.id,+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
         console.log(formValue[item.name])
-        order.itemOrders.push(new ItemOrder(null , item.name ,null , item.id , formValue[item.name], false)) 
+        //order.itemOrders.push(new ItemOrder(null , item.name ,null , item.id , formValue[item.name], false)) 
       }
     }
 

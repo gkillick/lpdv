@@ -25,4 +25,20 @@ router.get('/', verifyToken, async (req,res) => {
 
 })
 
+router.put('/', verifyToken, async (req,res) => {
+
+    const updated = await db.updateOrder(req.body)
+
+    if(updated){
+        res.send(req.body)
+    }else{
+        res.status(400).send({error: "NOT_UPDATED"})
+    }
+
+})
+
+router.delete('/:id', verifyToken, async (req,res) => {
+    const deleted = await db.deleteOrderForUser(req.params.id, req.user.id)
+})
+
 module.exports = router

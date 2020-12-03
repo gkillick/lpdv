@@ -22,7 +22,8 @@ router.post('/add', verifyToken, async(req, res) => {
     const item = req.body
 
     const id = await db.addItem(item)
-    console.log(id)
+    item.id = id
+
     res.send(item)
 
 })

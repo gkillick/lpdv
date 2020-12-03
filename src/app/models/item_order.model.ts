@@ -12,9 +12,10 @@ export class ItemOrder{
         public item_id: string,
         public amount: number,
         public sliced: boolean,
+        public date: Date,
     ){}
 
-    static newOrder(params: any){
-        return new ItemOrder(params.id, params.string, params.order_id, params.item_id, params.amount, params.sliced)
+    static newItemOrder(params: any){
+        return new ItemOrder(params.id, params.string, params.order_id, params.item_id, params.amount, params.sliced, params.date)
     }
 }

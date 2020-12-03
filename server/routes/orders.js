@@ -18,6 +18,7 @@ router.post('/add', verifyToken, async(req, res) => {
 router.get('/', verifyToken, async(req, res) => {
 
     var orders = await db.getOrdersByUserId(req.user._id)
+        //populate itemOrders
     for (let i = 0; i < orders.length; i++) {
         var itemOrders = await db.getItemOrdersByOrderId(orders[i].id)
         orders[i].itemOrders = itemOrders

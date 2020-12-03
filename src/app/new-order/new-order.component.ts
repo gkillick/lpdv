@@ -92,6 +92,7 @@ export class NewOrderComponent implements OnInit {
     formValue.sub_total = this.sub_total
     formValue.tax = this.tax
     formValue.total = this.total
+    formValue.date.setHours(0,0,0,0);
     let order = Order.newOrder(formValue)
     this.orderService.addOrder(order).subscribe(res => {
       console.log(res)

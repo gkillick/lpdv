@@ -51,8 +51,27 @@ export class AddItemComponent implements OnInit {
       //use this object to create product
       console.log(formValue)
       const item: Item = Item.newItem(formValue)
- 
-      this.itemsService.addItem(formValue).subscribe(
+
+          //if sliced duplicate 
+      if(item.sliced){
+        let item2 = Item.newItem(item)
+       item2.sliced = true
+       item.sliced = false
+        item2.name = item2.name + " sliced"
+        this.itemsService.addItem(item2).subscribe(
+          response => {
+            console.log(response)
+            this.dialogRef.close()
+          }, errorRes => {
+            console.log(errorRes)
+            this.dialogRef.close(errorRes)
+          }
+        )
+
+      }
+      
+      
+      this.itemsService.addItem(item).subscribe(
         response => {
           console.log(response)
           this.dialogRef.close()

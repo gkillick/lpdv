@@ -97,18 +97,16 @@ export class NewOrderComponent implements OnInit {
     let order = Order.newOrder(formValue)
     this.orderService.addOrder(order).subscribe(res => {
       order = res
-    }, error => {
-      //console.log(error)
-    })
-    console.log("Order:")
-    console.log(order)
     var itemOrders = [];
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
         console.log(item.id)
         console.log(formValue[item.name])
-        itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
+        if(formValue[item.name]){
+          itemOrders.push(new ItemOrder(null, item.name, order.id, item.id, formValue[item.name], false)) 
+        }
+
       }
     }
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
@@ -117,6 +115,12 @@ export class NewOrderComponent implements OnInit {
     }, error => {
       console.log(error)
     })
+    }, error => {
+      //console.log(error)
+    })
+    console.log("Order:")
+    console.log(order)
+
 
     try {
       //use this object to create order

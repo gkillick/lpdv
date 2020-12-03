@@ -24,6 +24,8 @@ export class OrderService {
 
 
   addOrder(order: Order){
+    console.log('order: ')
+    console.log(order)
     //assign user id to item
     this.authService.user.subscribe((user: User)=> {
       console.log(user)

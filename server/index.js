@@ -9,6 +9,7 @@ const app = express()
 const authRoute = require('./routes/auth')
 const itemsRoute = require('./routes/items')
 const ordersRoute = require('./routes/orders')
+const itemOrdersRoute = require('./routes/itemOrders')
 
 //Cors middleware
 
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use('/api/user', authRoute)
 app.use('/api/items', itemsRoute)
 app.use('/api/orders', ordersRoute)
+app.use('/api/itemOrders', itemOrdersRoute)
 
 app.listen(3000, () => {console.log('Server is up and running')})
 

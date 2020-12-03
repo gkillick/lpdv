@@ -3,14 +3,20 @@ const verifyToken = require('./verifyToken')
 const db = require('../database')
 
 
-router.post('/', verifyToken, async (req,res) => {
+router.post('/add', verifyToken, async (req,res) => {
 
-    const id = await db.addItemOrder(req.body)
-    console.log(id)
+    const itemOrders = req.body.orders
 
-    const itemOrder = req.body
-    itemOrder.id = id
+    ordersResponse = []
+    for(let itemOrder of itemOrders){
+        const id = await db.addItemOrder(itemOrder)
+        itemOrder.id = id
+        ordersResponse.push(itemOrder)
+    }
 
-    res.send(itemOrder)
+    res.send({itemOrders: ordersResponse})
 
 })
+
+
+module.exports = router

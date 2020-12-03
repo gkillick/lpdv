@@ -9,7 +9,7 @@ router.post('/add', verifyToken, async (req,res) => {
 
     const id = await db.addOrder(req.body)
 
-    console.log(id)
+    req.body.id = id
 
     res.send(req.body)
 

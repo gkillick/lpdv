@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { ɵBrowserDomAdapter } from '@angular/platform-browser';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table'
@@ -7,7 +7,6 @@ import { ItemsService } from '../services/items.service';
 import {Item} from '../models/item.model'
 import { DataService } from '../services/data.service';
 import { EditItemComponent } from '../edit-item/edit-item.component';
-import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-items',
@@ -22,17 +21,9 @@ export class ItemsComponent implements OnInit {
 
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>()
 
-  @ViewChild(MatSort) sort: MatSort;
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
-
   ngOnInit(): void {
 
-    this.itemService.fetchItems().subscribe(items => {
-      console.log(items)
-    })
+
 
 
     this.dataSource.data = this.dataService.items
@@ -85,16 +76,6 @@ export class ItemsComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
-  //capitalize
-  capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  // Create our number formatter.
-formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
 
 
 

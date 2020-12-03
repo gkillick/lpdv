@@ -8,6 +8,7 @@ import { ItemOrder } from '../models/item_order.model';
 import { Order } from '../models/order.model';
 import { User } from '../models/user.model';
 import { DataService } from '../services/data.service';
+import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
 
@@ -36,7 +37,7 @@ export class NewOrderComponent implements OnInit {
 
   
 
-  constructor(private itemsService: ItemsService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
+  constructor(private itemsService: ItemsService, private itemOrdersService: ItemOrdersService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
 
 
   ngOnInit(): void {
@@ -95,24 +96,25 @@ export class NewOrderComponent implements OnInit {
     formValue.date.setHours(0,0,0,0);
     let order = Order.newOrder(formValue)
     this.orderService.addOrder(order).subscribe(res => {
-      console.log(res)
+      order = res
     }, error => {
-      console.log(error)
+      //console.log(error)
     })
     console.log("Order:")
     console.log(order)
     var itemOrders = [];
     for(let key in this.items){
-      //console.log(key)
+      console.log(key)
       for(let item of this.items[key]){
-        //console.log(item.id)
-        //console.log(formValue[item.name])
-        //order.itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
+        console.log(item.id)
+        console.log(formValue[item.name])
+        itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
       }
     }
-
-    //this.dataService.addOrder(order)
-    
+    this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
+      console.log('item orders')
+      console.log(orders)
+    })
 
     try {
       //use this object to create order

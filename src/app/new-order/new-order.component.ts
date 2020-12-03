@@ -45,21 +45,14 @@ export class NewOrderComponent implements OnInit {
     for(let item of this.itemsService.items){
       for(let item_type in this.items){
         if(item.item_type == item_type){
-          //logic for slice forms
-          console.log(item.sliced)
-          if(item.sliced){
-            //create two elements for sliced items
-            this.items[item_type].push(item)
-            let item2 = Item.newItem(item)
-            item2.name = item2.name + " sliced"
-            this.items[item_type].push(item2)
-
-          }else{
-             this.items[item_type].push(item)
-          }
-
+          this.items[item_type].push(item)
         }
+        this.items[item_type].sort((a,b) => {
+          //not working
+          return ('' + a.name).localeCompare(b.name);
+        })
       }
+
 
     }
 
@@ -108,7 +101,6 @@ export class NewOrderComponent implements OnInit {
     console.log("Order:")
     console.log(order)
     var itemOrders = [];
-    //this.dataService.idTraker +=1
     for(let key in this.items){
       //console.log(key)
       for(let item of this.items[key]){

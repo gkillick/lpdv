@@ -35,16 +35,17 @@ export class ItemsService implements OnInit{
   addItem(item: Item){
     //assign user id to item
     item.name = item.name.toLowerCase()
+
     this.authService.user.subscribe(user => {
       console.log(user)
       item.user_id = user.id;
     })
 
-    console.log(item)
     return this.http.post<Item>('/api/items/add', item).pipe(catchError(this.handleErrors), tap(res => {
       this.items.push(res)
       this.itemsSubject.next(this.items)
     }))
+    
   }
 
 

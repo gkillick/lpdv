@@ -17,7 +17,7 @@ export class ItemsComponent implements OnInit {
 
   errorMessage: string
 
-  constructor(private dataService: DataService,private itemService: ItemsService,public dialog: MatDialog, private changeDetection: ChangeDetectorRef, private zone: NgZone) { }
+  constructor(private itemService: ItemsService,public dialog: MatDialog, private changeDetection: ChangeDetectorRef, private zone: NgZone) { }
 
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>()
 

@@ -5,6 +5,7 @@ export class Order{
 
     summary: string
     orderNumber: number
+    itemOrders: ItemOrder[]
 
     constructor(
         public id: string,
@@ -13,13 +14,15 @@ export class Order{
         public last_name:string,
         public telephone: number,
         public date: Date,
-        public itemOrders: 
-        ItemOrder[],
-        public before_tax: number,
+        public sub_total: number,
         public tax: number,
         public total: number
         
         ){
+    }
+
+    static newOrder(params: any){
+        return new Order(params.id, params.user_id, params.first_name, params.last_name, params.telephone,params.date, params.sub_total, params.tax,params.total )
     }
 
     addItemOrder(itemOrder: ItemOrder){

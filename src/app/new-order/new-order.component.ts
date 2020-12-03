@@ -23,9 +23,9 @@ export class NewOrderComponent implements OnInit {
 
   loading = false;
   success = false;
-  total_price = 0;
-  total_before_tax = 0;
-  total_tax = 0;
+  total = 0;
+  sub_total = 0;
+  tax = 0;
 
   items = {
     "viennoiserie": [],
@@ -83,14 +83,20 @@ export class NewOrderComponent implements OnInit {
     this.loading = true;
 
     const formValue = this.myForm.value;
+    formValue.sub_total = this.sub_total
+    formValue.tax = this.tax
+    formValue.total = this.total
+    let order = Order.newOrder(formValue)
+    console.log("Order:")
+    console.log(order)
     var itemOrders = [];
     //const order = new Order(this.dataService.idTraker.toString(),+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     //this.dataService.idTraker +=1
     for(let key in this.items){
-      console.log(key)
+      //console.log(key)
       for(let item of this.items[key]){
-        console.log(item.id)
-        console.log(formValue[item.name])
+        //console.log(item.id)
+        //console.log(formValue[item.name])
         //order.itemOrders.push(new ItemOrder(null, item.name, null, item.id, formValue[item.name], false)) 
       }
     }
@@ -100,7 +106,6 @@ export class NewOrderComponent implements OnInit {
 
     try {
       //use this object to create order
-      console.log(formValue)
       this.success = true;
       this.dialogRef.close()
     } catch(err) {
@@ -160,9 +165,9 @@ export class NewOrderComponent implements OnInit {
       }
       console.log(tax)
       tax += tax_items.normal.total * .14975
-      this.total_tax = tax;
-      this.total_before_tax = before_tax;
-      this.total_price = this.total_tax + this.total_before_tax;
+      this.tax = tax;
+      this.sub_total = before_tax;
+      this.total = this.tax + this.sub_total;
       });
 
   }

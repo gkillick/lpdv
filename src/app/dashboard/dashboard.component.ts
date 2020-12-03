@@ -55,8 +55,11 @@ export class DashboardComponent implements OnInit {
 
   onDateSelected(event){
     this.currentlySelctedDate = event.value
+    console.log(event.value)
 
     this.getOrdersForCurrentlySelectedDate()
+
+    this.changeDetection.detectChanges()
   }
 
   getOrdersForCurrentlySelectedDate(){
@@ -72,7 +75,7 @@ export class DashboardComponent implements OnInit {
         console.log("date below")
         console.log(orderDate)
         console.log(selectedDate)
-        return orderDate.toDateString === selectedDate.toDateString
+        return orderDate.toDateString() === selectedDate.toDateString()
       })
 
       var sortedOrders = filteredOrders.sort((a,b) => {

@@ -36,7 +36,7 @@ export class NewOrderComponent implements OnInit {
 
   
 
-  constructor(private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
+  constructor(private itemsService: ItemsService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
 
 
   ngOnInit(): void {
@@ -100,10 +100,14 @@ export class NewOrderComponent implements OnInit {
     formValue.tax = this.tax
     formValue.total = this.total
     let order = Order.newOrder(formValue)
+    this.orderService.addOrder(order).subscribe(res => {
+      console.log(res)
+    }, error => {
+      console.log(error)
+    })
     console.log("Order:")
     console.log(order)
     var itemOrders = [];
-    //const order = new Order(this.dataService.idTraker.toString(),+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     //this.dataService.idTraker +=1
     for(let key in this.items){
       //console.log(key)

@@ -22,7 +22,9 @@ export class Order{
     }
 
     static newOrder(params: any){
-        return new Order(params.id, params.user_id, params.first_name, params.last_name, params.telephone,params.date, params.sub_total, params.tax,params.total )
+        let order = new Order(params.id, params.user_id, params.first_name, params.last_name, params.telephone,params.date, params.sub_total, params.tax,params.total )
+        order.itemOrders = params.itemOrders
+        return order
     }
 
     addItemOrder(itemOrder: ItemOrder){

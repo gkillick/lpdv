@@ -65,6 +65,7 @@ export class DashboardComponent implements OnInit {
   getOrdersForCurrentlySelectedDate(){
 
       var orders = this.ordersService.orders
+      console.log(orders)
 
       var filteredOrders = orders.filter(order => {
         let selectedDate = new Date(this.currentlySelctedDate)

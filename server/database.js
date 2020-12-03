@@ -1,10 +1,10 @@
 const admin = require('firebase-admin')
 const serviceAccount = require('./lpdv-cdf2e-firebase-adminsdk-mf06f-7e1ca62523.json')
 
-class FirestoreClient{
+class FirestoreClient {
 
 
-    constructor(){
+    constructor() {
 
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
@@ -21,7 +21,7 @@ class FirestoreClient{
         return res.id
     }
 
-    async getUserByName(name){
+    async getUserByName(name) {
 
         console.log(name)
 
@@ -30,24 +30,24 @@ class FirestoreClient{
         const queryRef = await users.where('name', '==', name).get()
 
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
+        } else {
             const data = []
-            queryRef.forEach(doc =>{
+            queryRef.forEach(doc => {
                 data.push({
                     id: doc.id,
                     data: doc.data()
                 })
             })
 
-            return data[0]      //Send back first one since there should only ever be one with the same name
+            return data[0] //Send back first one since there should only ever be one with the same name
         }
 
 
     }
 
-    async getUserById(id){
+    async getUserById(id) {
 
         const users = this.db.collection('users')
 
@@ -65,7 +65,7 @@ class FirestoreClient{
     }
 
 
-    async getItemByNameForUserId(name, id){
+    async getItemByNameForUserId(name, id) {
 
         const items = this.db.collection('items')
 
@@ -73,13 +73,13 @@ class FirestoreClient{
         const queryRef = await items.where('name', '==', name).get()
 
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
+        } else {
             const data = []
-            queryRef.forEach(doc =>{
+            queryRef.forEach(doc => {
                 const d = doc.data()
-                if(d.user_id === id){
+                if (d.user_id === id) {
                     d.id = doc.id
                     data.push(d)
                 }
@@ -89,19 +89,19 @@ class FirestoreClient{
         }
     }
 
-    async updateItem(item_id, item){
+    async updateItem(item_id, item) {
 
         const items = this.db.collection('items')
 
         const queryRef = await items.where('user_id', '==', item.user_id).get()
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
-            queryRef.forEach( async doc =>{
+        } else {
+            queryRef.forEach(async doc => {
                 const d = doc.data()
                 console.log(doc.id)
-                if(item_id === doc.id){
+                if (item_id === doc.id) {
                     const res = await items.doc(doc.id).update(item)
                     console.log(res)
                 }
@@ -111,26 +111,26 @@ class FirestoreClient{
 
     }
 
-    async deleteItemByIdForUser(item_id, user_id){
+    async deleteItemByIdForUser(item_id, user_id) {
 
         const items = this.db.collection('items')
 
 
         const queryRef = await items.where('user_id', '==', user_id).get()
 
-        
 
 
 
-        if(queryRef.empty){
+
+        if (queryRef.empty) {
             return null
-        }else{
+        } else {
 
-            queryRef.forEach( async doc =>{
+            queryRef.forEach(async doc => {
                 const d = await doc.data()
                 console.log(doc.id)
                 console.log(item_id)
-                if(doc.id === item_id){
+                if (doc.id === item_id) {
                     const res = await items.doc(doc.id).delete()
                 }
             })
@@ -139,18 +139,18 @@ class FirestoreClient{
         }
     }
 
-    async getItemByUserId(id){
+    async getItemByUserId(id) {
 
         const items = this.db.collection('items')
 
         const queryRef = await items.where('user_id', '==', id).get()
 
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
+        } else {
             const data = []
-            queryRef.forEach(doc =>{
+            queryRef.forEach(doc => {
                 const d = doc.data()
                 d.id = doc.id
                 data.push(d)
@@ -160,24 +160,40 @@ class FirestoreClient{
         }
     }
 
-    async addOrder(order){
+    async addOrder(order) {
         const res = await this.db.collection('orders').add(order)
 
         return res.id
     }
 
-    async getOrdersByUserId(id){
+    async getItemOrdersByOrderId(id) {
+        const itemOrders = this.db.collection('itemOrders')
+        const queryRef = await itemOrders.where('order_id', '==', id).get()
+        if (queryRef.empty) {
+            return null
+        } else {
+            const data = []
+            queryRef.forEach(doc => {
+                const d = doc.data()
+                d.id = doc.id
+                data.push(d)
+            })
+            return data
+        }
+
+    }
+    async getOrdersByUserId(id) {
 
         const orders = this.db.collection('orders')
 
         const queryRef = await orders.where('user_id', '==', id).get()
 
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
+        } else {
             const data = []
-            queryRef.forEach(doc =>{
+            queryRef.forEach(doc => {
                 const d = doc.data()
                 d.id = doc.id
                 data.push(d)
@@ -187,19 +203,19 @@ class FirestoreClient{
         }
     }
 
-    async updateOrder(order){
+    async updateOrder(order) {
 
-        const orders= this.db.collection('orders')
+        const orders = this.db.collection('orders')
 
         const queryRef = await orders.where('user_id', '==', order.user_id).get()
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
-            queryRef.forEach( async doc =>{
+        } else {
+            queryRef.forEach(async doc => {
                 const d = doc.data()
                 console.log(doc.id)
-                if(order.id === doc.id){
+                if (order.id === doc.id) {
                     const res = await orders.doc(doc.id).update(order)
                     console.log(res)
                 }
@@ -209,17 +225,17 @@ class FirestoreClient{
 
     }
 
-    async deleteOrderForUser(order_id,user_id){
+    async deleteOrderForUser(order_id, user_id) {
 
         const orders = this.db.collection('orders')
 
         const queryRef = await orders.where('user_id', '==', user_id).get()
 
-        if(queryRef.empty){
+        if (queryRef.empty) {
             return null
-        }else{
-            queryRef.forEach( async doc =>{
-                if(order_id === doc.id){
+        } else {
+            queryRef.forEach(async doc => {
+                if (order_id === doc.id) {
                     const res = await orders.doc(doc.id).delete()
                     console.log(res)
                 }
@@ -229,20 +245,20 @@ class FirestoreClient{
 
     }
 
-    async addItemOrder(itemOrder){
+    async addItemOrder(itemOrder) {
 
-        const itemOrders = await this.db.collection('itemOrders').add(itemOrder)
+            const itemOrders = await this.db.collection('itemOrders').add(itemOrder)
 
-        return itemOrders.id
-    }
-/*
-    async getItemOrdersForOrderId(order_id){
+            return itemOrders.id
+        }
+        /*
+            async getItemOrdersForOrderId(order_id){
 
-        const itemOrders = await this.db.collection('itemOrders')
+                const itemOrders = await this.db.collection('itemOrders')
 
-        itemOrders.
-    }
-    */
+                itemOrders.
+            }
+            */
 }
 
 const client = new FirestoreClient()

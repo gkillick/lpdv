@@ -72,8 +72,7 @@ export class DashboardComponent implements OnInit {
         console.log("date below")
         console.log(orderDate)
         console.log(selectedDate)
-        console.log(orderDate.toDateString === selectedDate.toDateString)
-        return orderDate === selectedDate
+        return orderDate.toDateString === selectedDate.toDateString
       })
 
       var sortedOrders = filteredOrders.sort((a,b) => {

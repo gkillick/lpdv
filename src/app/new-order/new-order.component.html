@@ -26,29 +26,35 @@
             -->
         </div>
     </div>
-    <mat-dialog-content>
-        <div class="row">
-            <div class="col-sm">
-                <h4>Viennoiserie</h4>
+    <div class="row">
+        <div class="col-sm">
+
+            <h4>Viennoiserie</h4>
+            <mat-dialog-content>
                 <mat-form-field class="w-100" *ngFor="let item of items.viennoiserie">
                     <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
                 </mat-form-field>
-            </div>
-            <div class="col-sm">
-                <h4>Pains</h4>
+            </mat-dialog-content>
+        </div>
+        <div class="col-sm wrap">
+            <h4>Pains</h4>
+            <mat-dialog-content>
                 <mat-form-field class="w-100" *ngFor="let item of items.pains" [class.sliced]="item.sliced_option">
                     <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
                 </mat-form-field>
-            </div>
-            <div class="col-sm">
-                <h4>Nöel</h4>
+            </mat-dialog-content>
+        </div>
+        <div class="col-sm">
+            <h4>Nöel</h4>
+            <mat-dialog-content>
                 <mat-form-field class="w-100" *ngFor="let item of items.noel">
                     <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
                 </mat-form-field>
-            </div>
-
+            </mat-dialog-content>
         </div>
-    </mat-dialog-content>
+
+    </div>
+
     <div class="row">
         <div class="col-sm">
             <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>

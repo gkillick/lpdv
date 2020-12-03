@@ -54,6 +54,7 @@ export class AddItemComponent implements OnInit {
 
           //if sliced duplicate 
       if(item.sliced){
+        item.sliced_option = true
         let item2 = Item.newItem(item)
        item2.sliced = true
        item.sliced = false
@@ -68,6 +69,8 @@ export class AddItemComponent implements OnInit {
           }
         )
 
+      }else{
+        item.sliced_option = false
       }
       
       

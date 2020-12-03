@@ -35,7 +35,7 @@
         </div>
         <div class="col-sm">
             <h4>Pains</h4>
-            <mat-form-field class="w-100" *ngFor="let item of items.pains">
+            <mat-form-field class="w-100" *ngFor="let item of items.pains" [class.sliced]="item.sliced_option">
                 <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
             </mat-form-field>
         </div>

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ɵELEMENT_PROBE_PROVIDERS__POST_R3__ } from '@angular/platform-browser';
-import { Item } from 'electron/main';
 import { getMaxListeners } from 'process';
+import { Item } from '../models/item.model';
 import { ItemOrder } from '../models/item_order.model';
 import { Order } from '../models/order.model';
 import { User } from '../models/user.model';
@@ -32,6 +32,7 @@ export class NewOrderComponent implements OnInit {
     "pains": [],
     "noel": []
   }
+  itemtypes = ["viennoiserie", "pains", "noel"]
 
   
 
@@ -40,16 +41,28 @@ export class NewOrderComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('init')
+
     for(let item of this.itemsService.items){
-      console.log(item.item_type)
-      if(item.item_type === "viennoiserie"){
-        this.items["viennoiserie"].push(item)
-      }else if(item.item_type === "pains"){
-        this.items["pains"].push(item)
-      }else if(item.item_type === "nöel"){
-        this.items["noel"].push(item)
+      for(let item_type in this.items){
+        if(item.item_type == item_type){
+          //logic for slice forms
+          console.log(item.sliced)
+          if(item.sliced){
+            //create two elements for sliced items
+            this.items[item_type].push(item)
+            let item2 = Item.newItem(item)
+            item2.name = item2.name + " sliced"
+            this.items[item_type].push(item2)
+
+          }else{
+             this.items[item_type].push(item)
+          }
+
+        }
       }
+
     }
+
 
 
 

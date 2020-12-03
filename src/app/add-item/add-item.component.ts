@@ -22,7 +22,7 @@ export class AddItemComponent implements OnInit {
   types: any[] = [
     {value: 'viennoiserie', viewValue: 'Viennoiserie'},
     {value: 'pains', viewValue: 'Pains'},
-    {value: 'nöel', viewValue: 'Noel'},
+    {value: 'noel', viewValue: 'Nöel'},
   ];
   tax_classifications: any[] = [
     {value: 'normal', viewValue: 'normal'},

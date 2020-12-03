@@ -124,24 +124,23 @@ export class DashboardComponent implements OnInit {
 
     console.log(id)
 
-    var dialogRef
-    this.zone.run(() => {
       
-      dialogRef = this.dialog.open(EditOrderComponent, {
+      var dialogRef = this.dialog.open(EditOrderComponent, {
         width: '100%',
         data: {
           id: id
         }
       });
-    })
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
+    }
 
 
 
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
+
   //one order summary no need for database
   
   orderSummary(order: any){

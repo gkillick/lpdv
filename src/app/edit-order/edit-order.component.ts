@@ -7,6 +7,8 @@ import { Order } from '../models/order.model';
 import { User } from '../models/user.model';
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
+import { ItemsService } from '../services/items.service';
+import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -33,8 +35,8 @@ export class EditOrderComponent implements OnInit {
   current_user = new User("1", "Montreal lpdv", "bob")
   
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
-    //this.order = this.dataService.getOrderById(data.id)
+  constructor(private orderService: OrderService,private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
+    this.order = this.orderService.getOrderById(data.id)
     console.log("constructor running")
    }
 
@@ -42,7 +44,7 @@ export class EditOrderComponent implements OnInit {
   ngOnInit(): void {
     console.log('init')
 
-    for(let item of this.dataService.items){
+    for(let item of this.itemsService.items){
       console.log(item.item_type)
       if(item.item_type === "viennoiserie"){
         this.items["viennoiserie"].push(item)

@@ -35,6 +35,8 @@ router.put('/', verifyToken, async(req, res) => {
 
     const updated = await db.updateOrder(req.body)
 
+    console.log(req.body.itemOrders)
+
     if (updated) {
         res.send(req.body)
     } else {

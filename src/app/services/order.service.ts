@@ -22,7 +22,6 @@ export class OrderService {
     
    }
 
-
   addOrder(order: Order){
     console.log('order: ')
     console.log(order)
@@ -75,6 +74,14 @@ export class OrderService {
       })
       this.orderChangedSubject.next(this.orders)
     }))
+  }
+
+  getOrderById(id){
+    for(let order of this.orders){
+      if(order.id === id){
+        return order
+      }
+    }
   }
 
 

@@ -21,7 +21,7 @@ router.get('/', verifyToken, async (req,res) => {
     const orders = await db.getOrdersByUserId(req.user._id)
     console.log(orders)
 
-    res.send(orders)
+    res.send({orders: orders})
 
 })
 

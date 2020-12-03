@@ -40,7 +40,7 @@ export class OrderService {
   }
 
   getOrders(){
-    return this.http.get('/api/orders/add').pipe(catchError(this.handleErrors), tap(res => {
+    return this.http.get('/api/orders').pipe(catchError(this.handleErrors), tap(res => {
       this.orders = []
 
       for(let order of res['orders']){

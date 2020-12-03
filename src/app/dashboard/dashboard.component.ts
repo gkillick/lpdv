@@ -9,6 +9,7 @@ import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
 import { NgZone } from '@angular/core';
 import { ItemsService } from '../services/items.service';
+import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,13 +27,14 @@ export class DashboardComponent implements OnInit {
   currentlySelctedDate: Date
   dateForm: FormControl
 
-  constructor(private itemsService: ItemsService, public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
+  constructor(private itemsService: ItemsService, private ordersService: OrderService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
 
   }
 
   ngOnInit(): void {
 
     this.itemsService.fetchItems().subscribe()
+    this.ordersService.getOrders().subscribe()
 
  
     this.currentlySelctedDate = new Date();
@@ -40,16 +42,13 @@ export class DashboardComponent implements OnInit {
  
     this.currentlySelctedDate.setHours(0,0,0,0);
     this.dateForm = new FormControl(this.currentlySelctedDate)
-/*
     this.getOrdersForCurrentlySelectedDate()
 
-    this.dataService.orderChanged.subscribe(orders => {
-
+    this.ordersService.orderChangedSubject.subscribe(orders => {
       this.getOrdersForCurrentlySelectedDate()
 
       this.changeDetection.detectChanges()
     })
-    */
   }
 
 
@@ -62,9 +61,11 @@ export class DashboardComponent implements OnInit {
 
   getOrdersForCurrentlySelectedDate(){
 
-      var orders = this.dataService.orders
+      var orders = this.ordersService.orders
 
       var filteredOrders = orders.filter(order => {
+        console.log(order.date)
+        console.log(this.currentlySelctedDate.setHours(0,0,0,0))
         return order.date.toDateString() === this.currentlySelctedDate.toDateString()
       })
 
@@ -76,8 +77,8 @@ export class DashboardComponent implements OnInit {
 
       this.orderItemCountsList = []
       this.orderItemCounts.data = this.orderItemCountsList
-/*
-      for(let item of this.dataService.items){
+
+      for(let item of this.itemsService.items){
         console.log(item)
         this.orderItemCountsList.push({id: item.id, name: item.name, amount: 0})
       }
@@ -93,7 +94,6 @@ export class DashboardComponent implements OnInit {
           }
       }
     }
-    */
 
     this.orderItemCounts.data = this.orderItemCountsList
 

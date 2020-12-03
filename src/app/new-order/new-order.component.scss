@@ -24,3 +24,25 @@ mat-form-field {
 .sliced {
     width: 44%!important;
 }
+
+
+/*
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+mat-form-field {
+    flex: 0 0 33.3333%;
+}
+*/
+
+.filter-field {
+    font-weight: 500;
+    color: black;
+    font-size: 16px;
+}
+
+::ng-deep .filter-field .mat-form-field-underline {
+    background-color: transparent!important;
+}

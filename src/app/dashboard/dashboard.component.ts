@@ -144,24 +144,22 @@ export class DashboardComponent implements OnInit {
   //one order summary no need for database
   
   orderSummary(order: any){
-    let summary = "summary goes here"
-    /*
+
     var itemOrders = order.itemOrders;
     itemOrders.sort((a,b) => {
       //not working
-      return ('' + a.name).localeCompare(b.name);
+      return ('' + a.itemName).localeCompare(b.itemName);
     })
   
 
     var summary = "";
     for(let item_order of itemOrders){
       if(item_order.amount > 0){
-          //const name = this.dataService.getItemById(item_order.item_id).name
-          summary= summary+ name + " "
           summary= summary+ item_order.amount+ " "
+          summary= summary+ item_order.itemName + " "
       }
   }
-     */
+
   
   return summary;
   }

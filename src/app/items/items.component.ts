@@ -23,10 +23,9 @@ export class ItemsComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log('init')
 
-
-
-    this.dataSource.data = this.dataService.items
+    this.dataSource.data = this.itemService.items
 
 
     this.itemService.itemsSubject.subscribe((items: Item[]) => {

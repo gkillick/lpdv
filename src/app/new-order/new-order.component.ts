@@ -114,6 +114,8 @@ export class NewOrderComponent implements OnInit {
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
       console.log('item orders')
       console.log(orders)
+    }, error => {
+      console.log(error)
     })
 
     try {

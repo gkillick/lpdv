@@ -67,14 +67,10 @@ export class DashboardComponent implements OnInit {
       var orders = this.ordersService.orders
 
       var filteredOrders = orders.filter(order => {
-        console.log(order.date)
         let selectedDate = new Date(this.currentlySelctedDate)
         let orderDate = new Date(order.date)
         selectedDate.setHours(0,0,0,0)
         orderDate.setHours(0,0,0,0)
-        console.log("date below")
-        console.log(orderDate)
-        console.log(selectedDate)
         return orderDate.toDateString() === selectedDate.toDateString()
       })
 
@@ -88,7 +84,6 @@ export class DashboardComponent implements OnInit {
       this.orderItemCounts.data = this.orderItemCountsList
 
       for(let item of this.itemsService.items){
-        console.log(item)
         this.orderItemCountsList.push({id: item.id, name: item.name, amount: 0})
       }
       /*

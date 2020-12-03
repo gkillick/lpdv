@@ -23,7 +23,7 @@ export class ItemOrdersService {
       for(let itemOrder of res['itemOrders']){
         itemOrders.push(itemOrder)
       }
-      itemOrders
+      return itemOrders
     }))
   }
 

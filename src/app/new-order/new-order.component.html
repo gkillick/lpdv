@@ -2,7 +2,7 @@
 
 <form [formGroup]="myForm" (ngSubmit)="submitHandler()">
     <div class="row">
-        <div class="col-sm">
+        <div class="col">
             <mat-form-field>
                 <input matInput placeholder="First Name" formControlName="first_name">
             </mat-form-field>
@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col">
 
             <h4>Viennoiserie</h4>
             <mat-dialog-content>
@@ -36,7 +36,7 @@
                 </mat-form-field>
             </mat-dialog-content>
         </div>
-        <div class="col-sm wrap">
+        <div class="col-6 wrap">
             <h4>Pains</h4>
             <mat-dialog-content>
                 <mat-form-field class="w-100" *ngFor="let item of items.pains" [class.sliced]="item.sliced_option">
@@ -44,7 +44,7 @@
                 </mat-form-field>
             </mat-dialog-content>
         </div>
-        <div class="col-sm">
+        <div class="col">
             <h4>Nöel</h4>
             <mat-dialog-content>
                 <mat-form-field class="w-100" *ngFor="let item of items.noel">
@@ -56,7 +56,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm">
+        <div class="col">
             <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>
         </div>
         <div class="col-sm">

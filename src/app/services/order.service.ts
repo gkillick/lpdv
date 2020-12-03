@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { DataService } from './data.service';
 import {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} from '../../message-types'
 import { Order } from '../models/order.model';
+import { AuthService } from '../auth.service';
+import { User } from '../models/user.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {catchError, tap} from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -10,32 +14,53 @@ import { Order } from '../models/order.model';
 export class OrderService {
 
 
-  order: Order[] = []
+  orders: Order[] = []
   orderChangedSubject: Subject<Order[]> = new Subject<Order[]>()
 
 
-  constructor(private dataService: DataService) {
+  constructor(private authService: AuthService, private http: HttpClient) {
     
    }
 
 
   addOrder(order: Order){
-    this.order.push(order)
-    this.orderChangedSubject.next(this.order)
-    const key: string = this.dataService.idTraker.toString()
-
-    const itemWithId = {
-      key: key, 
-        payload: {
-          type: 'ORDER',
-          data : order 
-      }
-    }
 
 
+    //assign user id to item
+    this.authService.user.subscribe((user: User)=> {
+      console.log(user)
+      order.user_id = user.id
+    })
 
-    this.dataService.ipc.send(SENDING_ITEM,  itemWithId)
+    console.log(order)
+    return this.http.post<Order>('/api/orders/add', order).pipe(catchError(this.handleErrors), tap(res => {
+      this.orders.push(res)
+      this.orderChangedSubject.next(this.orders)
+    }))
+
+
 
   }
 
+
+
+
+  handleErrors(errorRes: HttpErrorResponse){
+
+
+    let errorMessage = "an unknown error occured"
+
+    if(!errorRes.error || !errorRes.error.error){
+      return throwError(errorRes)
+    }
+
+    switch(errorRes.error.error){
+      case "ITEM_EXISTS":
+        errorMessage = "The item already exists"
+
+    }
+
+    throw(errorMessage)
+
+}
 }

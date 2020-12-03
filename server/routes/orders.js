@@ -5,17 +5,13 @@ const db = require('../database')
 
 
 
-router.post('/', verifyToken, async (req,res) => {
+router.post('/add', verifyToken, async (req,res) => {
 
-    const order = {
-        user_id: req.user._id,
-        orders: req.body.orders
-    }
+    const id = await db.addOrder(req.body)
 
-
-    const id = await db.addOrder(order)
     console.log(id)
-    res.send(id)
+
+    res.send(req.body)
 
 })
 

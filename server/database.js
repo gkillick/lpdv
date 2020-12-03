@@ -178,10 +178,9 @@ class FirestoreClient{
         }else{
             const data = []
             queryRef.forEach(doc =>{
-                data.push({
-                    id: doc.id,
-                    data: doc.data()
-                })
+                const d = doc.data()
+                d.id = doc.id
+                data.push(d)
             })
 
             return data

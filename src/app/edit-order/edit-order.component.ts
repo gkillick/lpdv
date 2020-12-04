@@ -98,6 +98,8 @@ export class EditOrderComponent implements OnInit {
     formValue.total = this.total
     formValue.date.setHours(0,0,0,0);
     let order = Order.newOrder(formValue)
+    order.id = this.order.id
+    order.user_id = this.order.user_id
     this.orderService.editOrder(order).subscribe(res => {
       order = res
       console.log(res)
@@ -114,7 +116,7 @@ export class EditOrderComponent implements OnInit {
 
     order.itemOrders = itemOrders
     this.orderService.orders = this.orderService.orders.filter(or => {
-      return order.id === or.id
+      return !(order.id === or.id)
     })
     this.orderService.orders.push(order)
     console.log(order)

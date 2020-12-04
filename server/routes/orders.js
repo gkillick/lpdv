@@ -46,7 +46,11 @@ router.put('/', verifyToken, async(req, res) => {
 })
 
 router.delete('/:id', verifyToken, async(req, res) => {
-    const deleted = await db.deleteOrderForUser(req.params.id, req.user.id)
+    const deleted = await db.deleteOrderForUser(req.params.id)
+
+    const dele = await db.deleteItemOrdersByOrderId(req.params.id)
+
+    res.send({id: req.params.id})
 })
 
 module.exports = router

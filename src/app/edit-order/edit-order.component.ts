@@ -13,15 +13,15 @@ import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-edit-order',
-  templateUrl: './edit-order.component.html',
-  styleUrls: ['./edit-order.component.scss']
+  templateUrl: '../new-order/new-order.component.html',
+  styleUrls: ['../new-order/new-order.component.scss']
 })
 export class EditOrderComponent implements OnInit {
 
   //form object
   myForm: FormGroup;
   order: Order
-
+  viewClass = "Edit Order"
   loading = false;
   success = false;
   total = 0;
@@ -43,16 +43,15 @@ export class EditOrderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('init')
 
     for(let item of this.itemsService.items){
-      console.log(item.item_type)
-      if(item.item_type === "viennoiserie"){
-        this.items["viennoiserie"].push(item)
-      }else if(item.item_type === "pains"){
-        this.items["pains"].push(item)
-      }else if(item.item_type === "nöel"){
-        this.items["nöel"].push(item)
+      for(let item_type in this.items){
+        if(item.item_type == item_type){
+          this.items[item_type].push(item)
+        }
+        this.items[item_type].sort((a,b) => {
+          return ('' + a.name).localeCompare(b.name);
+        })
       }
     }
 
@@ -60,8 +59,6 @@ export class EditOrderComponent implements OnInit {
     tomorrow.setDate(new Date().getDate()+1);
     tomorrow.setHours(0,0,0,0);
 
-    console.log('hi')
-    console.log(this.order.date)
     this.myForm = this.fb.group({
       first_name: [this.order.first_name, Validators.required],
       last_name: [this.order.last_name, Validators.required],
@@ -71,7 +68,6 @@ export class EditOrderComponent implements OnInit {
     });
     for (var key in this.items) {
       this.items[key].forEach(element => {
-        console.log(element.item_type)
         var found = false
         for(let itemOrder of this.order.itemOrders){
           if(itemOrder.item_id == element.id){
@@ -109,8 +105,6 @@ export class EditOrderComponent implements OnInit {
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
-        console.log(item.id)
-        console.log(formValue[item.name])
         if(formValue[item.name]){
           itemOrders.push(new ItemOrder(null, item.name, order.id, item.id, formValue[item.name], false,res.date)) 
         }
@@ -126,18 +120,13 @@ export class EditOrderComponent implements OnInit {
     console.log(order)
     this.orderService.orderChangedSubject.next(this.orderService.orders)
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
-      console.log('item orders')
-      console.log(orders)
+
     }, error => {
       console.log(error)
     })
     }, error => {
       //console.log(error)
     })
-
-
-    console.log("Order:")
-    console.log(order)
 
 
     try {

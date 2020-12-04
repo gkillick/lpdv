@@ -21,7 +21,7 @@ export class NewOrderComponent implements OnInit {
 
   //form object
   myForm: FormGroup;
-
+  viewClass = "New Order"
   loading = false;
   success = false;
   total = 0;
@@ -42,7 +42,6 @@ export class NewOrderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('init')
 
     for(let item of this.itemsService.items){
       for(let item_type in this.items){
@@ -50,7 +49,6 @@ export class NewOrderComponent implements OnInit {
           this.items[item_type].push(item)
         }
         this.items[item_type].sort((a,b) => {
-          //not working
           return ('' + a.name).localeCompare(b.name);
         })
       }

@@ -93,6 +93,7 @@ export class EditOrderComponent implements OnInit {
 
 
   submitHandler() {
+
     this.loading = true;
 
     const formValue = this.myForm.value;
@@ -115,6 +116,13 @@ export class EditOrderComponent implements OnInit {
 
       }
     }
+
+    order.itemOrders = itemOrders
+    this.orderService.orders = this.orderService.orders.filter(or => {
+      return order.id === or.id
+    })
+    this.orderService.orders.push(order)
+    this.orderService.orderChangedSubject.next(this.orderService.orders)
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
       console.log('item orders')
       console.log(orders)
@@ -124,11 +132,14 @@ export class EditOrderComponent implements OnInit {
     }, error => {
       //console.log(error)
     })
-    
+
+
+    console.log("Order:")
+    console.log(order)
+
 
     try {
       //use this object to create order
-      console.log(formValue)
       this.success = true;
       this.dialogRef.close()
     } catch(err) {
@@ -136,6 +147,8 @@ export class EditOrderComponent implements OnInit {
     }
 
     this.loading = false;
+    
+
     
   }
 

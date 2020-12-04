@@ -61,12 +61,13 @@
     <div class="row">
         <div class="col">
             <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>
+            <button *ngIf="edit" mat-button class="btn btn-danger ml-1" (click)="delete()">Delete</button>
         </div>
-        <div class="col-sm">
-            <div class="total_price">
-                <span class="subheading">Subtotal: </span><span class="subheadingbold">{{ sub_total | currency }} </span>
-                <span class="subheading">Tax: </span><span class="subheadingbold">{{tax | currency }} </span>
-                <span class="subheading">Total: </span><span class="subheadingbold">{{ total | currency }} </span>
+        <div class="col-sm ">
+            <div class="total_price ">
+                <span class="subheading ">Subtotal: </span><span class="subheadingbold ">{{ sub_total | currency }} </span>
+                <span class="subheading ">Tax: </span><span class="subheadingbold ">{{tax | currency }} </span>
+                <span class="subheading ">Total: </span><span class="subheadingbold ">{{ total | currency }} </span>
 
             </div>
         </div>

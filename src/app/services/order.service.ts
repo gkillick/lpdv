@@ -33,8 +33,7 @@ export class OrderService {
 
     console.log(order)
     return this.http.post<Order>('/api/orders/add', order).pipe(catchError(this.handleErrors), tap(res => {
-      this.orders.push(res)
-      this.orderChangedSubject.next(this.orders)
+      console.log(res)
     }))
   }
 

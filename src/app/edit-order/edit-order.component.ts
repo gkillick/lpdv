@@ -27,11 +27,12 @@ export class EditOrderComponent implements OnInit {
   total = 0;
   sub_total = 0;
   tax = 0;
+  searchText = '';
 
   items = {
     "viennoiserie": [],
     "pains": [],
-    "nöel": []
+    "noel": []
   }
   
 

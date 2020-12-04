@@ -33,6 +33,16 @@ export class DashboardComponent implements OnInit {
   dateForm: FormControl
   activeTab: string = "All Orders"
   itemOrders: ItemOrder[] = []
+  searchText: string = ""
+
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.all_orders.filter = filterValue;
+    this.orderItemCounts.filter = filterValue;
+
+  }
 
   constructor(private itemsService: ItemsService, private ordersService: OrderService,private itemOrdersService: ItemOrdersService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
 

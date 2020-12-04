@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Item } from 'electron/main';
@@ -145,24 +145,19 @@ export class EditOrderComponent implements OnInit {
 
     
   }
-  increment(e){
-    const field = e.target.parentElement.parentElement.childNodes[1]
-    if(field.value.length == 0){
-      field.value = 1;
-    }else{
-    field.value = (parseInt(field.value) + 1)
-    }
-    
+
+  increment(elmRef: HTMLInputElement){
+   
+    console.log(elmRef.value)
+    elmRef.value = (Number(elmRef.value) + 1).toString()
   }
 
-  decrement(e){
-    const field = e.target.parentElement.parentElement.childNodes[1]
-    if(field.value == 1){
-      field.value = '';
-    }else if (field.value.length != 0){
-    field.value = (parseInt(field.value) - 1)
-    }
+  decrement(elmRef: HTMLInputElement){
+   
+    console.log(elmRef.value)
+    elmRef.value = (Number(elmRef.value) - 1).toString()
   }
+
 
   delete(){
     this.orderService.deleteOrder(this.order).subscribe()

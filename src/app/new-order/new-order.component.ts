@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ɵELEMENT_PROBE_PROVIDERS__POST_R3__ } from '@angular/platform-browser';
@@ -29,6 +29,8 @@ export class NewOrderComponent implements OnInit {
   sub_total = 0;
   tax = 0;
   searchText = '';
+  @ViewChild('input' ) elemRef: ElementRef;
+
 
   items = {
     "viennoiserie": [],
@@ -139,26 +141,18 @@ export class NewOrderComponent implements OnInit {
     this.loading = false;
     
   }
-  increment(e){
-    var field = (e.target.parentElement.parentElement.childNodes[1])
-    console.log(field)
-    if(field.value.length == 0){
-      field.value = 1;
-    }else{
-    field.value = (parseInt(field.value) + 1)
-    }
-    
+  increment(elmRef: HTMLInputElement){
+   
+    console.log(elmRef.value)
+    elmRef.value = (Number(elmRef.value) + 1).toString()
   }
 
-  decrement(e){
-    var field = e.target.parentElement.parentElement.childNodes[1]
-    if(field.value == 1){
-      field.value = '';
-    }else if (field.value.length != 0){
-    field.value = (parseInt(field.value) - 1)
-    }
-    
+  decrement(elmRef: HTMLInputElement){
+   
+    console.log(elmRef.value)
+    elmRef.value = (Number(elmRef.value) - 1).toString()
   }
+
   formatDate(date: Date): string{
     var d = new Date(date),
     month = '' + (d.getMonth() + 1),

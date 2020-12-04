@@ -123,7 +123,7 @@ export class EditOrderComponent implements OnInit {
     console.log(order)
     this.orderService.orderChangedSubject.next(this.orderService.orders)
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
-
+      console.log(itemOrders)
     }, error => {
       console.log(error)
     })

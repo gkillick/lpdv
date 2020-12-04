@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ItemOrder } from '../models/item_order.model';
 import {map, tap, catchError} from 'rxjs/operators'
 import { Subject, throwError } from 'rxjs';
@@ -11,19 +11,36 @@ import { nextTick } from 'process';
 export class ItemOrdersService {
 
 
-  itemOrders: ItemOrder[] = []
+  itemOrders: ItemOrder[]
   itemOrderSubject: Subject<ItemOrder[]> = new Subject<ItemOrder[]>()
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
 
-  addItemOrders(itemOrders: ItemOrder[]){
-    const orders = {orders: itemOrders}
-    return this.http.post('/api/itemOrders/add', orders).pipe(catchError(this.handleErrors), map(res => {
-      const itemOrders: ItemOrder[] = [] 
+    this.itemOrders = []
+    console.log(this.itemOrders)
+  }
+
+  addItemOrders(itemOrde: ItemOrder[]){
+    const orders = {orders: itemOrde}
+    return this.http.post('/api/itemOrders/add', orders).pipe(catchError(this.handleErrors), tap(res => {
       for(let itemOrder of res['itemOrders']){
-        itemOrders.push(itemOrder)
+        console.log(itemOrder)
+        console.log(this.itemOrders)
+        this.itemOrders.push(itemOrder)
       }
-      return itemOrders
+      this.itemOrderSubject.next(this.itemOrders)
+    }))
+  }
+
+  getItemOrders(){
+    return this.http.get('api/itemOrders').pipe(catchError(this.handleErrors), tap(res => {
+      console.log(res['itemOrders'])
+      this.itemOrders = res['itemOrders']
+      if(!this.itemOrders){
+        this.itemOrders = []
+      }
+
+      this.itemOrderSubject.next(this.itemOrders)
     }))
   }
 

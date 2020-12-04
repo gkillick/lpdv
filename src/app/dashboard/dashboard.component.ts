@@ -11,6 +11,8 @@ import { NgZone } from '@angular/core';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ItemOrdersService } from '../services/item-orders.service';
+import { ItemOrder } from '../models/item_order.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,8 +32,9 @@ export class DashboardComponent implements OnInit {
   currentlySelctedDate: Date
   dateForm: FormControl
   activeTab: string = "All Orders"
+  itemOrders: ItemOrder[] = []
 
-  constructor(private itemsService: ItemsService, private ordersService: OrderService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
+  constructor(private itemsService: ItemsService, private ordersService: OrderService,private itemOrdersService: ItemOrdersService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
 
   }
 
@@ -39,6 +42,7 @@ export class DashboardComponent implements OnInit {
 
     this.itemsService.fetchItems().subscribe()
     this.ordersService.getOrders().subscribe()
+    this.itemOrdersService.getItemOrders().subscribe()
 
  
     this.currentlySelctedDate = new Date();
@@ -47,6 +51,12 @@ export class DashboardComponent implements OnInit {
     this.currentlySelctedDate.setHours(0,0,0,0);
     this.dateForm = new FormControl(this.currentlySelctedDate)
     this.getOrdersForCurrentlySelectedDate()
+
+    this.itemOrdersService.itemOrderSubject.subscribe((itemOrders) => {
+      this.itemOrders = itemOrders
+
+      this.getOrdersForCurrentlySelectedDate()
+    })
 
     this.ordersService.orderChangedSubject.subscribe(orders => {
       this.getOrdersForCurrentlySelectedDate()
@@ -94,22 +104,38 @@ export class DashboardComponent implements OnInit {
       this.orderItemCountsList = []
       this.orderItemCounts.data = this.orderItemCountsList
 
+
+
+
+
+
+
       for(let item of this.itemsService.items){
-        this.orderItemCountsList.push({id: item.id, name: item.name, amount: 0})
+        console.log(item)
+        if(!item.sliced){
+          this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0})
+        }
       }
-      /*
-      for(let order of this.orders){
-        console.log("Here:")
-        console.log(order)
-        for(let itemOrder of order.itemOrders){
-          for(let orderItemCount of this.orderItemCountsList){
-            if(+itemOrder.item_id === +orderItemCount.id){
-              orderItemCount.amount += itemOrder.amount
-            }
+
+      var filteredItemOrders = this.itemOrders.filter(iorder => {
+        let selectedDate = new Date(this.currentlySelctedDate)
+        let orderDate = new Date(iorder.date)
+        selectedDate.setHours(0,0,0,0)
+        orderDate.setHours(0,0,0,0)
+        return orderDate.toDateString() === selectedDate.toDateString()
+      })
+
+      for(let itemOrder of filteredItemOrders){
+        console.log('hi')
+        for(let orderItemCount of this.orderItemCountsList){
+          console.log(itemOrder.item_id)
+          console.log(orderItemCount.id)
+          if(itemOrder.combined_name === orderItemCount.name){
+            console.log('added')
+            orderItemCount.amount += itemOrder.amount
           }
+        }
       }
-    }
-    */
 
 
     this.orderItemCounts.data = this.orderItemCountsList

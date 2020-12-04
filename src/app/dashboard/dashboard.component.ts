@@ -10,6 +10,7 @@ import { DataService } from '../services/data.service';
 import { NgZone } from '@angular/core';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemOrder } from '../models/item_order.model';
 
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
   displayedAllOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total",  "date", "details"]
   currentlySelctedDate: Date
   dateForm: FormControl
+  activeTab: string = "All Orders"
   itemOrders: ItemOrder[] = []
 
   constructor(private itemsService: ItemsService, private ordersService: OrderService,private itemOrdersService: ItemOrdersService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
@@ -66,7 +68,9 @@ export class DashboardComponent implements OnInit {
     })
 
   }
-
+  onTabChange(event: MatTabChangeEvent) {
+    this.activeTab = event.tab.textLabel;
+  }
 
 
   onDateSelected(event){

@@ -1,18 +1,18 @@
 <div class="container-fluid mt-3">
     <div class="row no-print">
-        <div class="col-sm">
-            <mat-form-field class=" mr-2">
+        <div class="col-sm header-bar">
+            <button (click)="openDialog()" class=" btn btn-primary">New Order</button>
+            <mat-form-field class="ml-2 mr-2" [class.hidden-item]="activeTab == 'All Orders'">
                 <mat-label>Choose a date</mat-label>
                 <input matInput [matDatepicker]="picker" (dateChange)="onDateSelected($event)" [formControl]="dateForm">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-            <button (click)="openDialog()" class="btn btn-primary">New Order</button>
         </div>
     </div>
     <div class="row">
         <div class="col-sm">
-            <mat-tab-group>
+            <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="All Orders">
                     <table mat-table [dataSource]="all_orders" matSort class="mat-elevation-z8 mt-3 table-max">
                         <ng-container matColumnDef="orderNumber">

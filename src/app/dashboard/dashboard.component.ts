@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
 
   itemQuantities: MatTableDataSource<any> = new MatTableDataSource<any>()
   orders = []
-  all_orders = []
+  all_orders: MatTableDataSource<any> = new MatTableDataSource<any>()
   orderItemCountsList = []
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
   displayedColumns = ["name", "count"];
@@ -48,6 +48,9 @@ export class DashboardComponent implements OnInit {
 
     this.ordersService.orderChangedSubject.subscribe(orders => {
       this.getOrdersForCurrentlySelectedDate()
+
+      this.all_orders.data = orders
+      console.log(orders)
       
       this.changeDetection.detectChanges()
     })
@@ -68,7 +71,6 @@ export class DashboardComponent implements OnInit {
   getOrdersForCurrentlySelectedDate(){
 
       var orders = this.ordersService.orders
-      this.all_orders = this.ordersService.orders
       console.log(orders)
 
       var filteredOrders = orders.filter(order => {

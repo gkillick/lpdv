@@ -7,6 +7,7 @@ export class ItemOrder{
 
     constructor(
         public id:string,
+        public user_id:string,
         public itemName: string,
         public combined_name,
         public order_id: string,
@@ -17,6 +18,6 @@ export class ItemOrder{
     ){}
 
     static newItemOrder(params: any){
-        return new ItemOrder(params.id, params.string, params.combined_name, params.order_id, params.item_id, params.amount, params.sliced, params.date)
+        return new ItemOrder(params.id, params.user_id, params.string, params.combined_name, params.order_id, params.item_id, params.amount, params.sliced, params.date)
     }
 }

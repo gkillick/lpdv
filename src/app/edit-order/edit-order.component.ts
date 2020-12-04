@@ -59,8 +59,8 @@ export class EditOrderComponent implements OnInit {
     tomorrow.setDate(new Date().getDate()+1);
     tomorrow.setHours(0,0,0,0);
 
-    console.log(this.order.first_name)
-
+    console.log('hi')
+    console.log(this.order.date)
     this.myForm = this.fb.group({
       first_name: [this.order.first_name, Validators.required],
       last_name: [this.order.last_name, Validators.required],
@@ -145,19 +145,6 @@ export class EditOrderComponent implements OnInit {
   
   }
 
-  formatDate(date: Date): string{
-    var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-    if (month.length < 2) 
-      month = '0' + month;
-    if (day.length < 2) 
-      day = '0' + day;
-
-    return [year, month, day].join('-');
-  }
 
   tax_classifications: any[] = [
     {value: 'normal', viewValue: 'normal'},
@@ -174,11 +161,7 @@ export class EditOrderComponent implements OnInit {
       });
 
   }
-// Create our number formatter.
-formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
+
 //function to update total prices 
 updateTotals(){
   var before_tax = 0;

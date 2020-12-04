@@ -113,6 +113,7 @@ export class DashboardComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(NewOrderComponent, {
       width: '100%',
+      height: '100%',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -127,6 +128,7 @@ export class DashboardComponent implements OnInit {
       
       var dialogRef = this.dialog.open(EditOrderComponent, {
         width: '100%',
+        height: '100%',
         data: {
           id: id
         }
@@ -164,12 +166,6 @@ export class DashboardComponent implements OnInit {
   return summary;
   }
  
-
-  // Create our number formatter.
-formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
 
 
 printPage(){

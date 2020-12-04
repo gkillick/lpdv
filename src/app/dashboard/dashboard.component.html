@@ -40,7 +40,7 @@
                         </ng-container>
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-                            <td mat-cell *matCellDef="let item"> {{ formatter.format(item.total)}} </td>
+                            <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
                         </ng-container>
                         <ng-container matColumnDef="details">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Details </th>

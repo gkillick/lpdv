@@ -28,17 +28,31 @@
     </div>
     <div class="row">
         <div class="col-sm">
+
             <h4>Viennoiserie</h4>
-            <mat-form-field class="w-100" *ngFor="let item of items.viennoiserie">
-                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
-            </mat-form-field>
+            <mat-dialog-content>
+                <mat-form-field class="w-100" *ngFor="let item of items.viennoiserie">
+                    <input type="number" autocomplete="off" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
+                </mat-form-field>
+            </mat-dialog-content>
+        </div>
+        <div class="col-6 wrap">
+            <h4>Pains</h4>
+            <mat-dialog-content>
+                <mat-form-field class="w-100" *ngFor="let item of items.pains| searchFilter: searchText " [class.sliced]="item.sliced_option">
+                    <input type="number" autocomplete="off" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
+                </mat-form-field>
+            </mat-dialog-content>
         </div>
         <div class="col-sm">
-            <h4>Pains</h4>
-            <mat-form-field class="w-100" *ngFor="let item of items.pains">
-                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
-            </mat-form-field>
+            <h4>Nöel</h4>
+            <mat-dialog-content>
+                <mat-form-field class="w-100" *ngFor="let item of items.noel">
+                    <input type="number" matInput autocomplete="off" placeholder=" {{item.name}} " formControlName="{{item.name}}">
+                </mat-form-field>
+            </mat-dialog-content>
         </div>
+
     </div>
     <div class="row">
         <div class="col-sm">

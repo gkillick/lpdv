@@ -32,3 +32,33 @@ input[type=number]:hover::-webkit-inner-spin-button {
         display: none !important;
     }
 }
+
+.item-field input[type=number]::-webkit-inner-spin-button,
+.item-field input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
+}
+
+.item-field input {
+    width: 35px;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #80808078;
+    text-align: center;
+}
+
+.item-field .incrementers {
+    display: inline-block;
+    font-size: 25px;
+    color: #2d2d2d;
+    visibility: hidden;
+}
+
+.item-field .bi {
+    cursor: pointer;
+}
+
+.item-field:hover .incrementers {
+    visibility: visible;
+}

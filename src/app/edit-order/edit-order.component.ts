@@ -145,6 +145,24 @@ export class EditOrderComponent implements OnInit {
 
     
   }
+  increment(e){
+    const field = e.target.parentElement.parentElement.childNodes[1]
+    if(field.value.length == 0){
+      field.value = 1;
+    }else{
+    field.value = (parseInt(field.value) + 1)
+    }
+    
+  }
+
+  decrement(e){
+    const field = e.target.parentElement.parentElement.childNodes[1]
+    if(field.value == 1){
+      field.value = '';
+    }else if (field.value.length != 0){
+    field.value = (parseInt(field.value) - 1)
+    }
+  }
 
   delete(){
     this.orderService.deleteOrder(this.order).subscribe()
@@ -169,6 +187,8 @@ export class EditOrderComponent implements OnInit {
       });
 
   }
+
+  
 
 //function to update total prices 
 updateTotals(){
@@ -202,6 +222,8 @@ updateTotals(){
 
 
 }
+
   
 
 }
+

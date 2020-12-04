@@ -225,8 +225,9 @@ class FirestoreClient {
 
     async deleteOrder(order_id) {
 
-        const orders = this.db.collection('orders')
+        const orders = await this.db.collection('orders').doc(order_id).delete()
 
+/*
         const queryRef = await orders.where('id', '==', order_id).get()
 
         if (queryRef.empty) {
@@ -237,6 +238,7 @@ class FirestoreClient {
                 console.log(res)
             })
         }
+        */
         return 'deleted'
 
     }

@@ -57,6 +57,7 @@ export class OrderService {
   }
 
   deleteOrder(order: Order){
+    console.log('deleting')
 
     return this.http.delete('api/orders/'+order.id).pipe(catchError(this.handleErrors), tap(res => {
 

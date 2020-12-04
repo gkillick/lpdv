@@ -147,7 +147,7 @@ export class EditOrderComponent implements OnInit {
   }
 
   delete(){
-    //this.dataService.deleteOrderById(this.order.id)
+    this.orderService.deleteOrder(this.order).subscribe()
 
     this.dialogRef.close()
   

@@ -31,6 +31,7 @@ import {HttpClientModule} from '@angular/common/http'
 import {AuthInterceptorService} from './auth-interceptor.service'
 import {MatSortModule} from '@angular/material/sort';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
+import { SearchFilterPipe } from './pipes/search-filter.pipe';
 
 
 
@@ -49,6 +50,7 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
     LoginComponent,
     RegisterComponent,
     CapitalizePipe,
+    SearchFilterPipe,
   ],
   imports: [
     FormsModule,

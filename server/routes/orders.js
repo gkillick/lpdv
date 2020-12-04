@@ -36,13 +36,9 @@ router.put('/', verifyToken, async(req, res) => {
 
     const updated = await db.updateOrder(req.body)
 
-    console.log(req.body.itemOrders)
+    var itemOrders = await db.deleteItemOrderByOrderId(req.body.id)
 
-    if (updated) {
-        res.send(req.body)
-    } else {
-        res.status(400).send({ error: "NOT_UPDATED" })
-    }
+    res.send(req.body)
 
 })
 

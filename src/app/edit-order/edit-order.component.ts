@@ -7,6 +7,7 @@ import { Order } from '../models/order.model';
 import { User } from '../models/user.model';
 import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
+import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
 
@@ -23,19 +24,18 @@ export class EditOrderComponent implements OnInit {
 
   loading = false;
   success = false;
-  total_price = 0;
-  total_before_tax = 0;
-  total_tax = 0;
+  total = 0;
+  sub_total = 0;
+  tax = 0;
 
   items = {
     "viennoiserie": [],
     "pains": [],
     "nöel": []
   }
-  current_user = new User("1", "Montreal lpdv", "bob")
   
 
-  constructor(private orderService: OrderService,private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
+  constructor(private orderService: OrderService,private itemsService: ItemsService,private itemOrdersService: ItemOrdersService, private fb: FormBuilder, private dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data) {
     this.order = this.orderService.getOrderById(data.id)
     console.log("constructor running")
    }
@@ -95,17 +95,34 @@ export class EditOrderComponent implements OnInit {
     this.loading = true;
 
     const formValue = this.myForm.value;
+    formValue.sub_total = this.sub_total
+    formValue.tax = this.tax
+    formValue.total = this.total
+    formValue.date.setHours(0,0,0,0);
+    let order = Order.newOrder(formValue)
+    this.orderService.editOrder(order).subscribe(res => {
+      order = res
     var itemOrders = [];
-    //const order = new Order(this.order.id,+this.current_user.id, formValue.first_name, formValue.last_name, formValue.telephone, formValue.date, [], this.total_before_tax, this.total_tax, this.total_price)
     for(let key in this.items){
       console.log(key)
       for(let item of this.items[key]){
+        console.log(item.id)
         console.log(formValue[item.name])
-        //order.itemOrders.push(new ItemOrder(null , item.name ,null , item.id , formValue[item.name], false)) 
+        if(formValue[item.name]){
+          itemOrders.push(new ItemOrder(null, item.name, order.id, item.id, formValue[item.name], false,res.date)) 
+        }
+
       }
     }
-
-    //this.dataService.saveOrder(order)
+    this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
+      console.log('item orders')
+      console.log(orders)
+    }, error => {
+      console.log(error)
+    })
+    }, error => {
+      //console.log(error)
+    })
     
 
     try {
@@ -188,9 +205,9 @@ updateTotals(){
       }
       console.log(tax)
       tax += tax_items.normal.total * .14975
-      this.total_tax = tax;
-      this.total_before_tax = before_tax;
-      this.total_price = this.total_tax + this.total_before_tax;
+      this.tax = tax;
+      this.sub_total = before_tax;
+      this.total= this.tax + this.sub_total;
 
 }
   

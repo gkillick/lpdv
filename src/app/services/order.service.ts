@@ -51,7 +51,7 @@ export class OrderService {
 
   editOrder(order: Order){
 
-    return this.http.put('api/orders', order).pipe(catchError(this.handleErrors), tap(res => {
+    return this.http.put<Order>('api/orders', order).pipe(catchError(this.handleErrors), tap(res => {
 
       this.orders = this.orders.map((order: Order) => {
         if(order.id === res['id']){

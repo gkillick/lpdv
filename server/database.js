@@ -207,7 +207,7 @@ class FirestoreClient {
 
         const orders = this.db.collection('orders')
 
-        const queryRef = await orders.where('user_id', '==', order.user_id).get()
+        const queryRef = await orders.where('id', '==', order.id).get()
 
         if (queryRef.empty) {
             return null
@@ -215,13 +215,10 @@ class FirestoreClient {
             queryRef.forEach(async doc => {
                 const d = doc.data()
                 console.log(doc.id)
-                if (order.id === doc.id) {
-                    const res = await orders.doc(doc.id).update(order)
-                    console.log(res)
-                }
+                d.id = doc.id
+                return d
             })
         }
-        return 'updated'
 
     }
 
@@ -259,6 +256,24 @@ class FirestoreClient {
                 itemOrders.
             }
             */
+
+    async deleteItemOrdersByOrderId(order_id){
+
+
+        const itemOrders = await this.db.collection('itemOrders')
+
+        const queryRef = await itemOrders.where('order_id', '==', order_id)
+
+
+        if (queryRef.empty) {
+            return null
+        } else {
+            queryRef.forEach(async doc => {
+                const res = await orders.doc(doc.id).delete()
+            })
+        }
+        return 'deleted'
+    }
 }
 
 const client = new FirestoreClient()

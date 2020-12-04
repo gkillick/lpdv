@@ -110,6 +110,10 @@ export class NewOrderComponent implements OnInit {
 
       }
     }
+
+    order.itemOrders = itemOrders
+    this.orderService.orders.push(order)
+    this.orderService.orderChangedSubject.next(this.orderService.orders)
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
       console.log('item orders')
       console.log(orders)
@@ -119,6 +123,8 @@ export class NewOrderComponent implements OnInit {
     }, error => {
       //console.log(error)
     })
+
+
     console.log("Order:")
     console.log(order)
 

@@ -190,11 +190,7 @@ export class NewOrderComponent implements OnInit {
       });
 
   }
-// Create our number formatter.
-formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
+
 
   
 

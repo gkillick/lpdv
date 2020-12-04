@@ -182,32 +182,33 @@ formatter = new Intl.NumberFormat('en-US', {
 //function to update total prices 
 updateTotals(){
   var before_tax = 0;
-      var tax = 0;
-      var tax_items = {
-        "no_tax": {"count": 0, "total": 0},
-        "normal": {"count": 0, "total": 0},
-        "no_tax_6": {"count": 0, "total": 0},
+  var tax = 0;
+  var tax_items = {
+    "no_tax": {"count": 0, "total": 0},
+    "normal": {"count": 0, "total": 0},
+    "no_tax_6": {"count": 0, "total": 0},
+  }
+  let formValue = this.myForm.value;
+  for(let key in this.items){
+    for(let item of this.items[key]){
+      if(formValue[item.name] > 0 && item.tax_catagory != null){
+        tax_items[item.tax_catagory]["count"] += formValue[item.name];
+        tax_items[item.tax_catagory]["total"] += (formValue[item.name] * item.price)
       }
-      let formValue = this.myForm.value;
-      for(let key in this.items){
-        for(let item of this.items[key]){
-          if(formValue[item.name] > 0 && item.tax_catagory != null){
-            tax_items[item.tax_catagory]["count"] += formValue[item.name];
-            tax_items[item.tax_catagory]["total"] += (formValue[item.name] * item.price)
-          }
-        }
-      }
-      before_tax += tax_items.no_tax_6.total + tax_items.no_tax.total + tax_items.normal.total
+    }
+  }
+  before_tax += tax_items.no_tax_6.total + tax_items.no_tax.total + tax_items.normal.total
 
-      //calculate individual taxes 
-      if(tax_items.no_tax_6.count < 6){
-        tax += tax_items.no_tax_6.total * .14975
-      }
-      console.log(tax)
-      tax += tax_items.normal.total * .14975
-      this.tax = tax;
-      this.sub_total = before_tax;
-      this.total= this.tax + this.sub_total;
+  //calculate individual taxes 
+  if(tax_items.no_tax_6.count < 6){
+    tax += tax_items.no_tax_6.total * .14975
+  }
+  console.log(tax)
+  tax += tax_items.normal.total * .14975
+  this.tax = tax;
+  this.sub_total = before_tax;
+  this.total = this.tax + this.sub_total;
+
 
 }
   

@@ -36,7 +36,7 @@
         <div class="col-sm">
             <h4>Pains</h4>
             <mat-form-field class="w-100" *ngFor="let item of items.pains">
-                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}" >
+                <input type="number" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
             </mat-form-field>
         </div>
     </div>
@@ -47,9 +47,9 @@
         </div>
         <div class="col-sm">
             <div class="total_price">
-                <span class="subheading">Subtotal: </span><span class="subheadingbold">{{formatter.format(total_before_tax)}} </span>
-                <span class="subheading">Tax: </span><span class="subheadingbold">{{formatter.format(total_tax)}} </span>
-                <span class="subheading">Total: </span><span class="subheadingbold">{{formatter.format(total_price)}} </span>
+                <span class="subheading">Subtotal: </span><span class="subheadingbold">{{ sub_total | currency}} </span>
+                <span class="subheading">Tax: </span><span class="subheadingbold">{{ tax | currency}} </span>
+                <span class="subheading">Total: </span><span class="subheadingbold">{{ total | currency }} </span>
 
             </div>
         </div>

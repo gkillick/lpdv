@@ -46,3 +46,24 @@ mat-form-field {
 ::ng-deep .filter-field .mat-form-field-underline {
     background-color: transparent!important;
 }
+
+::ng-deep .mat-dialog-container {
+    display: flex;
+    flex-flow: column;
+}
+
+:host {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+.form-flex {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+.flex-row {
+    flex: 1;
+}

@@ -22,6 +22,7 @@ export class NewOrderComponent implements OnInit {
   //form object
   myForm: FormGroup;
   viewClass = "New Order"
+  edit = false
   loading = false;
   success = false;
   total = 0;

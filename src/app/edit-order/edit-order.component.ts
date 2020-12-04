@@ -22,6 +22,7 @@ export class EditOrderComponent implements OnInit {
   myForm: FormGroup;
   order: Order
   viewClass = "Edit Order"
+  edit = true
   loading = false;
   success = false;
   total = 0;

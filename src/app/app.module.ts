@@ -32,7 +32,6 @@ import {AuthInterceptorService} from './auth-interceptor.service'
 import {MatSortModule} from '@angular/material/sort';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
-import { TableFilterPipe } from './pipes/table-filter.pipe';
 
 
 
@@ -53,7 +52,6 @@ import { TableFilterPipe } from './pipes/table-filter.pipe';
     RegisterComponent,
     CapitalizePipe,
     SearchFilterPipe,
-    TableFilterPipe,
   ],
   imports: [
     FormsModule,

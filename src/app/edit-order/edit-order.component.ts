@@ -13,15 +13,15 @@ import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-edit-order',
-  templateUrl: './edit-order.component.html',
-  styleUrls: ['./edit-order.component.scss']
+  templateUrl: '../new-order/new-order.component.html',
+  styleUrls: ['../new-order/new-order.component.scss']
 })
 export class EditOrderComponent implements OnInit {
 
   //form object
   myForm: FormGroup;
   order: Order
-
+  viewClass = "Edit Order"
   loading = false;
   success = false;
   total = 0;

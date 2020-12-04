@@ -38,6 +38,7 @@ import { SearchFilterPipe } from './pipes/search-filter.pipe';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,7 +72,7 @@ import { SearchFilterPipe } from './pipes/search-filter.pipe';
     MatNativeDateModule,
     MatTabsModule,
     HttpClientModule,
-    MatSortModule
+    MatSortModule,
 
   ],
   providers: [

@@ -42,40 +42,36 @@
         <div class="col-6 wrap">
             <h4>Pains</h4>
             <mat-dialog-content>
-                <div class="item-field" *ngFor="let item of items.pains| searchFilter: searchText ">
-                    <label for="bread">{{item.name}}</label>
-                    <input class="ml-1" matInput type="number" id="bread" autocomplete="off" placeholder="0" #input formControlName="{{item.name}}">
-                    <div class="incrementers ml-1">
-                        <svg (click)="increment(input)" width="1em" height="1em" viewBox="0 0 16 16" class="ml-1 bi bi-plus-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                          </svg>
-
-                        <svg (click)="decrement(input)" width="1em" height="1em" viewBox="0 0 16 16" class="ml-1 bi bi-dash-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
-                          </svg>
-
-                    </div>
-                </div>
-
-
-
-                <!--
                 <mat-form-field class="w-100" *ngFor="let item of items.pains| searchFilter: searchText " [class.sliced]="item.sliced_option">
                     <input type="number" autocomplete="off" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
                 </mat-form-field>
-            -->
             </mat-dialog-content>
         </div>
         <div class="col-sm">
             <h4>Nöel</h4>
             <mat-dialog-content>
-
                 <mat-form-field class="w-100" *ngFor="let item of items.noel | searchFilter: searchText">
                     <input type="number" matInput autocomplete="off" placeholder=" {{item.name}} " formControlName="{{item.name}}">
                 </mat-form-field>
             </mat-dialog-content>
+
+            <!--<div class="item-field">
+                        <label for="bread">{{item.name}}</label>
+                        <input class="ml-1" type="number" id="bread" matInput autocomplete="off" placeholder="0" #input formControlName="{{item.name}}">
+                        <div class="incrementers ml-1">
+                            <svg (click)="increment(input)" width="1em" height="1em" viewBox="0 0 16 16" class="ml-1 bi bi-plus-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                          </svg>
+
+                            <svg (click)="decrement(input)" width="1em" height="1em" viewBox="0 0 16 16" class="ml-1 bi bi-dash-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                          </svg>
+
+                        </div>
+                    </div>
+                -->
         </div>
 
     </div>

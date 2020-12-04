@@ -52,13 +52,6 @@ export class OrderService {
 
     return this.http.put<Order>('api/orders', order).pipe(catchError(this.handleErrors), tap(res => {
 
-      this.orders = this.orders.map((order: Order) => {
-        if(order.id === res['id']){
-          return Order.newOrder(res)
-        }else{
-          return Order.newOrder(order)
-        }
-      })
 
       this.orderChangedSubject.next(this.orders)
     }))

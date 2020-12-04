@@ -104,7 +104,7 @@ export class NewOrderComponent implements OnInit {
         console.log(item.id)
         console.log(formValue[item.name])
         if(formValue[item.name]){
-          itemOrders.push(new ItemOrder(null, item.name, order.id, item.id, formValue[item.name], false,res.date)) 
+          itemOrders.push(new ItemOrder(null, item.name, item.combined_name,order.id, item.id, formValue[item.name], false,res.date)) 
         }
 
       }

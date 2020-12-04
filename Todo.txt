@@ -1,6 +1,3 @@
-- finish print view styling/json build
-- allow for 2 pricing schemes 
-- allow slicing option
-- is tax okay
-- add in items from inventory 
-- delete items past due?
+- fix edit update
+- production quantities
+- package

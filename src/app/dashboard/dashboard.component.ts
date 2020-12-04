@@ -102,7 +102,9 @@ export class DashboardComponent implements OnInit {
 
       for(let item of this.itemsService.items){
         console.log(item)
-        this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0})
+        if(!item.sliced){
+          this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0})
+        }
       }
 
       console.log(this.itemOrders)

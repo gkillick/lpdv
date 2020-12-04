@@ -100,6 +100,12 @@ export class DashboardComponent implements OnInit {
       this.orderItemCountsList = []
       this.orderItemCounts.data = this.orderItemCountsList
 
+
+
+
+
+
+
       for(let item of this.itemsService.items){
         console.log(item)
         if(!item.sliced){
@@ -107,9 +113,15 @@ export class DashboardComponent implements OnInit {
         }
       }
 
-      console.log(this.itemOrders)
+      var filteredItemOrders = this.itemOrders.filter(iorder => {
+        let selectedDate = new Date(this.currentlySelctedDate)
+        let orderDate = new Date(iorder.date)
+        selectedDate.setHours(0,0,0,0)
+        orderDate.setHours(0,0,0,0)
+        return orderDate.toDateString() === selectedDate.toDateString()
+      })
 
-      for(let itemOrder of this.itemOrders){
+      for(let itemOrder of filteredItemOrders){
         console.log('hi')
         for(let orderItemCount of this.orderItemCountsList){
           console.log(itemOrder.item_id)

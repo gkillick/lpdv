@@ -10,6 +10,7 @@ import { DataService } from '../services/data.service';
 import { NgZone } from '@angular/core';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
   displayedAllOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total",  "date", "details"]
   currentlySelctedDate: Date
   dateForm: FormControl
+  activeTab: string = "All Orders"
 
   constructor(private itemsService: ItemsService, private ordersService: OrderService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
 
@@ -56,7 +58,9 @@ export class DashboardComponent implements OnInit {
     })
 
   }
-
+  onTabChange(event: MatTabChangeEvent) {
+    this.activeTab = event.tab.textLabel;
+  }
 
 
   onDateSelected(event){

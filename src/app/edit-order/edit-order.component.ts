@@ -67,7 +67,7 @@ export class EditOrderComponent implements OnInit {
       last_name: [this.order.last_name, Validators.required],
       //client_number: ['', Validators.required],
       telephone: [this.order.telephone, Validators.required],
-      date: [this.order.date, Validators.required],
+      date: [new Date(this.order.date), Validators.required],
     });
     for (var key in this.items) {
       this.items[key].forEach(element => {
@@ -104,6 +104,7 @@ export class EditOrderComponent implements OnInit {
     let order = Order.newOrder(formValue)
     this.orderService.editOrder(order).subscribe(res => {
       order = res
+      console.log(res)
     var itemOrders = [];
     for(let key in this.items){
       console.log(key)
@@ -122,6 +123,7 @@ export class EditOrderComponent implements OnInit {
       return order.id === or.id
     })
     this.orderService.orders.push(order)
+    console.log(order)
     this.orderService.orderChangedSubject.next(this.orderService.orders)
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
       console.log('item orders')

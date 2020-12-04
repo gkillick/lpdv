@@ -206,6 +206,7 @@ class FirestoreClient {
     async updateOrder(order) {
 
         const orders = this.db.collection('orders')
+        console.log(order)
 
         const queryRef = await orders.where('id', '==', order.id).get()
 

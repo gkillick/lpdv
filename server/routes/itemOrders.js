@@ -21,4 +21,11 @@ router.post('/add', verifyToken, async (req,res) => {
 })
 
 
+router.get('/', verifyToken, async (req,res) => {
+    const itemOrders = await db.getItemOrdersByUserId(req.user.id)
+
+    res.send({itemOrders: itemOrders})
+})
+
+
 module.exports = router

@@ -267,6 +267,26 @@ class FirestoreClient {
         }
         return 'deleted'
     }
+
+    async getItemOrdersByUserId(user_id){
+
+        const itemOrders = await this.db.collection('itemOrders')
+
+        const queryRef = await itemOrders.where('user_id', '==', user_id).get()
+
+        if(queryRef.empty){
+            return null
+        }else{
+            const itemOrders = []
+            queryRef.forEach(async doc => {
+                const d = doc.data()
+                d.id = doc.id
+                itemOrders.push(d)
+            })
+
+            return itemOrders
+        }
+    }
 }
 
 const client = new FirestoreClient()

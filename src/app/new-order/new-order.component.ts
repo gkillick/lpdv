@@ -104,7 +104,7 @@ export class NewOrderComponent implements OnInit {
         console.log(item.id)
         console.log(formValue[item.name])
         if(formValue[item.name]){
-          itemOrders.push(new ItemOrder(null, item.name, order.id, item.id, formValue[item.name], false,res.date)) 
+          itemOrders.push(new ItemOrder(null, item.name, item.combined_name,order.id, item.id, formValue[item.name], false,res.date)) 
         }
 
       }
@@ -139,7 +139,26 @@ export class NewOrderComponent implements OnInit {
     this.loading = false;
     
   }
+  increment(e){
+    var field = (e.target.parentElement.parentElement.childNodes[1])
+    console.log(field)
+    if(field.value.length == 0){
+      field.value = 1;
+    }else{
+    field.value = (parseInt(field.value) + 1)
+    }
+    
+  }
 
+  decrement(e){
+    var field = e.target.parentElement.parentElement.childNodes[1]
+    if(field.value == 1){
+      field.value = '';
+    }else if (field.value.length != 0){
+    field.value = (parseInt(field.value) - 1)
+    }
+    
+  }
   formatDate(date: Date): string{
     var d = new Date(date),
     month = '' + (d.getMonth() + 1),
@@ -193,6 +212,7 @@ export class NewOrderComponent implements OnInit {
       this.sub_total = before_tax;
       this.total = this.tax + this.sub_total;
       });
+
 
   }
 

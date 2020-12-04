@@ -35,8 +35,11 @@ router.get('/', verifyToken, async(req, res) => {
 router.put('/', verifyToken, async(req, res) => {
 
     const updated = await db.updateOrder(req.body)
+    console.log(req.body.id)
+    var itemOrders = await db.deleteItemOrdersByOrderId(req.body.id)
 
-    var itemOrders = await db.deleteItemOrderByOrderId(req.body.id)
+    console.log('item orders')
+    console.log(itemOrders)
 
     res.send(req.body)
 

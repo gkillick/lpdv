@@ -263,14 +263,14 @@ class FirestoreClient {
 
         const itemOrders = await this.db.collection('itemOrders')
 
-        const queryRef = await itemOrders.where('order_id', '==', order_id)
+        const queryRef = await itemOrders.where('order_id', '==', order_id).get()
 
 
         if (queryRef.empty) {
             return null
         } else {
             queryRef.forEach(async doc => {
-                const res = await orders.doc(doc.id).delete()
+                const res = await itemOrders.doc(doc.id).delete()
             })
         }
         return 'deleted'

@@ -22,6 +22,10 @@ export class ItemOrdersService {
 
   addItemOrders(itemOrde: ItemOrder[]){
     const orders = {orders: itemOrde}
+
+    this.itemOrders = this.itemOrders.filter(itemOr => {
+      return !(itemOr.order_id === itemOrde[0].order_id)
+    })
     return this.http.post('/api/itemOrders/add', orders).pipe(catchError(this.handleErrors), tap(res => {
       for(let itemOrder of res['itemOrders']){
         console.log(itemOrder)
@@ -34,6 +38,7 @@ export class ItemOrdersService {
 
   getItemOrders(){
     return this.http.get('api/itemOrders').pipe(catchError(this.handleErrors), tap(res => {
+      this.itemOrders = []
       console.log(res['itemOrders'])
       this.itemOrders = res['itemOrders']
       if(!this.itemOrders){

@@ -203,23 +203,15 @@ class FirestoreClient {
         }
     }
 
+
     async updateOrder(order) {
 
         const orders = this.db.collection('orders')
-        console.log(order)
 
-        const queryRef = await orders.where('id', '==', order.id).get()
+        const updating = await orders.doc(order.id).update(order)
 
-        if (queryRef.empty) {
-            return null
-        } else {
-            queryRef.forEach(async doc => {
-                const d = doc.data()
-                console.log(doc.id)
-                d.id = doc.id
-                return d
-            })
-        }
+
+        return 'updated'
 
     }
 

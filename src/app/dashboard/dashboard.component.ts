@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
   //one order summary no need for database
   
   orderSummary(order: any){
-
+    if(order.itemOrders != null){
     var itemOrders = order.itemOrders;
     itemOrders.sort((a,b) => {
       //not working
@@ -165,6 +165,7 @@ export class DashboardComponent implements OnInit {
           summary= summary+ item_order.itemName + ", "
       }
   }
+}
 
   
   return summary;

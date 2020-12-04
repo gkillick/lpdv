@@ -22,3 +22,13 @@ input[type=number]:hover::-webkit-inner-spin-button {
     width: 14px;
     height: 30px;
 }
+
+@media print {
+    .no-print,
+    .mat-tab-labels,
+    .mat-tab-labels *,
+    .mat-tab-header-pagination,
+    .no-print * {
+        display: none !important;
+    }
+}

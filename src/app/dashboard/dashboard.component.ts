@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
   displayedColumns = ["name", "count"];
   displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total", "details"]
+  displayedAllOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total",  "date", "details"]
   currentlySelctedDate: Date
   dateForm: FormControl
 
@@ -161,7 +162,7 @@ export class DashboardComponent implements OnInit {
     for(let item_order of itemOrders){
       if(item_order.amount > 0){
           summary= summary+ item_order.amount+ " "
-          summary= summary+ item_order.itemName + " "
+          summary= summary+ item_order.itemName + ", "
       }
   }
 

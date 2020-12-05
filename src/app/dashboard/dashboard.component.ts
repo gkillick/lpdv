@@ -197,9 +197,10 @@ export class DashboardComponent implements OnInit {
 
 
 calculateTotal(source: MatTableDataSource<Order>){
-  let data = source.data
+  let data = source.filteredData
   var total = 0;
   data.forEach((order) => total += order.total)
+  return total;
   }
 
   openEditDialog(id: number): void {
@@ -256,12 +257,16 @@ printPage(){
   //this.dataService.sendDataToPrint(html.innerHTML)
 
 }
-@ViewChild(MatSort) sort: MatSort;
+
+@ViewChild('firstTableSort') public secondTableSort: MatSort;
+@ViewChild('secondTableSort') public firstTableSort: MatSort;
+@ViewChild('thirdTableSort') public thirdTableSort: MatSort;
+
 
 ngAfterViewInit() {
-  this.orderItemCounts.sort = this.sort;
-  this.all_orders.sort = this.sort;
-
+  this.ordersByDate.sort = this.firstTableSort
+  this.orderItemCounts.sort = this.thirdTableSort
+  this.all_orders.sort = this.secondTableSort
 }
 
 

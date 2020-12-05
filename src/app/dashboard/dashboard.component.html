@@ -20,8 +20,7 @@
         <div class="col-sm">
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="All Orders">
-                    <table mat-table [dataSource]="all_orders" matSort class="mat-elevation-z8 mt-3 table-max">
-
+                    <table mat-table #firstTable #firstTableSort="matSort" [dataSource]="all_orders" matSort class="mat-elevation-z8 mt-3 table-max">
                         <ng-container matColumnDef="first_name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
                             <td mat-cell *matCellDef="let item"> {{item.first_name}} </td>
@@ -37,7 +36,7 @@
 
                         <!-- Count -->
                         <ng-container matColumnDef="summary">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Summary </th>
+                            <th mat-header-cell *matHeaderCellDef> Summary </th>
                             <td mat-cell *matCellDef="let item"> {{ orderSummary(item)}} </td>
                         </ng-container>
                         <ng-container matColumnDef="total">
@@ -61,7 +60,7 @@
                     </table>
                 </mat-tab>
                 <mat-tab label="Orders for Date">
-                    <table mat-table [dataSource]="ordersByDate" matSort class="mat-elevation-z8 mt-3 table-max">
+                    <table mat-table #secondTable #secondTableSort="matSort" [dataSource]="ordersByDate" matSort class="mat-elevation-z8 mt-3 table-max">
                         <ng-container matColumnDef="first_name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
                             <td mat-cell *matCellDef="let item"> {{item.first_name}} </td>
@@ -80,14 +79,14 @@
 
                         <!-- Count -->
                         <ng-container matColumnDef="summary">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Summary </th>
+                            <th mat-header-cell *matHeaderCellDef> Summary </th>
                             <td mat-cell *matCellDef="let item"> {{ orderSummary(item)}} </td>
                             <td mat-footer-cell *matFooterCellDef></td>
                         </ng-container>
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
                             <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
-                            <td mat-footer-cell *matFooterCellDef> <b>{{total_for_date | currency}} </b></td>
+                            <td mat-footer-cell *matFooterCellDef> <b>{{calculateTotal(ordersByDate) | currency}} </b></td>
                         </ng-container>
                         <ng-container matColumnDef="details">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-print"> Details </th>
@@ -105,7 +104,7 @@
                 </mat-tab>
                 <mat-tab label="Production Quantities">
 
-                    <table id="orderAmountTable" mat-table [dataSource]="orderItemCounts" matSort class="mat-elevation-z8 mt-3 table-max">
+                    <table id="orderAmountTable" #thirdTable #thirdTableSort="matSort" mat-table [dataSource]="orderItemCounts" matSort class="mat-elevation-z8 mt-3 table-max">
 
                         <!-- Item name -->
                         <ng-container matColumnDef="name">

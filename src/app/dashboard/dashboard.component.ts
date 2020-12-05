@@ -14,11 +14,14 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemOrder } from '../models/item_order.model';
 import { MatSort } from '@angular/material/sort';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  providers:[DatePipe]
 })
 export class DashboardComponent implements OnInit {
 
@@ -26,6 +29,7 @@ export class DashboardComponent implements OnInit {
   orders = []
   all_orders: MatTableDataSource<any> = new MatTableDataSource<any>()
   orderItemCountsList = []
+  ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>()
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
   displayedColumns = ["name", "amount"];
   displayedOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"]
@@ -37,17 +41,22 @@ export class DashboardComponent implements OnInit {
   itemOrders: ItemOrder[] = []
   searchText: string = ""
   total_for_date = 0;
+  stringDate = ""
 
 
-  applyFilter(filterValue: string) {
+  applyFilter() {
+    var filterValue = this.searchText
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.all_orders.filter = filterValue;
     this.orderItemCounts.filter = filterValue;
+    console.log('Here is the date:')
+    this.stringDate = new Date(this.currentlySelctedDate.setHours(0,0,0,0) ).toISOString()
+    this.ordersByDate.filter = this.stringDate
 
   }
 
-  constructor(private itemsService: ItemsService, private ordersService: OrderService,private itemOrdersService: ItemOrdersService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
+  constructor(private datePipe: DatePipe, private itemsService: ItemsService, private ordersService: OrderService,private itemOrdersService: ItemOrdersService,public dialog: MatDialog, private dataService: DataService, private changeDetection: ChangeDetectorRef, private zone: NgZone ) { 
 
   }
 
@@ -69,12 +78,14 @@ export class DashboardComponent implements OnInit {
       this.itemOrders = itemOrders
 
       this.getOrdersForCurrentlySelectedDate()
+      this.applyFilter()
     })
 
     this.ordersService.orderChangedSubject.subscribe(orders => {
       this.getOrdersForCurrentlySelectedDate()
 
       this.all_orders.data = orders
+      this.ordersByDate.data = orders
       console.log(orders)
       
       this.changeDetection.detectChanges()
@@ -96,6 +107,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getOrdersForCurrentlySelectedDate(){
+    
 
       var orders = this.ordersService.orders
       console.log(orders)
@@ -124,7 +136,6 @@ export class DashboardComponent implements OnInit {
 
 
       for(let item of this.itemsService.items){
-        console.log(item)
         if(!item.sliced){
           this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0})
         }
@@ -153,9 +164,14 @@ export class DashboardComponent implements OnInit {
 
     this.orderItemCounts.data = this.orderItemCountsList
 
+    this.applyFilter()
+
   }
 
-
+  updateSearch(search: string){
+    this.searchText = search;
+    this.applyFilter()
+  }
 
 
 

@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { User } from '../models/user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators'
+import { ItemOrdersService } from './item-orders.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class OrderService {
   orderChangedSubject: Subject<Order[]> = new Subject<Order[]>()
 
 
-  constructor(private authService: AuthService, private http: HttpClient) {
+  constructor(private itemOrderService: ItemOrdersService,private authService: AuthService, private http: HttpClient) {
     
    }
 
@@ -58,6 +59,8 @@ export class OrderService {
 
   deleteOrder(order: Order){
     console.log('deleting')
+
+    this.itemOrderService.deleteItemOrdersForOrder(order.id)
 
     return this.http.delete('api/orders/'+order.id).pipe(catchError(this.handleErrors), tap(res => {
 

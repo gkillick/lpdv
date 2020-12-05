@@ -52,7 +52,7 @@ export class NewOrderComponent implements OnInit {
           this.items[item_type].push(item)
         }
         this.items[item_type].sort((a,b) => {
-          return ('' + a.name).localeCompare(b.name);
+          return ('' + a.combined_name).localeCompare(b.combined_name);
         })
       }
 

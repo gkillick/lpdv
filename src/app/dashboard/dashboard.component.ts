@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -13,6 +13,7 @@ import { OrderService } from '../services/order.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemOrder } from '../models/item_order.model';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,7 +27,7 @@ export class DashboardComponent implements OnInit {
   all_orders: MatTableDataSource<any> = new MatTableDataSource<any>()
   orderItemCountsList = []
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
-  displayedColumns = ["name", "count"];
+  displayedColumns = ["name", "amount"];
   displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total", "details"]
   displayedAllOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total",  "date", "details"]
   currentlySelctedDate: Date
@@ -219,6 +220,13 @@ printPage(){
   const html: HTMLElement = document.getElementById('orderAmountTable')
 
   //this.dataService.sendDataToPrint(html.innerHTML)
+
+}
+@ViewChild(MatSort) sort: MatSort;
+
+ngAfterViewInit() {
+  this.orderItemCounts.sort = this.sort;
+  this.all_orders.sort = this.sort;
 
 }
 

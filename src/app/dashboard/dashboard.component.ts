@@ -15,6 +15,7 @@ import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemOrder } from '../models/item_order.model';
 import { MatSort } from '@angular/material/sort';
 import { DatePipe } from '@angular/common';
+import { Hash } from 'crypto';
 
 
 @Component({
@@ -42,6 +43,11 @@ export class DashboardComponent implements OnInit {
   searchText: string = ""
   total_for_date = 0;
   stringDate = ""
+  filteredValues =
+  {
+    date: '',
+    searchText: '',
+  };
 
 
   applyFilter() {
@@ -52,7 +58,10 @@ export class DashboardComponent implements OnInit {
     this.orderItemCounts.filter = filterValue;
     console.log('Here is the date:')
     this.stringDate = new Date(this.currentlySelctedDate.setHours(0,0,0,0) ).toISOString()
-    this.ordersByDate.filter = this.stringDate
+    this.filteredValues.date = new Date(this.currentlySelctedDate.setHours(0,0,0,0) ).toISOString()
+    this.filteredValues.searchText = this.searchText
+    this.ordersByDate.filter = JSON.stringify(this.filteredValues)
+
 
   }
 
@@ -61,7 +70,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.ordersByDate.filterPredicate = this.customFilterPredicate
     this.itemsService.fetchItems().subscribe()
     this.ordersService.getOrders().subscribe()
     this.itemOrdersService.getItemOrders().subscribe()
@@ -254,5 +263,17 @@ ngAfterViewInit() {
   this.all_orders.sort = this.sort;
 
 }
+
+
+//filter stuff
+customFilterPredicate(data: any, filter: string): boolean {    
+  const filterObject = JSON.parse(filter);
+  const first_name = data.first_name.toString().trim().toLowerCase().indexOf(filterObject.searchText.toLowerCase()) !== -1;
+  const last_name = data.last_name.toString().trim().toLowerCase().indexOf(filterObject.searchText.toLowerCase()) !== -1;
+  return data.date == filterObject.date && (first_name || last_name)
+
+}
+
+
 
 }

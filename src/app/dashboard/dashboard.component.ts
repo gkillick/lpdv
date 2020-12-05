@@ -186,6 +186,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+calculateTotal(source: MatTableDataSource<Order>){
+  let data = source.data
+  var total = 0;
+  data.forEach((order) => total += order.total)
+  }
+
   openEditDialog(id: number): void {
 
     console.log(id)

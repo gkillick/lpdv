@@ -49,6 +49,11 @@ export class ItemOrdersService {
     }))
   }
 
+  deleteItemOrdersForOrder(ord_id){
+    this.itemOrders = this.itemOrders.filter(itemOrder => {
+      return !(itemOrder.order_id === ord_id)
+    })
+  }
 
   handleErrors(errorRes: HttpErrorResponse){
 

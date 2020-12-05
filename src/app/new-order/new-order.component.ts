@@ -52,7 +52,11 @@ export class NewOrderComponent implements OnInit {
           this.items[item_type].push(item)
         }
         this.items[item_type].sort((a,b) => {
+          if(a.combined_name == b.combined_name){
+            return ('' + a.sliced).localeCompare(b.sliced)
+          }else{
           return ('' + a.combined_name).localeCompare(b.combined_name);
+          }
         })
       }
 
@@ -116,8 +120,6 @@ export class NewOrderComponent implements OnInit {
     this.orderService.orders.push(order)
     this.orderService.orderChangedSubject.next(this.orderService.orders)
     this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
-      console.log('item orders')
-      console.log(orders)
     }, error => {
       console.log(error)
     })
@@ -200,7 +202,6 @@ export class NewOrderComponent implements OnInit {
       if(tax_items.no_tax_6.count < 6){
         tax += tax_items.no_tax_6.total * .14975
       }
-      console.log(tax)
       tax += tax_items.normal.total * .14975
       this.tax = tax;
       this.sub_total = before_tax;

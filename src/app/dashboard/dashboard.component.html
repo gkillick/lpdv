@@ -21,11 +21,7 @@
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="All Orders">
                     <table mat-table [dataSource]="all_orders" matSort class="mat-elevation-z8 mt-3 table-max">
-                        <ng-container matColumnDef="orderNumber">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Order No. </th>
-                            <td mat-cell *matCellDef="let item"> {{item.id}} </td>
-                        </ng-container>
-                        <!-- Item name -->
+
                         <ng-container matColumnDef="first_name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
                             <td mat-cell *matCellDef="let item"> {{item.first_name}} </td>
@@ -66,36 +62,37 @@
                 </mat-tab>
                 <mat-tab label="Orders for Date">
                     <table mat-table [dataSource]="orders" matSort class="mat-elevation-z8 mt-3 table-max">
-                        <ng-container matColumnDef="orderNumber">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Order No. </th>
-                            <td mat-cell *matCellDef="let item"> {{item.id}} </td>
-                        </ng-container>
-                        <!-- Item name -->
                         <ng-container matColumnDef="first_name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
                             <td mat-cell *matCellDef="let item"> {{item.first_name}} </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
                         </ng-container>
                         <ng-container matColumnDef="last_name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
                             <td mat-cell *matCellDef="let item"> {{item.last_name}} </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
                         </ng-container>
                         <ng-container matColumnDef="telephone">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> telephone </th>
                             <td mat-cell *matCellDef="let item"> {{item.telephone}} </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
                         </ng-container>
 
                         <!-- Count -->
                         <ng-container matColumnDef="summary">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Summary </th>
                             <td mat-cell *matCellDef="let item"> {{ orderSummary(item)}} </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
                         </ng-container>
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
                             <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
+                            <td mat-footer-cell *matFooterCellDef> <b>{{total_for_date | currency}} </b></td>
                         </ng-container>
                         <ng-container matColumnDef="details">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Details </th>
-                            <td mat-cell *matCellDef="let item"> <button (click)="openEditDialog(item.id)" class="btn btn-primary">Edit</button> </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-print"> Details </th>
+                            <td mat-cell *matCellDef="let item"> <button (click)="openEditDialog(item.id)" class="no-print btn btn-primary">Edit</button> </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
                         </ng-container>
 
 
@@ -103,6 +100,7 @@
 
                         <tr mat-header-row *matHeaderRowDef="displayedOrderColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedOrderColumns;"></tr>
+                        <tr mat-footer-row *matFooterRowDef="displayedOrderColumns"></tr>
                     </table>
                 </mat-tab>
                 <mat-tab label="Production Quantities">

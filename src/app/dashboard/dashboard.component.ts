@@ -28,13 +28,15 @@ export class DashboardComponent implements OnInit {
   orderItemCountsList = []
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
   displayedColumns = ["name", "amount"];
-  displayedOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total", "details"]
-  displayedAllOrderColumns = ["orderNumber", "first_name","last_name","telephone", "summary", "total",  "date", "details"]
+  displayedOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"]
+  displayedAllOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"]
+  orderDateFooterColumnsToDisplay = ["total"]
   currentlySelctedDate: Date
   dateForm: FormControl
   activeTab: string = "All Orders"
   itemOrders: ItemOrder[] = []
   searchText: string = ""
+  total_for_date = 0;
 
 
   applyFilter(filterValue: string) {

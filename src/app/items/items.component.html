@@ -20,7 +20,7 @@
                 <!-- Count -->
                 <ng-container matColumnDef="price">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> price </th>
-                    <td mat-cell *matCellDef="let item"> {{item.price}} </td>
+                    <td mat-cell *matCellDef="let item"> {{item.price |currency }} </td>
                 </ng-container>
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>

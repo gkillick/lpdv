@@ -1,3 +1,9 @@
-- fix edit update
-- production quantities
+
 - package
+
+
+- add sliced 
+- date to new date in all orders & production 
+- total argon 
+
+

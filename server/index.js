@@ -20,6 +20,7 @@ app.use('/api/user', authRoute)
 app.use('/api/items', itemsRoute)
 app.use('/api/orders', ordersRoute)
 app.use('/api/itemOrders', itemOrdersRoute)
+app.use(express.static(__dirname + '/dist/lpdv'))
 
 app.listen(3000, () => {console.log('Server is up and running')})
 

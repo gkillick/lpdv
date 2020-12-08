@@ -1,7 +1,7 @@
 # bin/bash
 
 echo Building Client
-npm build --prod
+npm run build
 
 echo Moving Client to server folder
 mv dist/ server/

@@ -22,5 +22,8 @@ app.use('/api/orders', ordersRoute)
 app.use('/api/itemOrders', itemOrdersRoute)
 app.use(express.static(__dirname + '/dist/lpdv'))
 
-app.listen(3000, () => {console.log('Server is up and running')})
+app.route('/*').get(function(req, res) {
+    return res.sendFile(__dirname + '/dist/lpdv/index.html');
+});
 
+app.listen(3000, () => { console.log('Server is up and running') })

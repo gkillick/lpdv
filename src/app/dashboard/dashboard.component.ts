@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   orderItemCountsList = []
   ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>()
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
-  displayedColumns = ["name", "amount"];
+  displayedColumns = ["name", "type", "amount", "sliced_amount"];
   displayedOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"]
   displayedAllOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"]
   orderDateFooterColumnsToDisplay = ["total"]
@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit {
 
       for(let item of this.itemsService.items){
         if(!item.sliced){
-          this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0})
+          this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0, sliced_amount: 0, type: item.item_type})
         }
       }
 
@@ -159,13 +159,16 @@ export class DashboardComponent implements OnInit {
       })
 
       for(let itemOrder of filteredItemOrders){
-        console.log('hi')
         for(let orderItemCount of this.orderItemCountsList){
-          console.log(itemOrder.item_id)
-          console.log(orderItemCount.id)
           if(itemOrder.combined_name === orderItemCount.name){
-            console.log('added')
+            console.log('item order:')
+            console.log(itemOrder)
+            
             orderItemCount.amount += itemOrder.amount
+            if(itemOrder.sliced){
+              console.log('its sliced')
+              orderItemCount.sliced_amount += itemOrder.amount
+            }
           }
         }
       }

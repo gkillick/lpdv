@@ -175,7 +175,7 @@ class EditOrderComponent {
                 console.log(key);
                 for (let item of this.items[key]) {
                     if (formValue[item.name]) {
-                        itemOrders.push(new _models_item_order_model__WEBPACK_IMPORTED_MODULE_3__["ItemOrder"](null, order.user_id, item.name, item.combined_name, order.id, item.id, formValue[item.name], false, res.date));
+                        itemOrders.push(new _models_item_order_model__WEBPACK_IMPORTED_MODULE_3__["ItemOrder"](null, order.user_id, item.name, item.combined_name, order.id, item.id, formValue[item.name], item.sliced, res.date));
                     }
                 }
             }

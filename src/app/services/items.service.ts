@@ -1,9 +1,11 @@
 import { Injectable, OnInit} from '@angular/core';
 import { Subject, throwError } from 'rxjs';
 import { catchError, tap} from 'rxjs/operators';
-import { Item } from '../models/item.model';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { AuthService } from '../auth.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Item } from '../models/item.interface';
 
 
  
@@ -19,7 +21,7 @@ export class ItemsService implements OnInit{
   items: Item[] = []
   itemsSubject: Subject<Item[]> = new Subject<Item[]>()
 
-  constructor(private http: HttpClient, private authService: AuthService) { 
+  constructor(private http: HttpClient, private authService: AuthService, private firestore: AngularFirestore) { 
     
   }
   ngOnInit(){
@@ -34,17 +36,18 @@ export class ItemsService implements OnInit{
 
   addItem(item: Item){
     //assign user id to item
+
+
+
     item.name = item.name.toLowerCase()
 
-    this.authService.userData.subscribe(user => {
-      console.log(user)
-      item.user_id = user.uid;
-    })
 
-    return this.http.post<Item>('/api/items/add', item).pipe(catchError(this.handleErrors), tap(res => {
-      this.items.push(res)
+    return this.firestore.collection('items').add(item).then((resp) => {
+      console.log(resp)
+      this.items.push(item)
       this.itemsSubject.next(this.items)
-    }))
+      console.log("added items")
+    })
     
   }
 
@@ -63,7 +66,7 @@ export class ItemsService implements OnInit{
   }
 
   editItem(item: Item){
-
+/*
     console.log(item)
     item.name = item.name.toLowerCase()
     return this.http.put('api/items', item).pipe(catchError(this.handleErrors), tap(res => {
@@ -78,8 +81,10 @@ export class ItemsService implements OnInit{
 
       this.itemsSubject.next(this.items)
     }))
+    */
   }
 
+  /*
   deleteItem(item: Item){
 
     return this.http.delete('api/items/'+item.id).pipe(catchError(this.handleErrors), tap(res => {
@@ -91,6 +96,7 @@ export class ItemsService implements OnInit{
     }))
 
   }
+  */
 
 
 

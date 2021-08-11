@@ -26,7 +26,7 @@ export class ItemsComponent implements OnInit {
 
     console.log('init')
 
-    this.dataSource.data = this.itemService.items
+    //this.dataSource.data = this.itemService.items
 
 
     this.itemService.itemsSubject.subscribe((items: Item[]) => {

@@ -24,4 +24,3 @@ export class Item{
 }
     //const {type, data} = resp_data
 
-

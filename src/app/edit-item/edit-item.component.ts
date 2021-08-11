@@ -57,10 +57,11 @@ export class EditItemComponent implements OnInit {
       const item: Item = Item.newItem(formValue)
       item.id = this.item.id
       item.user_id = this.item.user_id
-
+/*
       this.itemService.editItem(item).subscribe(res => {
         console.log(res)
       })
+      */
       //this.dataService.saveItem(item)
       this.success = true;
       this.dialogRef.close()
@@ -73,10 +74,11 @@ export class EditItemComponent implements OnInit {
   }
 
   delete(){
-
+/*
     this.itemService.deleteItem(this.item).subscribe(res => {
       console.log(res)
     })
+    */
 
     this.dialogRef.close()
   }

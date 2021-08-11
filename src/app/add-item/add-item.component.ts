@@ -48,6 +48,9 @@ export class AddItemComponent implements OnInit {
     const formValue: Item = this.myForm.value;
 
     try {
+
+      this.itemsService.addItem(formValue)
+      /*
       //use this object to create product
       console.log(formValue)
       const item: Item = Item.newItem(formValue)
@@ -61,7 +64,8 @@ export class AddItemComponent implements OnInit {
        item2.sliced = true
        item.sliced = false
         item2.name = item2.name + " Tr."
-        this.itemsService.addItem(item2).subscribe(
+        this.itemsService.addItem(item2)
+        .subscribe(
           response => {
             console.log(response)
             this.dialogRef.close()
@@ -76,7 +80,8 @@ export class AddItemComponent implements OnInit {
       }
       
       
-      this.itemsService.addItem(item).subscribe(
+      this.itemsService.addItem(item)
+      .subscribe(
         response => {
           console.log(response)
           this.dialogRef.close()
@@ -85,6 +90,7 @@ export class AddItemComponent implements OnInit {
           this.dialogRef.close(errorRes)
         }
       )
+      */
       //this.dataService.addItem(item)
       this.success = true;
 

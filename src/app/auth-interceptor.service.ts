@@ -18,12 +18,11 @@ export class AuthInterceptorService implements HttpInterceptor{
         return this.afAuth.authState.pipe(take(1), exhaustMap(user => {
 
             if(!user){
-                console.log("no user")
                 return next.handle(req)
             } else {
                 user.getIdToken().then(token => {
                     const modifiedReq = req.clone({headers: new HttpHeaders({'auth-token': token})}) 
-                    return next.handle(modifiedReq)
+                    return next.handle(req)
                 }).catch(error => {
                     console.log(error)
                 })

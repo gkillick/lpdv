@@ -2,23 +2,31 @@ import { HttpHandler, HttpHeaders, HttpInterceptor, HttpParams, HttpRequest } fr
 import {Injectable} from '@angular/core'
 import { AuthService } from './auth.service';
 import {exhaustMap, take} from 'rxjs/operators'
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable()
 
 
 export class AuthInterceptorService implements HttpInterceptor{
-    constructor(private authService: AuthService){}
+    constructor(
+        private afAuth: AngularFireAuth
+        ){}
+
 
     intercept(req: HttpRequest<any>, next: HttpHandler){
 
-        return this.authService.user.pipe(take(1), exhaustMap(user => {
+        return this.afAuth.authState.pipe(take(1), exhaustMap(user => {
+
             if(!user){
-                console.log('no user')
+                console.log("no user")
                 return next.handle(req)
-            }else{
-                console.log(user.token)
-                const modifiedReq = req.clone({headers: new HttpHeaders({'auth-token': user.token})}) 
-                return next.handle(modifiedReq)
+            } else {
+                user.getIdToken().then(token => {
+                    const modifiedReq = req.clone({headers: new HttpHeaders({'auth-token': token})}) 
+                    return next.handle(modifiedReq)
+                }).catch(error => {
+                    console.log(error)
+                })
             }
         }))
     }

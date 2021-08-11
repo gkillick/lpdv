@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {SENDING_ITEM, DELETE_ITEM, GET_KEYS_ORDERS, GET_KEYS_ITEMS, RESPONSE_KEYS_ITEMS, RESPONSE_KEYS_ORDERS, REQUEST_ITEM, RESPONSE_ITEM, RESPONSE_ORDER, REQUEST_ORDER} from '../../message-types'
-import {IpcRenderer} from 'electron'
 import { Subject } from 'rxjs';
 import { Item } from '../models/item.model';
 import { Order } from '../models/order.model';
@@ -11,7 +10,6 @@ import { ItemOrder } from '../models/item_order.model';
 })
 export class DataService {
 
-  ipc: IpcRenderer
   items: Item[] = []
   itemsChanged: Subject<Item[]> = new Subject<Item[]>()
   orders: Order[] = []

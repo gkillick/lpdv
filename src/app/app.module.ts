@@ -32,6 +32,10 @@ import {AuthInterceptorService} from './auth-interceptor.service'
 import {MatSortModule} from '@angular/material/sort';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore'
+import { AngularFireAuthModule } from '@angular/fire/auth'
+import { environment } from 'src/environments/environment';
 
 
 
@@ -73,7 +77,9 @@ import { SearchFilterPipe } from './pipes/search-filter.pipe';
     MatTabsModule,
     HttpClientModule,
     MatSortModule,
-
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}

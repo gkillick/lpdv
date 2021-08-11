@@ -4,10 +4,10 @@ import { DataService } from './data.service';
 import {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} from '../../message-types'
 import { Order } from '../models/order.model';
 import { AuthService } from '../auth.service';
-import { User } from '../models/user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators'
 import { ItemOrdersService } from './item-orders.service';
+import { User } from '../models/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +27,9 @@ export class OrderService {
     console.log('order: ')
     console.log(order)
     //assign user id to item
-    this.authService.user.subscribe((user: User)=> {
+    this.authService.userData.subscribe((user: User)=> {
       console.log(user)
-      order.user_id = user.id
+      order.user_id = user.uid
     })
 
     console.log(order)

@@ -23,7 +23,7 @@ export class ItemsService implements OnInit{
     
   }
   ngOnInit(){
-    this.authService.user.subscribe(user => {
+    this.authService.userData.subscribe(user => {
       if(user){
         this.fetchItems().subscribe(res => {
           console.log(res)
@@ -36,9 +36,9 @@ export class ItemsService implements OnInit{
     //assign user id to item
     item.name = item.name.toLowerCase()
 
-    this.authService.user.subscribe(user => {
+    this.authService.userData.subscribe(user => {
       console.log(user)
-      item.user_id = user.id;
+      item.user_id = user.uid;
     })
 
     return this.http.post<Item>('/api/items/add', item).pipe(catchError(this.handleErrors), tap(res => {

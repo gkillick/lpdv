@@ -17,30 +17,17 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if(this.authService.user){
-      this.authService.autoLogin()
+    if(this.authService.userData){
+      //this.authService.autoLogin()
     }
   }
 
   onSubmit(form: NgForm){
 
-    console.log(form)
-
     const {username, password} = form.value
 
     if(form.valid){
-
-      this.authService.login(username, password).subscribe(res => {
-        console.log(res)
-
-        
-        this.router.navigate(['/dashboard'])
-
-      }, errorRes => {
-        console.log(errorRes)
-
-        this.errorMessage = errorRes
-      })
+      this.authService.login(username, password)
     }
 
     form.reset()

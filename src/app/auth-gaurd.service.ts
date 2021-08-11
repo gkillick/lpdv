@@ -14,7 +14,8 @@ export class AuthGaurdService implements CanActivate{
 
     canActivate(route: ActivatedRouteSnapshot, router: RouterStateSnapshot): boolean | Promise<boolean> | Observable<boolean>{
 
-        return this.authService.user.pipe(map(user => {
+        return this.authService.userData.pipe(map(user => {
+            console.log(user)
             return !!user
         }), tap(isAuth => {
             console.log(isAuth)

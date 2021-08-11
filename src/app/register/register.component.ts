@@ -25,8 +25,6 @@ export class RegisterComponent implements OnInit {
   onSubmit(form: NgForm){
 
     const {username, password, passwordConf} = form.value
-    console.log(username)
-    console.log(password)
 
     const passwordConsitent = password === passwordConf
 
@@ -35,12 +33,7 @@ export class RegisterComponent implements OnInit {
     }
 
     if(passwordConsitent && form.valid){
-      this.authService.signup(username, password).subscribe(res => {
-        console.log(res)
-        this.router.navigate(['/dashboard'])
-      }, errorRes => {
-        this.errorMessage = errorRes
-      })
+      this.authService.signUp(username, password)    
     }
 
 

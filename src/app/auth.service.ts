@@ -1,23 +1,88 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http'
 import {catchError, tap} from 'rxjs/operators'
 import { BehaviorSubject, throwError } from 'rxjs';
-import { User } from './models/user.model';
 import jwt_decode from 'jwt-decode'
 import { Router } from '@angular/router';
 import { ItemsService } from './services/items.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { User } from './models/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  user: BehaviorSubject<User> = new BehaviorSubject<User>(null)
+  userData: BehaviorSubject<User> = new BehaviorSubject<User>(null)
   tokenExpirationTimer: any
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private ngZone: NgZone 
+    ) {
+
+      this.afAuth.authState.subscribe(user => {
+        if(user){
+          this.setUserData(user)
+       this.router.navigate(['dashboard'])
+          JSON.parse(localStorage.getItem('user'))
+        }else{
+          localStorage.setItem('user', null)
+          JSON.parse(localStorage.getItem('user'))
+        }
+      })
+
+   }
+
+   signUp(email, password){
+     return this.afAuth.createUserWithEmailAndPassword(email, password).then((result => {
+       this.setUserData(result.user)
+       this.router.navigate(['dashboard'])
+     })).catch(error => {
+       console.log(error)
+     })
+   }
+
+   login(email, password){
+     return this.afAuth.signInWithEmailAndPassword(email, password).then(result => {
+       this.setUserData(result.user)
+       this.router.navigate(['dashboard'])
+     })
+   }
 
 
+
+   logout(){
+     this.afAuth.signOut().then(() => {
+     this.userData.next(null)
+     localStorage.removeItem('user')
+     this.router.navigate(['login'])
+     })
+   }
+
+   setUserData(user){
+     const userData: User = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified
+     }
+
+     this.userData.next(userData)
+
+
+    localStorage.setItem('user', JSON.stringify(user))
+
+   }
+
+
+
+/*
   signup(username: string, password:string){
     return this.http.post<User>('/api/user/register', {
       name: username,
@@ -79,10 +144,6 @@ export class AuthService {
       console.log('no user data saved')
     }
 
-
-
-
-
   }
 
   autoLogout(){
@@ -102,36 +163,10 @@ export class AuthService {
     }
   }
 
+*/
 
-  handleErrors(errorRes: HttpErrorResponse){
 
 
-      let errorMessage = "an unknown error occured"
 
-      if(!errorRes.error || !errorRes.error.error){
-        return throwError(errorRes)
-      }
 
-      switch(errorRes.error.error){
-        case "USER_EXISTS":
-          errorMessage = "This user already exists"
-          break;
-        case 'INVALID_USERNAME':
-          errorMessage = "Invalid username or password"
-          break;
-        case 'INVALID_PASSWORD':
-          errorMessage = "Invalid username or password"
-          break;
-        case 'ACCESS_DENIED':
-          errorMessage = "Invalid creddentials"
-          break;
-        case 'INVALID_TOKEN':
-          errorMessage = "Invalid creddentials"
-          break;
-  
-      }
-
-      throw(errorMessage)
-
-  }
 }

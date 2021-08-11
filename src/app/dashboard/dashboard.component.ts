@@ -15,7 +15,6 @@ import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemOrder } from '../models/item_order.model';
 import { MatSort } from '@angular/material/sort';
 import { DatePipe } from '@angular/common';
-import { Hash } from 'crypto';
 
 
 @Component({

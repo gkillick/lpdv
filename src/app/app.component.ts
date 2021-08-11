@@ -19,8 +19,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(){
-    this.authService.autoLogin()
-    console.log('getting data')
     //this.dataService.getStoredData()
   }
 

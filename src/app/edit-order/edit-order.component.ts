@@ -1,7 +1,6 @@
 import { Component, ElementRef, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Item } from 'electron/main';
 import { ItemOrder } from '../models/item_order.model';
 import { Order } from '../models/order.model';
 import { User } from '../models/user.model';

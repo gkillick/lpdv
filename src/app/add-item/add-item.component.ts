@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Item } from '../models/item.model';
+import { Item, ItemForm} from '../models/item.interface';
 import { DataService } from '../services/data.service';
 import { ItemsService } from '../services/items.service';
 
@@ -13,10 +13,7 @@ import { ItemsService } from '../services/items.service';
 export class AddItemComponent implements OnInit {
 
   myForm: FormGroup;
-
   errorMessage: string
-  loading = false;
-  success = false;
 
   //types of foods
   types: any[] = [
@@ -37,69 +34,45 @@ export class AddItemComponent implements OnInit {
       name: ['', Validators.required],
       item_type: ['', Validators.required],
       price: ['', Validators.required],
-      sliced: ['', Validators.required],
+      sliced_option: ['', Validators.required],
       tax_catagory: ['', Validators.required]
     });
   }
 
   async submitHandler() {
-    this.loading = true;
 
-    const formValue: Item = this.myForm.value;
+    const itemForm: ItemForm = this.myForm.value;
 
     try {
 
-      this.itemsService.addItem(formValue)
-      /*
-      //use this object to create product
-      console.log(formValue)
-      const item: Item = Item.newItem(formValue)
-      //this will verify that sliced and non sliced items can be called for the same item
-      item.name = item.name.toLowerCase()
-      item.combined_name = item.name
-          //if sliced duplicate 
-      if(item.sliced){
-        item.sliced_option = true
-        let item2 = Item.newItem(item)
-       item2.sliced = true
-       item.sliced = false
-        item2.name = item2.name + " Tr."
-        this.itemsService.addItem(item2)
-        .subscribe(
-          response => {
-            console.log(response)
+      if(itemForm.sliced_option){
+
+        var {sliced_option: boolean, ...slicedItem} = {...itemForm, sliced: true}
+        var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false}
+        slicedItem.name = slicedItem.name + "Tr."
+
+        this.itemsService.addItems([slicedItem, unslicedItem]).then(resp => {
+          console.log(resp)
             this.dialogRef.close()
-          }, errorRes => {
-            console.log(errorRes)
-            this.dialogRef.close(errorRes)
-          }
-        )
+        }).catch(err => {
+          console.log(err)
+        })
 
       }else{
-        item.sliced_option = false
+
+        var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false}
+
+        this.itemsService.addItem(unslicedItem).then(resp => {
+            this.dialogRef.close()
+        }).catch(err => {
+          console.log(err)
+        })
+
       }
-      
-      
-      this.itemsService.addItem(item)
-      .subscribe(
-        response => {
-          console.log(response)
-          this.dialogRef.close()
-        }, errorRes => {
-          console.log(errorRes)
-          this.dialogRef.close(errorRes)
-        }
-      )
-      */
-      //this.dataService.addItem(item)
-      this.success = true;
 
     } catch(err) {
       console.error(err)
     }
-
-    this.loading = false;
-    
   }
 
 }

@@ -1,116 +1,52 @@
 import { Injectable, OnInit} from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
-import { catchError, switchMap, map} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 import { AuthService } from '../auth.service';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Item } from '../models/item.interface';
-import { User } from '../models/user.interface';
-
-
- 
 
 @Injectable({
   providedIn: 'root'
 })
 
 
-export class ItemsService implements OnInit{
+export class ItemsService {
 
-  items: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(null)
+  items: Observable<Item[]> = new Observable<Item[]>(null)
+  itemCollection: AngularFirestoreCollection<Item>
+  itemsBatch;
 
-  constructor(private http: HttpClient, private authService: AuthService, private firestore: AngularFirestore) { 
-    
-    this.firestore.collection('items', ref => ref.where("uid", '==', authService.user.uid)).valueChanges().subscribe((items: Item[]) => {
-      this.items.next(items)
-    })
-    
-  }
-
-  ngOnInit(){
+  constructor(private http: HttpClient, private authService: AuthService, private afs: AngularFirestore) { 
+    this.itemsBatch = this.afs.firestore.batch()
+    this.itemCollection = this.afs.collection<Item>('items', ref => ref.where("uid", '==', authService.user.uid))
+    this.items = this.itemCollection.valueChanges()
   }
 
   addItem(item: Item){
-    //assign user id to item
-
-
-
     item.name = item.name.toLowerCase()
     item.uid = this.authService.user.uid
-
-
-    return this.firestore.collection('items').add(item)
-    
+    item.id = this.afs.createId()
+    return this.itemCollection.doc(item.id).set(item)
   }
 
+  addItems(items: Item[]): Promise<any> {
 
-  fetchItems(){
-    console.log("getting items")
-    return this.http.get('/api/items').pipe(catchError(this.handleErrors), tap(res => {
+    for(let item of items){
+      item.name = item.name.toLowerCase()
+      item.uid = this.authService.user.uid
+      const itemRef = this.itemCollection.doc().ref
+      item.id = itemRef.id
+      this.itemsBatch.set(itemRef, item)
+    }
 
-      this.items = []
-      for(let item of res['items']){
-        this.items.push(item)
-      }
-
-      this.itemsSubject.next(this.items)
-    }))
+    return this.itemsBatch.commit()
   }
 
   editItem(item: Item){
-/*
-    console.log(item)
-    item.name = item.name.toLowerCase()
-    return this.http.put('api/items', item).pipe(catchError(this.handleErrors), tap(res => {
-
-      this.items = this.items.map((item: Item) => {
-        if(item.id === res['id']){
-          return Item.newItem(res)
-        }else{
-          return Item.newItem(item)
-        }
-      })
-
-      this.itemsSubject.next(this.items)
-    }))
-    */
+    return this.itemCollection.doc(item.id).update(item)
   }
 
-  /*
   deleteItem(item: Item){
-
-    return this.http.delete('api/items/'+item.id).pipe(catchError(this.handleErrors), tap(res => {
-
-      this.items = this.items.filter(item => {
-        return !(item.id === res['id'])
-      })
-      this.itemsSubject.next(this.items)
-    }))
-
+    return this.itemCollection.doc(item.id).delete()
   }
-  */
-
-
-
-  handleErrors(errorRes: HttpErrorResponse){
-
-
-    let errorMessage = "an unknown error occured"
-
-    if(!errorRes.error || !errorRes.error.error){
-      return throwError(errorRes)
-    }
-
-    switch(errorRes.error.error){
-      case "ITEM_EXISTS":
-        errorMessage = "The item already exists"
-
-    }
-
-    throw(errorMessage)
-
-}
-
-  
 }

@@ -70,7 +70,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.ordersByDate.filterPredicate = this.customFilterPredicate
-    this.itemsService.fetchItems().subscribe()
     this.ordersService.getOrders().subscribe()
     this.itemOrdersService.getItemOrders().subscribe()
 
@@ -142,12 +141,13 @@ export class DashboardComponent implements OnInit {
 
 
 
-
-      for(let item of this.itemsService.items){
+/*
+      for(let item of this.itemsService.items.s){
         if(!item.sliced){
           //this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0, sliced_amount: 0, type: item.item_type})
         }
       }
+      */
 
       var filteredItemOrders = this.itemOrders.filter(iorder => {
         let selectedDate = new Date(this.currentlySelctedDate)

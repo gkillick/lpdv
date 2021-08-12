@@ -28,8 +28,7 @@ export class ItemsComponent implements OnInit {
 
     //this.dataSource.data = this.itemService.items
 
-
-    this.itemService.itemsSubject.subscribe((items: Item[]) => {
+    this.itemService.items.subscribe((items: any[]) => {
 
       this.dataSource.data = items.sort((a,b) => {
         return +b.id - +a.id

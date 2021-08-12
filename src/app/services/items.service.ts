@@ -1,11 +1,12 @@
 import { Injectable, OnInit} from '@angular/core';
-import { Subject, throwError } from 'rxjs';
-import { catchError, tap} from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { catchError, switchMap, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Item } from '../models/item.interface';
+import { User } from '../models/user.interface';
 
 
  
@@ -17,21 +18,17 @@ import { Item } from '../models/item.interface';
 
 export class ItemsService implements OnInit{
 
-
-  items: Item[] = []
-  itemsSubject: Subject<Item[]> = new Subject<Item[]>()
+  items: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(null)
 
   constructor(private http: HttpClient, private authService: AuthService, private firestore: AngularFirestore) { 
     
-  }
-  ngOnInit(){
-    this.authService.userData.subscribe(user => {
-      if(user){
-        this.fetchItems().subscribe(res => {
-          console.log(res)
-        })
-      }
+    this.firestore.collection('items', ref => ref.where("uid", '==', authService.user.uid)).valueChanges().subscribe((items: Item[]) => {
+      this.items.next(items)
     })
+    
+  }
+
+  ngOnInit(){
   }
 
   addItem(item: Item){
@@ -40,14 +37,10 @@ export class ItemsService implements OnInit{
 
 
     item.name = item.name.toLowerCase()
+    item.uid = this.authService.user.uid
 
 
-    return this.firestore.collection('items').add(item).then((resp) => {
-      console.log(resp)
-      this.items.push(item)
-      this.itemsSubject.next(this.items)
-      console.log("added items")
-    })
+    return this.firestore.collection('items').add(item)
     
   }
 

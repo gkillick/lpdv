@@ -15,20 +15,18 @@ import { User } from './models/user.interface';
 export class AuthService {
 
   userData: BehaviorSubject<User> = new BehaviorSubject<User>(null)
+  user: User
   tokenExpirationTimer: any
 
   constructor(
-    private http: HttpClient, 
     private router: Router,
-    private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
-    private ngZone: NgZone 
     ) {
 
       this.afAuth.authState.subscribe(user => {
         if(user){
           this.setUserData(user)
-       this.router.navigate(['dashboard'])
+          this.router.navigate(['dashboard'])
           JSON.parse(localStorage.getItem('user'))
         }else{
           localStorage.setItem('user', null)
@@ -73,7 +71,9 @@ export class AuthService {
       emailVerified: user.emailVerified
      }
 
-     this.userData.next(userData)
+     this.user = userData
+
+     this.userData.next(this.user)
 
 
     localStorage.setItem('user', JSON.stringify(user))

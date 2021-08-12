@@ -22,7 +22,7 @@ export class AuthInterceptorService implements HttpInterceptor{
             } else {
                 user.getIdToken().then(token => {
                     const modifiedReq = req.clone({headers: new HttpHeaders({'auth-token': token})}) 
-                    return next.handle(req)
+                    return next.handle(modifiedReq)
                 }).catch(error => {
                     console.log(error)
                 })

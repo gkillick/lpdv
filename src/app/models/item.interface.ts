@@ -13,7 +13,8 @@ export interface ItemForm {
 export interface Item {
         uid: string
         id: string
-        name: string, 
+        name: string,
+        combined_name: string,
         item_type: string, 
         price: number, 
         sliced: boolean,

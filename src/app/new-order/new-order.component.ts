@@ -3,9 +3,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef } from '@angular/material/dialog';
 import { ɵELEMENT_PROBE_PROVIDERS__POST_R3__ } from '@angular/platform-browser';
 import { getMaxListeners } from 'process';
-import { Item } from '../models/item.model';
-import { ItemOrder } from '../models/item_order.model';
-import { Order } from '../models/order.model';
+import { map, tap } from 'rxjs/operators';
+import { ItemOrder } from '../models/item_order.interface';
+import { Order} from '../models/order.interface';
 import { User } from '../models/user.model';
 import { DataService } from '../services/data.service';
 import { ItemOrdersService } from '../services/item-orders.service';
@@ -32,40 +32,16 @@ export class NewOrderComponent implements OnInit {
   @ViewChild('input' ) elemRef: ElementRef;
 
 
-  items = {
+  organizedItems = {
     "viennoiserie": [],
     "pains": [],
     "noel": []
   }
-  itemtypes = ["viennoiserie", "pains", "noel"]
 
-  
-
-  constructor(private itemsService: ItemsService, private itemOrdersService: ItemOrdersService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) { }
+  constructor(private itemsService: ItemsService, private itemOrdersService: ItemOrdersService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) {}
 
 
   ngOnInit(): void {
-
-    for(let item of this.itemsService.items){
-      for(let item_type in this.items){
-        if(item.item_type == item_type){
-          this.items[item_type].push(item)
-        }
-        this.items[item_type].sort((a,b) => {
-          if(a.combined_name == b.combined_name){
-            return ('' + a.sliced).localeCompare(b.sliced)
-          }else{
-          return ('' + a.combined_name).localeCompare(b.combined_name);
-          }
-        })
-      }
-
-
-    }
-
-
-
-
 
 
     var tomorrow = new Date();
@@ -75,74 +51,57 @@ export class NewOrderComponent implements OnInit {
     this.myForm = this.fb.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      //client_number: ['', Validators.required],
       telephone: ['', Validators.required],
       date: [tomorrow, Validators.required],
     });
-    console.log(this.items)
-    for (var key in this.items) {
-
-      this.items[key].forEach(element => {
-        console.log(element.item_type)
-        this.myForm.addControl(element.name, new FormControl('', ))
-      });
-  }
-  this.onChanges();
 
 
+    this.itemsService.items.pipe(tap( items => {
+      items.map(item => this.organizedItems[item.item_type].push(item))
+    })).subscribe(items => {
+
+      items.map(item => this.myForm.addControl(item.name , new FormControl('' )))
+
+
+      for(const key of Object.keys(this.organizedItems)){
+            this.organizedItems[key].sort((a,b) => {
+              return ('' + a.name).localeCompare(b.name);
+          })
+        }
+      })
   }
 
   async submitHandler() {
-    this.loading = true;
 
-    const formValue = this.myForm.value;
-    formValue.sub_total = this.sub_total
-    formValue.tax = this.tax
-    formValue.total = this.total
-    formValue.date.setHours(0,0,0,0);
-    let order = Order.newOrder(formValue)
-    this.orderService.addOrder(order).subscribe(res => {
-      order = res
-    var itemOrders = [];
-    for(let key in this.items){
-      console.log(key)
-      for(let item of this.items[key]){
-        console.log(item.id)
-        console.log(formValue[item.name])
-        if(formValue[item.name]){
-          itemOrders.push(new ItemOrder(null, order.user_id, item.name, item.combined_name,order.id, item.id, formValue[item.name], item.sliced,res.date)) 
+    const order: Order = this.myForm.value;
+    order.sub_total = this.sub_total
+    order.tax = this.tax
+    order.total = this.total
+    order.date.setHours(0,0,0,0);
+    this.orderService.addOrder(order).then(orderId => { 
+      this.submitItemOrders(this.myForm.value, this.organizedItems, orderId, order.date)
+      this.dialogRef.close()
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  submitItemOrders(form, seperatedItems, order_id: string, date: Date){
+    var itemOrders: ItemOrder[] = []
+    for(let key of Object.keys(seperatedItems)){
+      for(let item of seperatedItems[key]){
+        var number: number = form[item.name]
+        if(number > 0){
+          itemOrders.push({id: null, uid: null, item_id: item.id, number, order_id, date: date})
         }
-
       }
     }
 
-    order.itemOrders = itemOrders
-    this.orderService.orders.push(order)
-    this.orderService.orderChangedSubject.next(this.orderService.orders)
-    this.itemOrdersService.addItemOrders(itemOrders).subscribe(orders => {
-    }, error => {
-      console.log(error)
-    })
-    }, error => {
-      //console.log(error)
-    })
+    console.log(itemOrders)
 
-
-    console.log("Order:")
-    console.log(order)
-
-
-    try {
-      //use this object to create order
-      this.success = true;
-      this.dialogRef.close()
-    } catch(err) {
-      console.error(err)
-    }
-
-    this.loading = false;
-    
+    this.itemOrdersService.addItemOrders(itemOrders)
   }
+
   increment(elmRef: HTMLInputElement){
    
     console.log(elmRef.value)
@@ -188,8 +147,8 @@ export class NewOrderComponent implements OnInit {
         "no_tax_6": {"count": 0, "total": 0},
       }
       let formValue = this.myForm.value;
-      for(let key in this.items){
-        for(let item of this.items[key]){
+      for(let key in this.organizedItems){
+        for(let item of this.organizedItems[key]){
           if(formValue[item.name] > 0 && item.tax_catagory != null){
             tax_items[item.tax_catagory]["count"] += formValue[item.name];
             tax_items[item.tax_catagory]["total"] += (formValue[item.name] * item.price)

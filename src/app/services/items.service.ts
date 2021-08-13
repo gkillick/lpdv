@@ -2,13 +2,15 @@ import { Injectable, OnInit} from '@angular/core';
 import { Observable } from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import { AuthService } from '../auth.service';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreModule } from '@angular/fire/firestore';
 import { Item } from '../models/item.interface';
+
+
+ 
 
 @Injectable({
   providedIn: 'root'
 })
-
 
 export class ItemsService {
 
@@ -19,6 +21,7 @@ export class ItemsService {
   constructor(private http: HttpClient, private authService: AuthService, private afs: AngularFirestore) { 
     this.itemsBatch = this.afs.firestore.batch()
     this.itemCollection = this.afs.collection<Item>('items', ref => ref.where("uid", '==', authService.user.uid))
+
     this.items = this.itemCollection.valueChanges()
   }
 

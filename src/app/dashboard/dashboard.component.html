@@ -59,7 +59,7 @@
                         <tr mat-row *matRowDef="let row; columns: displayedAllOrderColumns;"></tr>
                     </table>
                 </mat-tab>
-                <mat-tab label="Orders for Date">
+                <mat-tab label="Orders for Date" id="ordersForDate">
                     <table mat-table #secondTable #secondTableSort="matSort" [dataSource]="ordersByDate" matSort class="mat-elevation-z8 mt-3 table-max">
                         <ng-container matColumnDef="first_name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
@@ -86,7 +86,7 @@
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
                             <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
-                            <td mat-footer-cell *matFooterCellDef> <b>{{calculateTotal(ordersByDate) | currency}} </b></td>
+                            <td mat-footer-cell *matFooterCellDef> <b>{{ 10 | currency}} </b></td>
                         </ng-container>
                         <ng-container matColumnDef="details">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-print"> Details </th>

@@ -47,12 +47,11 @@ export class AddItemComponent implements OnInit {
 
       if(itemForm.sliced_option){
 
-        var {sliced_option: boolean, ...slicedItem} = {...itemForm, sliced: true}
-        var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false}
+        var {sliced_option: boolean, ...slicedItem} = {...itemForm, sliced: true, combined_name: itemForm.name}
+        var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false, combined_name: itemForm.name}
         slicedItem.name = slicedItem.name + "Tr."
 
         this.itemsService.addItems([slicedItem, unslicedItem]).then(resp => {
-          console.log(resp)
             this.dialogRef.close()
         }).catch(err => {
           console.log(err)
@@ -60,7 +59,7 @@ export class AddItemComponent implements OnInit {
 
       }else{
 
-        var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false}
+        var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false, combined_name: itemForm.name}
 
         this.itemsService.addItem(unslicedItem).then(resp => {
             this.dialogRef.close()

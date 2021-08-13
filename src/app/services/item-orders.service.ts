@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
-import { ItemOrder } from '../models/item_order.model';
 import {map, tap, catchError} from 'rxjs/operators'
-import { Subject, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { nextTick } from 'process';
+import { AuthService } from '../auth.service';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { ItemOrder } from '../models/item_order.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,43 +13,31 @@ import { nextTick } from 'process';
 export class ItemOrdersService {
 
 
-  itemOrders: ItemOrder[]
-  itemOrderSubject: Subject<ItemOrder[]> = new Subject<ItemOrder[]>()
+  itemOrders: Observable<ItemOrder[]> = new Observable<ItemOrder[]>(null)
+  itemOrdersCollection: AngularFirestoreCollection<ItemOrder>
+  itemsOrdersBatch;
 
-  constructor(private http: HttpClient) { 
+  constructor(public http: HttpClient, public authService: AuthService, public afs: AngularFirestore) { 
+    this.itemsOrdersBatch = this.afs.firestore.batch()
+    this.itemOrdersCollection = this.afs.collection<ItemOrder>('itemOrders', ref => ref.where("uid", '==', authService.user.uid))
 
-    this.itemOrders = []
-    console.log(this.itemOrders)
+    this.itemOrders = this.itemOrdersCollection.valueChanges()
   }
 
-  addItemOrders(itemOrde: ItemOrder[]){
-    const orders = {orders: itemOrde}
+  addItemOrders(itemOrders: ItemOrder[]){
 
-    this.itemOrders = this.itemOrders.filter(itemOr => {
-      return !(itemOr.order_id === itemOrde[0].order_id)
-    })
-    return this.http.post('/api/itemOrders/add', orders).pipe(catchError(this.handleErrors), tap(res => {
-      for(let itemOrder of res['itemOrders']){
-        console.log(itemOrder)
-        console.log(this.itemOrders)
-        this.itemOrders.push(itemOrder)
-      }
-      this.itemOrderSubject.next(this.itemOrders)
-    }))
+    for(let itemOrder of itemOrders){
+      const itemOrderRef = this.itemOrdersCollection.doc().ref
+      itemOrder.id = itemOrderRef.id
+      itemOrder.uid = this.authService.user.uid
+      console.log(itemOrder.uid)
+      this.itemsOrdersBatch.set(itemOrderRef, itemOrder)
+    }
+
+    return this.itemsOrdersBatch.commit()
+
   }
 
-  getItemOrders(){
-    return this.http.get('api/itemOrders').pipe(catchError(this.handleErrors), tap(res => {
-      this.itemOrders = []
-      console.log(res['itemOrders'])
-      this.itemOrders = res['itemOrders']
-      if(!this.itemOrders){
-        this.itemOrders = []
-      }
-
-      this.itemOrderSubject.next(this.itemOrders)
-    }))
-  }
 
   deleteItemOrdersForOrder(ord_id){
     this.itemOrders = this.itemOrders.filter(itemOrder => {

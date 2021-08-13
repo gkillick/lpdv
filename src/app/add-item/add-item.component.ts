@@ -49,7 +49,8 @@ export class AddItemComponent implements OnInit {
 
         var {sliced_option: boolean, ...slicedItem} = {...itemForm, sliced: true, combined_name: itemForm.name}
         var {sliced_option: boolean, ...unslicedItem} = {...itemForm, sliced: false, combined_name: itemForm.name}
-        slicedItem.name = slicedItem.name + "Tr."
+
+        slicedItem.name = slicedItem.name + " Tr."
 
         this.itemsService.addItems([slicedItem, unslicedItem]).then(resp => {
             this.dialogRef.close()

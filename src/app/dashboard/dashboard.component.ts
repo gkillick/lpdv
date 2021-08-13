@@ -15,7 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { DatePipe } from '@angular/common';
 import { ItemOrder } from '../models/item_order.interface';
 import { Order } from '../models/order.interface';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Item } from '../models/item.interface';
 
 
@@ -97,7 +97,8 @@ export class DashboardComponent implements OnInit {
         this.items = items
       })
 
-    const itemOrderObservable = this.itemOrdersService.itemOrders.pipe(map(itemOrders => {
+    const itemOrderObservable = this.itemOrdersService.itemOrders
+    .pipe(map(itemOrders => {
       return itemOrders.map(itemOrder => {
         const item = this.items.find(item => item.id == itemOrder.item_id)
         return {

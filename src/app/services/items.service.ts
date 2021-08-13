@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreModule } from '@angular/fire/firestore';
 import { Item } from '../models/item.interface';
+import { tap } from 'rxjs/operators';
 
 
  

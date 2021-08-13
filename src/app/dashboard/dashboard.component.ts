@@ -15,6 +15,8 @@ import { MatSort } from '@angular/material/sort';
 import { DatePipe } from '@angular/common';
 import { ItemOrder } from '../models/item_order.interface';
 import { Order } from '../models/order.interface';
+import { map } from 'rxjs/operators';
+import { Item } from '../models/item.interface';
 
 
 @Component({
@@ -25,8 +27,8 @@ import { Order } from '../models/order.interface';
 })
 export class DashboardComponent implements OnInit {
 
-  itemQuantities: MatTableDataSource<any> = new MatTableDataSource<any>()
   orders: Order[]
+  items: Item[]
   all_orders: MatTableDataSource<any> = new MatTableDataSource<any>()
   orderItemCountsList = []
   ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>()
@@ -79,7 +81,6 @@ export class DashboardComponent implements OnInit {
     this.dateForm = new FormControl(this.currentlySelctedDate)
 
     this.ordersService.orders.subscribe(orders => {
-      console.log(orders)
       
       this.orders = orders
       this.all_orders = new MatTableDataSource(this.orders)
@@ -92,15 +93,24 @@ export class DashboardComponent implements OnInit {
     })
  
 
+      this.itemsService.items.subscribe(items => {
+        this.items = items
+      })
 
-    this.itemOrdersService.itemOrders.subscribe((itemOrders) => {
-
-      console.log(itemOrders)
-      this.itemOrders = itemOrders
-
-
-
-
+    const itemOrderObservable = this.itemOrdersService.itemOrders.pipe(map(itemOrders => {
+      return itemOrders.map(itemOrder => {
+        const item = this.items.find(item => item.id == itemOrder.item_id)
+        return {
+          name: item.name,
+          type: item.item_type,
+          amount: itemOrder.number,
+          sliced_amount: 0
+        }
+       })
+    }))
+    
+    itemOrderObservable.subscribe((itemOrders) => {
+      this.orderItemCounts = new MatTableDataSource(itemOrders)
       this.applyFilter()
     })
 

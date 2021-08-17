@@ -3,11 +3,11 @@ import { Observable } from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreModule } from '@angular/fire/firestore';
-import { Item } from '../models/item.interface';
-import { tap } from 'rxjs/operators';
+import {Item, ItemForm} from '../models/item.interface';
+import {map, tap} from 'rxjs/operators';
 
 
- 
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,22 +15,37 @@ import { tap } from 'rxjs/operators';
 
 export class ItemsService {
 
-  items: Observable<Item[]> = new Observable<Item[]>(null)
+  items: Observable<Item[]> = new Observable<Item[]>(null);
+  itemsList: Item[]
   itemCollection: AngularFirestoreCollection<Item>
   itemsBatch;
 
-  constructor(private http: HttpClient, private authService: AuthService, private afs: AngularFirestore) { 
+  constructor(private http: HttpClient, private authService: AuthService, private afs: AngularFirestore) {
     this.itemsBatch = this.afs.firestore.batch()
     this.itemCollection = this.afs.collection<Item>('items', ref => ref.where("uid", '==', authService.user.uid))
 
-    this.items = this.itemCollection.valueChanges()
+    this.items = this.itemCollection.valueChanges();
+    this.items.subscribe(items => {
+      this.itemsList = items;
+    })
   }
 
-  addItem(item: Item){
-    item.name = item.name.toLowerCase()
-    item.uid = this.authService.user.uid
-    item.id = this.afs.createId()
-    return this.itemCollection.doc(item.id).set(item)
+  addItem(itemForm: ItemForm){
+    const item: Item = {...itemForm, uid: this.authService.user.uid, id: this.afs.createId()};
+    item.name = item.name.toLowerCase();
+    return this.itemCollection.doc(item.id).set(item);
+  }
+
+
+  getFormattedItems(): any {
+    // This function will create a list of objects with sliced and unsliced variaties
+    return this.items.pipe(map(items => {
+      return items.filter(item => item.sliced_option).map(item => {
+        return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true};
+      }).concat(items.map(item => {
+        return  {name: item.name, id: item.id, number: 0, sliced: false};
+      }));
+    }));
   }
 
   addItems(items: Item[]): Promise<any> {

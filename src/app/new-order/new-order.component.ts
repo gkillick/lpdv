@@ -11,15 +11,21 @@ import { DataService } from '../services/data.service';
 import { ItemOrdersService } from '../services/item-orders.service';
 import { ItemsService } from '../services/items.service';
 import { OrderService } from '../services/order.service';
+import {Item, ItemNames} from "../models/item.interface";
 
 @Component({
   selector: 'app-new-order',
   templateUrl: './new-order.component.html',
   styleUrls: ['./new-order.component.scss']
 })
+
+
+
+
 export class NewOrderComponent implements OnInit {
 
-  //form object
+
+  // form object
   myForm: FormGroup;
   viewClass = "New Order"
   edit = false
@@ -30,13 +36,9 @@ export class NewOrderComponent implements OnInit {
   tax = 0;
   searchText = '';
   @ViewChild('input' ) elemRef: ElementRef;
-
-
-  organizedItems = {
-    "viennoiserie": [],
-    "pains": [],
-    "noel": []
-  }
+  // contains the names of sliced and unsliced variaties for the same item id
+  itemsNamesMap: Map<string, ItemNames> = new Map<string, ItemNames>();
+  organizedItems = {viennoiserie: [], pains: [], noel: []};
 
   constructor(private itemsService: ItemsService, private itemOrdersService: ItemOrdersService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) {}
 
@@ -57,59 +59,82 @@ export class NewOrderComponent implements OnInit {
 
 
     this.itemsService.items.pipe(tap( items => {
-      items.map(item => this.organizedItems[item.item_type].push(item))
+      items.map(item => this.organizedItems[item.item_type].push(item));
     })).subscribe(items => {
+      // Add items to form
+      items.forEach((item: Item) => {
+          if (item.sliced_option) {           // If the item can be sliced add two options
+            this.myForm.addControl(item.name, new FormControl(''));
+            const slicedName = item.name + ' Tr.';
+            this.myForm.addControl(slicedName, new FormControl(''));
+            this.itemsNamesMap.set(item.id, {slicedName, unslicedName: item.name});
+          } else {
+            this.myForm.addControl(item.name, new FormControl(''));
+          }
+        });
 
-      items.map(item => this.myForm.addControl(item.name , new FormControl('' )))
-
-
-      for(const key of Object.keys(this.organizedItems)){
-            this.organizedItems[key].sort((a,b) => {
+      // Sort the items alphabetically
+      for (const key of Object.keys(this.organizedItems)){
+            this.organizedItems[key].sort((a, b) => {
               return ('' + a.name).localeCompare(b.name);
-          })
+          });
         }
-      })
+      });
   }
 
-  async submitHandler() {
+  submitHandler(): void {
 
     const order: Order = this.myForm.value;
     order.sub_total = this.sub_total
     order.tax = this.tax
     order.total = this.total
     order.date.setHours(0,0,0,0);
-    this.orderService.addOrder(order).then(orderId => { 
-      this.submitItemOrders(this.myForm.value, this.organizedItems, orderId, order.date)
-      this.dialogRef.close()
+    this.orderService.addOrder(order).then(orderId => {
+      this.submitItemOrders(this.myForm.value, this.organizedItems, orderId, order.date);
+      this.dialogRef.close();
     }).catch(err => {
-      console.log(err)
+      console.log(err);
     })
   }
 
-  submitItemOrders(form, seperatedItems, order_id: string, date: Date){
-    var itemOrders: ItemOrder[] = []
+  submitItemOrders (form, seperatedItems, order_id: string, date: Date){
+    const itemOrders: ItemOrder[] = [];
     for(let key of Object.keys(seperatedItems)){
-      for(let item of seperatedItems[key]){
-        var number: number = form[item.name]
-        if(number > 0){
-          itemOrders.push({id: null, uid: null, item_id: item.id, number, order_id, date: date})
+      for (let item of seperatedItems[key]){
+        const itemNames = this.itemsNamesMap.get(item.id);
+        if (item.sliced_option){
+          const names: ItemNames = this.itemsNamesMap.get(item.id);
+          const amountSliced = +form[names.slicedName];
+          const amountUnsliced = +form[names.unslicedName];
+          if(amountSliced > 0 || amountUnsliced > 0){
+            itemOrders.push({id: null,
+              uid: null,
+              order_id,
+              item_id: item.id,
+              amountSliced,
+              amountTotal: amountUnsliced + amountSliced,
+              date});
+          }
+        }else {
+          const amountTotal = form[item.name];
+          if(amountTotal > 0){
+            itemOrders.push({id: null, uid: null, order_id, item_id: item.id, amountSliced: 0, amountTotal, date});
+          }
         }
       }
     }
 
-    console.log(itemOrders)
-
-    this.itemOrdersService.addItemOrders(itemOrders)
+    this.itemOrdersService.addItemOrders(itemOrders);
   }
 
   increment(elmRef: HTMLInputElement){
-   
+
     console.log(elmRef.value)
     elmRef.value = (Number(elmRef.value) + 1).toString()
   }
 
   decrement(elmRef: HTMLInputElement){
-   
+
     console.log(elmRef.value)
     elmRef.value = (Number(elmRef.value) - 1).toString()
   }
@@ -120,9 +145,9 @@ export class NewOrderComponent implements OnInit {
     day = '' + d.getDate(),
     year = d.getFullYear();
 
-    if (month.length < 2) 
+    if (month.length < 2)
       month = '0' + month;
-    if (day.length < 2) 
+    if (day.length < 2)
       day = '0' + day;
 
     return [year, month, day].join('-');
@@ -157,7 +182,7 @@ export class NewOrderComponent implements OnInit {
       }
       before_tax += tax_items.no_tax_6.total + tax_items.no_tax.total + tax_items.normal.total
 
-      //calculate individual taxes 
+      //calculate individual taxes
       if(tax_items.no_tax_6.count < 6){
         tax += tax_items.no_tax_6.total * .14975
       }
@@ -171,6 +196,6 @@ export class NewOrderComponent implements OnInit {
   }
 
 
-  
+
 
 }

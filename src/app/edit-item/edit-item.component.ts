@@ -13,7 +13,7 @@ import { ItemsService } from '../services/items.service';
 export class EditItemComponent implements OnInit {
 
   myForm: FormGroup;
-  item: Item 
+  item: Item
 
   //types of foods
   types: any[] = [
@@ -37,6 +37,7 @@ export class EditItemComponent implements OnInit {
       name: [this.item.name, Validators.required],
       item_type: [this.item.item_type, Validators.required],
       price: [this.item.price, Validators.required],
+      sliced_option: ['', Validators.required],
       tax_catagory: [this.item.tax_catagory, Validators.required]
     });
   }
@@ -46,19 +47,19 @@ export class EditItemComponent implements OnInit {
 
     try {
 
-        var item = {...itemForm, sliced: this.item.sliced, id: this.item.id}
-        item.name = item.name
+        const item = {...itemForm, id: this.item.id, uid: this.item.uid};
+        item.name = item.name.toLowerCase();
 
         this.itemsService.editItem(item).then(resp => {
-          console.log(resp)
-            this.dialogRef.close()
+          console.log(resp);
+          this.dialogRef.close();
         }).catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     } catch(err) {
-      console.error(err)
+      console.error(err);
     }
-    
+
   }
 
   delete(){

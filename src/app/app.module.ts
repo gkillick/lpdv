@@ -21,7 +21,6 @@ import { NewOrderComponent } from './new-order/new-order.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { EditOrderComponent } from './edit-order/edit-order.component';
 import {EditItemComponent} from './edit-item/edit-item.component'
 import {MatTabsModule} from '@angular/material/tabs';
 import { LoginComponent } from './login/login.component';
@@ -38,6 +37,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFireStorageModule} from '@angular/fire/storage'
 
 import { environment } from 'src/environments/environment';
+import { EditOrderComponent } from './edit-order/edit-order.component';
+import { OrderFormComponent } from './order-form/order-form.component';
 
 
 
@@ -52,12 +53,13 @@ import { environment } from 'src/environments/environment';
     ItemsComponent,
     AddItemComponent,
     NewOrderComponent,
-    EditOrderComponent,
     EditItemComponent,
     LoginComponent,
     RegisterComponent,
     CapitalizePipe,
     SearchFilterPipe,
+    EditOrderComponent,
+    OrderFormComponent,
   ],
   imports: [
     FormsModule,

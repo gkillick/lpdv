@@ -21,8 +21,18 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field>
-        <input matInput placeholder="price" formControlName="price">
+  <mat-form-field appearance="fill">
+    <mat-select formControlName="sliced_option">
+      <mat-option [value]="false">
+        No Slice Option
+      </mat-option>
+      <mat-option [value]="true">
+        Include sliced Option
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="price" formControlName="price">
     </mat-form-field>
 
     <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Item</button>

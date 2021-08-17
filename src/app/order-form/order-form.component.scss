@@ -1,0 +1,69 @@
+.top mat-form-field {
+  margin-right: 15px;
+}
+
+.cdk-overlay-pane {
+  max-width: 90vw;
+}
+
+.total_price {
+  display: block;
+  float: right;
+}
+
+.subheading {
+  font-weight: 500;
+  color: grey;
+}
+
+.subheadingbold {
+  font-weight: 500;
+  color: black;
+}
+
+.sliced {
+  width: 50%!important;
+}
+
+
+/*
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+mat-form-field {
+    flex: 0 0 33.3333%;
+}
+*/
+
+.filter-field {
+  font-weight: 500;
+  color: black;
+  font-size: 16px;
+}
+
+::ng-deep .filter-field .mat-form-field-underline {
+  background-color: transparent!important;
+}
+
+::ng-deep .mat-dialog-container {
+  display: flex;
+  flex-flow: column;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+}
+
+.form-flex {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+}
+
+.flex-row {
+  flex: 1;
+}

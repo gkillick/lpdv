@@ -16,12 +16,12 @@ export class AuthGaurdService implements CanActivate{
 
         return this.authService.userData.pipe(map(user => {
 
-            return !!user
+            return !!user;
         }), tap(isAuth => {
 
-            if(!isAuth){
-                this.router.navigate(['/login'])
+            if (!isAuth) {
+                this.router.navigate(['/login']);
             }
-        }))
+        }));
     }
 }

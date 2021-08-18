@@ -1,10 +1,10 @@
 <h1>{{viewClass}}</h1>
 
-<form [formGroup]="myForm" (ngSubmit)="submitHandler()" class="form-flex">
+<form [formGroup]="myForm" (ngSubmit)="submitHandler()" *ngIf="formIsReady()" class="form-flex">
   <div class="row top">
     <div class="col-sm">
       <mat-form-field>
-        <input matInput placeholder="{{first_name}}" formControlName="first_name">
+        <input matInput placeholder="First Name" formControlName="first_name">
       </mat-form-field>
       <mat-form-field>
         <input matInput placeholder="Last Name" formControlName="last_name">

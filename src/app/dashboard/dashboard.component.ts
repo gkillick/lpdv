@@ -79,8 +79,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ordersByDate.filterPredicate = this.customFilterPredicate;
-    this.ordersService.getOrders().subscribe();
+    // this.ordersByDate.filterPredicate = this.customFilterPredicate;
 
     this.currentlySelctedDate = new Date();
     this.currentlySelctedDate.setDate(new Date().getDate() + 1);
@@ -229,7 +228,7 @@ calculateTotal(source: MatTableDataSource<Order>){
 */
   openEditDialog(id: number): void {
 
-    const dialogRef = this.dialog.open(OrderFormComponent, {
+    const dialogRef = this.dialog.open(EditOrderComponent, {
       width: '100%',
       height: '98%',
       data: {

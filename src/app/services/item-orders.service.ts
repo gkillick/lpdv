@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import {map, tap, catchError} from 'rxjs/operators'
-import { Observable, Subject, throwError } from 'rxjs';
+import {forkJoin, Observable, Subject, throwError} from 'rxjs';
 import { nextTick } from 'process';
 import { AuthService } from '../auth.service';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -30,23 +30,31 @@ export class ItemOrdersService {
     }) ;
   }
 
-  addItemOrders(itemOrders: ItemOrder[]){
-
-    for(let itemOrder of itemOrders){
+  addItemOrders(itemOrders: ItemOrder[]): Promise<any>{
+    for (const itemOrder of itemOrders) {
       const itemOrderRef = this.itemOrdersCollection.doc().ref;
       itemOrder.id = itemOrderRef.id;
       itemOrder.uid = this.authService.user.uid;
       console.log(itemOrder.uid);
       this.itemsOrdersBatch.set(itemOrderRef, itemOrder);
     }
-
     return this.itemsOrdersBatch.commit();
 
   }
 
+  editItemOrder(itemOrder: ItemOrder): Promise<any> {
+     return this.itemOrdersCollection.doc(itemOrder.id).set(itemOrder);
+  }
 
-  deleteItemOrdersForOrder(ord_id){
-    return;
+
+  deleteItemOrdersForOrder(ordId: string): any{
+    return this.afs.collection<ItemOrder>('itemOrders',
+        ref => ref.where('uid', '==', this.authService.user.uid) && ref.where('order_id', '==', ordId))
+      .valueChanges().pipe(map((itemOrders: ItemOrder[]) => {
+        itemOrders.forEach((itemOrder: ItemOrder) => {
+          this.itemOrdersCollection.doc(itemOrder.id).delete();
+      });
+    }));
   }
 
   handleErrors(errorRes: HttpErrorResponse){

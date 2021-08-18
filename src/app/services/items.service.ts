@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreModule } from '@angular/fire/firestore';
 import {Item, ItemForm} from '../models/item.interface';
 import {map, tap} from 'rxjs/operators';
+import {ItemFormInfo} from "../models/form.interface";
 
 
 
@@ -37,13 +38,13 @@ export class ItemsService {
   }
 
 
-  getFormattedItems(): any {
+  getFormattedItems(): Observable<ItemFormInfo[]>{
     // This function will create a list of objects with sliced and unsliced variaties
     return this.items.pipe(map(items => {
       return items.filter(item => item.sliced_option).map(item => {
-        return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true};
+        return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true, item_type: item.item_type};
       }).concat(items.map(item => {
-        return  {name: item.name, id: item.id, number: 0, sliced: false};
+        return  {name: item.name, id: item.id, number: 0, sliced: false, item_type: item.item_type};
       }));
     }));
   }

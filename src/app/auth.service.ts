@@ -49,17 +49,4 @@ export class AuthService {
 
      });
    }
-/*
-   setUserData(user: User): void{
-     const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified
-     };
-     this.user = userData;
-     this.userData.next(this.user);
-   }
- */
 }

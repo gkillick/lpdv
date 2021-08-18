@@ -1,13 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
-import {map, tap, catchError} from 'rxjs/operators'
-import {forkJoin, Observable, Subject, throwError} from 'rxjs';
-import { nextTick } from 'process';
+import { HttpClient} from '@angular/common/http';
+import { Injectable} from '@angular/core';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import { AuthService } from '../auth.service';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { ItemOrder } from '../models/item_order.interface';
-import {ItemsService} from "./items.service";
-import {Item} from "../models/item.interface";
+import {ItemsService} from './items.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,10 +20,9 @@ export class ItemOrdersService {
 
   constructor(public http: HttpClient, public authService: AuthService, public afs: AngularFirestore, public itemsService: ItemsService) {
     this.itemsOrdersBatch = this.afs.firestore.batch();
-    this.itemOrdersCollection = this.afs.collection<ItemOrder>('itemOrders', ref => ref.where("uid", '==', authService.user.uid));
+    this.itemOrdersCollection = this.afs.collection<ItemOrder>('itemOrders', ref => ref.where('uid', '==', authService.user.uid));
     this.itemOrders = this.itemOrdersCollection.valueChanges();
     this.itemOrders.subscribe(itemOrders => {
-      console.log(itemOrders);
       this.itemOrdersList = itemOrders;
     }) ;
   }
@@ -35,7 +32,6 @@ export class ItemOrdersService {
       const itemOrderRef = this.itemOrdersCollection.doc().ref;
       itemOrder.id = itemOrderRef.id;
       itemOrder.uid = this.authService.user.uid;
-      console.log(itemOrder.uid);
       this.itemsOrdersBatch.set(itemOrderRef, itemOrder);
     }
     return this.itemsOrdersBatch.commit();
@@ -56,23 +52,4 @@ export class ItemOrdersService {
       });
     }));
   }
-
-  handleErrors(errorRes: HttpErrorResponse){
-
-
-    let errorMessage = "an unknown error occured"
-
-    if(!errorRes.error || !errorRes.error.error){
-      return throwError(errorRes)
-    }
-
-    switch(errorRes.error.error){
-      case "ITEM_EXISTS":
-        errorMessage = "The item already exists"
-
-    }
-
-    throw(errorMessage)
-
-}
 }

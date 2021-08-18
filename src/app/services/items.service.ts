@@ -17,21 +17,21 @@ import {ItemFormInfo} from "../models/form.interface";
 export class ItemsService {
 
   items: Observable<Item[]> = new Observable<Item[]>(null);
-  itemsList: Item[]
-  itemCollection: AngularFirestoreCollection<Item>
+  itemsList: Item[];
+  itemCollection: AngularFirestoreCollection<Item>;
   itemsBatch;
 
   constructor(private http: HttpClient, private authService: AuthService, private afs: AngularFirestore) {
-    this.itemsBatch = this.afs.firestore.batch()
-    this.itemCollection = this.afs.collection<Item>('items', ref => ref.where("uid", '==', authService.user.uid))
+    this.itemsBatch = this.afs.firestore.batch();
+    this.itemCollection = this.afs.collection<Item>('items', ref => ref.where('uid', '==', authService.user.uid));
 
     this.items = this.itemCollection.valueChanges();
     this.items.subscribe(items => {
       this.itemsList = items;
-    })
+    });
   }
 
-  addItem(itemForm: ItemForm){
+  addItem(itemForm: ItemForm): Promise<any>{
     const item: Item = {...itemForm, uid: this.authService.user.uid, id: this.afs.createId()};
     item.name = item.name.toLowerCase();
     return this.itemCollection.doc(item.id).set(item);
@@ -51,22 +51,22 @@ export class ItemsService {
 
   addItems(items: Item[]): Promise<any> {
 
-    for(let item of items){
-      item.name = item.name.toLowerCase()
-      item.uid = this.authService.user.uid
-      const itemRef = this.itemCollection.doc().ref
-      item.id = itemRef.id
-      this.itemsBatch.set(itemRef, item)
+    for(const item of items){
+      item.name = item.name.toLowerCase();
+      item.uid = this.authService.user.uid;
+      const itemRef = this.itemCollection.doc().ref;
+      item.id = itemRef.id;
+      this.itemsBatch.set(itemRef, item);
     }
 
-    return this.itemsBatch.commit()
+    return this.itemsBatch.commit();
   }
 
-  editItem(item: Item){
-    return this.itemCollection.doc(item.id).update(item)
+  editItem(item: Item): Promise<any> {
+    return this.itemCollection.doc(item.id).update(item);
   }
 
-  deleteItem(item: Item){
-    return this.itemCollection.doc(item.id).delete()
+  deleteItem(item: Item): Promise<any> {
+    return this.itemCollection.doc(item.id).delete();
   }
 }

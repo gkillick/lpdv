@@ -34,7 +34,6 @@ export class EditOrderComponent implements OnInit{
       this.orderData = orderForm;
       const mapped = orderForm.map(item => ({[item.name]: [item.number]}));
       const obj = Object.assign({}, ...mapped);
-      console.log(obj);
       this.myForm = this.fb.group({
         first_name: [this.order.first_name, Validators.required],
         last_name: [this.order.last_name, Validators.required],
@@ -47,8 +46,8 @@ export class EditOrderComponent implements OnInit{
   submitForm(orderForm: SubmitFormData): any {
     const itemOrders = orderForm.itemOrders;
     const orderFound = this.orderService.ordersList.find((order: Order) => order.id === this.orderId);
-    const {last_name, first_name, telephone, date} = orderForm.personalData;
-    const editedOrder = {...orderFound, last_name, first_name, telephone, date};
+    const {last_name, first_name, telephone, date, sub_total, tax, total} = orderForm.orderMetadata;
+    const editedOrder = {...orderFound, last_name, first_name, telephone, date, sub_total, tax, total};
     this.orderService.editOrder(editedOrder);
     itemOrders.forEach((itemOrd: ItemOrder) => {
       const order: ItemOrder = {...this.itemOrderService.itemOrdersList.find(item => item.item_id === itemOrd.item_id),

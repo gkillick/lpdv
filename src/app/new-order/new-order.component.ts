@@ -1,201 +1,59 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ɵELEMENT_PROBE_PROVIDERS__POST_R3__ } from '@angular/platform-browser';
-import { getMaxListeners } from 'process';
-import { map, tap } from 'rxjs/operators';
-import { ItemOrder } from '../models/item_order.interface';
-import { Order} from '../models/order.interface';
-import { User } from '../models/user.model';
-import { DataService } from '../services/data.service';
-import { ItemOrdersService } from '../services/item-orders.service';
-import { ItemsService } from '../services/items.service';
-import { OrderService } from '../services/order.service';
-import {Item, ItemNames} from "../models/item.interface";
+import {ItemOrder} from "../models/item_order.interface";
+import {SubmitFormData} from "../models/form.interface";
+import {Order} from "../models/order.interface";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ItemsService} from "../services/items.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Component, Inject, OnInit} from "@angular/core";
+import {ItemOrdersService} from "../services/item-orders.service";
+import {OrderService} from "../services/order.service";
+
 
 @Component({
-  selector: 'app-new-order',
+  selector: 'app-edit-order',
   templateUrl: './new-order.component.html',
   styleUrls: ['./new-order.component.scss']
 })
-
-
-
-
-export class NewOrderComponent implements OnInit {
-
-
-  // form object
+export class NewOrderComponent implements OnInit{
+  orderData: any;
+  order: any;
   myForm: FormGroup;
-  viewClass = "New Order"
-  edit = false
-  loading = false;
-  success = false;
-  total = 0;
-  sub_total = 0;
-  tax = 0;
-  searchText = '';
-  @ViewChild('input' ) elemRef: ElementRef;
-  // contains the names of sliced and unsliced variaties for the same item id
-  itemsNamesMap: Map<string, ItemNames> = new Map<string, ItemNames>();
-  organizedItems = {viennoiserie: [], pains: [], noel: []};
 
-  constructor(private itemsService: ItemsService, private itemOrdersService: ItemOrdersService, private orderService: OrderService, private fb: FormBuilder, private dialogRef: MatDialogRef<NewOrderComponent>) {}
+  constructor(private dialogRef: MatDialogRef<NewOrderComponent>,
+              @Inject(MAT_DIALOG_DATA) data,
+              public itemsService: ItemsService,
+              private fb: FormBuilder,
+              private itemOrderService: ItemOrdersService,
+              private orderService: OrderService
+  ) {
+  }
 
-
-  ngOnInit(): void {
-
-
-    var tomorrow = new Date();
-    tomorrow.setDate(new Date().getDate()+1);
-    tomorrow.setHours(0,0,0,0);
-
-    this.myForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      telephone: ['', Validators.required],
-      date: [tomorrow, Validators.required],
+  ngOnInit(): any {
+    this.itemsService.getFormattedItems().subscribe(items => {
+      this.orderData = items;
+      const mapped = items.map(item => ({[item.name]: [item.number]}));
+      const obj = Object.assign({}, ...mapped);
+      this.myForm = this.fb.group({
+        first_name: ['', Validators.required],
+        last_name: ['', Validators.required],
+        telephone: ['', Validators.required],
+        date: ['', Validators.required],
+        ...obj
+      });
     });
-
-
-    this.itemsService.items.pipe(tap( items => {
-      items.map(item => this.organizedItems[item.item_type].push(item));
-    })).subscribe(items => {
-      // Add items to form
-      items.forEach((item: Item) => {
-          if (item.sliced_option) {           // If the item can be sliced add two options
-            this.myForm.addControl(item.name, new FormControl(''));
-            const slicedName = item.name + ' Tr.';
-            this.myForm.addControl(slicedName, new FormControl(''));
-            this.itemsNamesMap.set(item.id, {slicedName, unslicedName: item.name});
-          } else {
-            this.myForm.addControl(item.name, new FormControl(''));
-          }
-        });
-
-      // Sort the items alphabetically
-      for (const key of Object.keys(this.organizedItems)){
-            this.organizedItems[key].sort((a, b) => {
-              return ('' + a.name).localeCompare(b.name);
-          });
-        }
-      });
   }
-
-  submitHandler(): void {
-
-    const order: Order = this.myForm.value;
-    order.sub_total = this.sub_total
-    order.tax = this.tax
-    order.total = this.total
-    order.date.setHours(0,0,0,0);
-    this.orderService.addOrder(order).then(orderId => {
-      this.submitItemOrders(this.myForm.value, this.organizedItems, orderId, order.date);
-      this.dialogRef.close();
-    }).catch(err => {
-      console.log(err);
-    })
+  submitForm(orderForm: SubmitFormData): any {
+    const itemOrders = orderForm.itemOrders;
+    const {last_name, first_name, telephone, date, sub_total, tax, total} = orderForm.orderMetadata;
+    const order = {last_name, first_name, telephone, date, id: null, uid: null, sub_total, tax, total };
+    this.orderService.addOrder(order).then(ord => {
+      console.log(ord);
+      itemOrders.map(itemOrder => {
+        return {...itemOrder, order_id: ord.id};
+      })
+      this.itemOrderService.addItemOrders(itemOrders);
+    });
   }
-
-  submitItemOrders (form, seperatedItems, order_id: string, date: Date){
-    const itemOrders: ItemOrder[] = [];
-    for(let key of Object.keys(seperatedItems)){
-      for (let item of seperatedItems[key]){
-        const itemNames = this.itemsNamesMap.get(item.id);
-        if (item.sliced_option){
-          const names: ItemNames = this.itemsNamesMap.get(item.id);
-          const amountSliced = +form[names.slicedName];
-          const amountUnsliced = +form[names.unslicedName];
-          if(amountSliced > 0 || amountUnsliced > 0){
-            itemOrders.push({id: null,
-              uid: null,
-              order_id,
-              item_id: item.id,
-              amountSliced,
-              amountTotal: amountUnsliced + amountSliced,
-              date});
-          }
-        }else {
-          const amountTotal = form[item.name];
-          if(amountTotal > 0){
-            itemOrders.push({id: null, uid: null, order_id, item_id: item.id, amountSliced: 0, amountTotal, date});
-          }
-        }
-      }
-    }
-
-    this.itemOrdersService.addItemOrders(itemOrders);
-  }
-
-  increment(elmRef: HTMLInputElement){
-
-    console.log(elmRef.value)
-    elmRef.value = (Number(elmRef.value) + 1).toString()
-  }
-
-  decrement(elmRef: HTMLInputElement){
-
-    console.log(elmRef.value)
-    elmRef.value = (Number(elmRef.value) - 1).toString()
-  }
-
-  formatDate(date: Date): string{
-    var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-
-    return [year, month, day].join('-');
-  }
-
-  tax_classifications: any[] = [
-    {value: 'normal', viewValue: 'normal'},
-    {value: 'no_tax_6', viewValue: 'tax before 6'},
-    {value: 'no_tax', viewValue: 'no tax'},
-  ]
-
-
-  //functions for calculating order totals with relevant taxes
-
-  onChanges(): void {
-    this.myForm.valueChanges.subscribe(val => {
-      var before_tax = 0;
-      var tax = 0;
-      var tax_items = {
-        "no_tax": {"count": 0, "total": 0},
-        "normal": {"count": 0, "total": 0},
-        "no_tax_6": {"count": 0, "total": 0},
-      }
-      let formValue = this.myForm.value;
-      for(let key in this.organizedItems){
-        for(let item of this.organizedItems[key]){
-          if(formValue[item.name] > 0 && item.tax_catagory != null){
-            tax_items[item.tax_catagory]["count"] += formValue[item.name];
-            tax_items[item.tax_catagory]["total"] += (formValue[item.name] * item.price)
-          }
-        }
-      }
-      before_tax += tax_items.no_tax_6.total + tax_items.no_tax.total + tax_items.normal.total
-
-      //calculate individual taxes
-      if(tax_items.no_tax_6.count < 6){
-        tax += tax_items.no_tax_6.total * .14975
-      }
-      tax += tax_items.normal.total * .14975
-      this.tax = tax;
-      this.sub_total = before_tax;
-      this.total = this.tax + this.sub_total;
-      });
-
-
-  }
-
-
-
-
 }
+
+

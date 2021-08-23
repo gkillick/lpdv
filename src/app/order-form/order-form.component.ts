@@ -1,4 +1,14 @@
-import {Component, Inject, Input, OnChanges, OnInit, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+  OnDestroy
+} from '@angular/core';
 import {map, tap} from 'rxjs/operators';
 import {ItemsService} from '../services/items.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -8,6 +18,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ItemOrder} from '../models/item_order.interface';
 import {Item} from '../models/item.interface';
 import {CustomerFormData, ItemFormInfo, SubmitFormData} from '../models/form.interface';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-order-form',
@@ -15,9 +26,10 @@ import {CustomerFormData, ItemFormInfo, SubmitFormData} from '../models/form.int
   styleUrls: ['./order-form.component.scss']
 })
 
-export class OrderFormComponent implements OnInit, OnChanges {
+export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   orderId: string;
+  viewClass: string;
   edit: boolean;
   order: Order;
   @Input() orderData: ItemFormInfo[];
@@ -25,6 +37,10 @@ export class OrderFormComponent implements OnInit, OnChanges {
   organizedItems = {viennoiserie: [], pains: [], noel: []};
   searchText = '';
   @Output() itemOrderEmitter: EventEmitter<SubmitFormData> = new EventEmitter<SubmitFormData>();
+  total = 0;
+  subTotal = 0;
+  tax = 0;
+  formSubscription: Subscription;
 
   constructor(private dialogRef: MatDialogRef<OrderFormComponent>,
               @Inject(MAT_DIALOG_DATA) data,
@@ -35,8 +51,10 @@ export class OrderFormComponent implements OnInit, OnChanges {
     if (data) {
       this.orderId = data.orderId;
       this.edit = true;
+      this.viewClass = 'Edit';
     } else {
       this.edit = false;
+      this.viewClass = 'New Order';
     }
   }
 
@@ -51,6 +69,7 @@ export class OrderFormComponent implements OnInit, OnChanges {
           return ('' + a.name).localeCompare(b.name);
         });
       }
+      this.calculatePrices(this.myForm);      // calculate prices on init for when editing order
     });
   }
 
@@ -67,10 +86,52 @@ export class OrderFormComponent implements OnInit, OnChanges {
     if (changes.formData) {
       this.myForm = this.fb.group(changes.formData.currentValue);
     }
+
+    if (!this.formSubscription && this.myForm) {
+      this.formSubscription = this.myForm.valueChanges.subscribe(form => {
+        this.calculatePrices(this.myForm);
+      });
+    }
+  }
+
+  ngOnDestroy(): void{
+    this.formSubscription.unsubscribe();
+  }
+
+  calculatePrices(form): void{
+    let beforeTax = 0;
+    let tax = 0;
+    const taxItems = {
+      "no_tax": {"count": 0, "total": 0},
+      "normal": {"count": 0, "total": 0},
+      "no_tax_6": {"count": 0, "total": 0}
+    };
+    const formValue = form.value;
+    for (const key in this.organizedItems) {
+      for (const item of this.organizedItems[key]) {
+        if (formValue[item.name] > 0 && item.tax_category != null) {
+          taxItems[item.tax_category]["count"] += formValue[item.name];
+          taxItems[item.tax_category]["total"] += (formValue[item.name] * item.price);
+        }
+      }
+    }
+
+    beforeTax += taxItems.no_tax_6.total + taxItems.no_tax.total + taxItems.normal.total;
+
+    // calculate individual taxes
+    if (taxItems.no_tax_6.count < 6) {
+      tax += taxItems.no_tax_6.total * .14975;
+    }
+    tax += taxItems.normal.total * .14975;
+    this.tax = tax;
+    this.subTotal = beforeTax;
+    this.total = this.tax + this.subTotal;
   }
 
   delete(): void {
-    this.orderService.deleteOrder(this.orderId);
+    this.orderService.deleteOrder(this.orderId).then(resp => {
+      this.dialogRef.close();
+    });
   }
 
   submitHandler(): void {
@@ -94,14 +155,15 @@ export class OrderFormComponent implements OnInit, OnChanges {
         return list;
       }, []);
     })).subscribe((itemOrders: ItemOrder[]) => {
-      const personalData = this.getPersonalData(this.myForm);
-      this.itemOrderEmitter.emit({itemOrders, personalData});
+      const orderMetadata = this.getPersonalData(this.myForm);
+      this.itemOrderEmitter.emit({itemOrders, orderMetadata});
+      this.dialogRef.close();
     });
   }
 
   getPersonalData(form: FormGroup): CustomerFormData {
     const {first_name, last_name, telephone, date} = form.value;
-    return {first_name, last_name, telephone, date};
+    return {first_name, last_name, telephone, date, sub_total: this.subTotal, tax: this.tax, total: this.total};
   }
 
   getAmounts(orderElements: ItemFormInfo[], form: FormGroup): any {

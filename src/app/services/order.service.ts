@@ -64,18 +64,18 @@ export class OrderService {
        const itemOrder = relevantOrders.find(itemOrd => itemOrd.item_id === item.id);
        if (itemOrder){
          return {name: item.name, id: item.id, number: itemOrder.amountTotal - itemOrder.amountSliced,
-           sliced: false, item_type: item.item_type};
+           sliced: false, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};
        }else{
-         return {name: item.name, id: item.id, number: 0, sliced: false, item_type: item.item_type};
+         return {name: item.name, id: item.id, number: 0, sliced: false, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};
        }
       }).concat(items.filter((item: Item) => {
         return item.sliced_option;
      }).map((item: Item) => {
        const itemOrder = relevantOrders.find(itemOrd => itemOrd.item_id === item.id);
        if (itemOrder){
-         return {name: item.name + ' Tr.', id: item.id, number: itemOrder.amountSliced, sliced: true, item_type: item.item_type};
+         return {name: item.name + ' Tr.', id: item.id, number: itemOrder.amountSliced, sliced: true, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};
        }else{
-         return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true, item_type: item.item_type};
+         return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};
        }
      }));
     }));

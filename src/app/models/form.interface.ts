@@ -5,6 +5,9 @@ export interface CustomerFormData {
   last_name: string;
   telephone: number;
   date: string;
+  total: number;
+  sub_total: number;
+  tax: number;
 }
 
 
@@ -14,9 +17,11 @@ export interface ItemFormInfo {
   number: number;
   sliced: boolean;
   item_type: string;
+  tax_category: string;
+  price: number;
 }
 
 export interface SubmitFormData {
   itemOrders: ItemOrder[];
-  personalData: CustomerFormData;
+  orderMetadata: CustomerFormData;
 }

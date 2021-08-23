@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { NewOrderComponent } from '../new-order/new-order.component';
 import { DataService } from '../services/data.service';
 import { NgZone } from '@angular/core';
 import { ItemsService } from '../services/items.service';
@@ -18,6 +17,7 @@ import { map, tap } from 'rxjs/operators';
 import { Item } from '../models/item.interface';
 import {EditOrderComponent} from "../edit-order/edit-order.component";
 import {OrderFormComponent} from "../order-form/order-form.component";
+import {NewOrderComponent} from "../new-order/new-order.component";
 
 
 @Component({

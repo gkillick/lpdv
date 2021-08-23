@@ -16,10 +16,8 @@ export class ItemOrdersService {
   itemOrders: Observable<ItemOrder[]> = new Observable<ItemOrder[]>(null);
   itemOrdersCollection: AngularFirestoreCollection<ItemOrder>;
   itemOrdersList: ItemOrder[];
-  itemsOrdersBatch;
 
   constructor(public http: HttpClient, public authService: AuthService, public afs: AngularFirestore, public itemsService: ItemsService) {
-    this.itemsOrdersBatch = this.afs.firestore.batch();
     this.itemOrdersCollection = this.afs.collection<ItemOrder>('itemOrders', ref => ref.where('uid', '==', authService.user.uid));
     this.itemOrders = this.itemOrdersCollection.valueChanges();
     this.itemOrders.subscribe(itemOrders => {
@@ -28,13 +26,14 @@ export class ItemOrdersService {
   }
 
   addItemOrders(itemOrders: ItemOrder[]): Promise<any>{
+    const itemsOrdersBatch = this.afs.firestore.batch();
     for (const itemOrder of itemOrders) {
       const itemOrderRef = this.itemOrdersCollection.doc().ref;
       itemOrder.id = itemOrderRef.id;
       itemOrder.uid = this.authService.user.uid;
-      this.itemsOrdersBatch.set(itemOrderRef, itemOrder);
+      itemsOrdersBatch.set(itemOrderRef, itemOrder);
     }
-    return this.itemsOrdersBatch.commit();
+    return itemsOrdersBatch.commit();
 
   }
 

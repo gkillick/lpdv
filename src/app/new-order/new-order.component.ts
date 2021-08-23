@@ -44,14 +44,14 @@ export class NewOrderComponent implements OnInit{
   }
   submitForm(orderForm: SubmitFormData): any {
     const itemOrders = orderForm.itemOrders;
+    console.log(orderForm.orderMetadata);
     const {last_name, first_name, telephone, date, sub_total, tax, total} = orderForm.orderMetadata;
     const order = {last_name, first_name, telephone, date, id: null, uid: null, sub_total, tax, total };
-    this.orderService.addOrder(order).then(ord => {
-      console.log(ord);
-      itemOrders.map(itemOrder => {
-        return {...itemOrder, order_id: ord.id};
-      })
-      this.itemOrderService.addItemOrders(itemOrders);
+    this.orderService.addOrder(order).then(id => {
+      const orders = itemOrders.map(itemOrder => {
+        return {...itemOrder, order_id: id};
+      });
+      this.itemOrderService.addItemOrders(orders);
     });
   }
 }

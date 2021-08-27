@@ -140,8 +140,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
         const elements = this.orderData.filter(orderElement => {    // Get sliced and unsliced elements with the item_id
           return orderElement.id === item.id;
         });
-        const {slicedAmount, totalAmount, different} = this.getAmounts(elements, this.myForm);
-        if (different) { // if item has a positive number selected create an item order
+        const {slicedAmount, totalAmount} = this.getAmounts(elements, this.myForm);
+        if (totalAmount > 0) { // if item has a positive number selected create an item order
           list.push({
             id: null,
             uid: null,
@@ -156,7 +156,11 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       }, []);
     })).subscribe((itemOrders: ItemOrder[]) => {
       const orderMetadata = this.getPersonalData(this.myForm);
-      this.itemOrderEmitter.emit({itemOrders, orderMetadata});
+      const itemOrdersWithDate: ItemOrder[] = itemOrders.map(itemOrder => {
+        itemOrder.date = orderMetadata.date;
+        return itemOrder;
+      });
+      this.itemOrderEmitter.emit({itemOrders: itemOrdersWithDate , orderMetadata});
       this.dialogRef.close();
     });
   }
@@ -173,12 +177,10 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       const unslicedElement = orderElements.find(el => !el.sliced);
       const slicedAmount = +form.value[slicedElement.name];
       const totalAmount = +form.value[unslicedElement.name] + slicedAmount;
-      const different = slicedElement.number !== slicedAmount || unslicedElement.number !== totalAmount;
-      return {slicedAmount, totalAmount, different };
+      return {slicedAmount, totalAmount};
     }else{
       const totalAmount = +form.value[orderElements[0].name];
-      const different = orderElements[0].number !== totalAmount;
-      return {slicedAmount: 0, totalAmount, different};
+      return {slicedAmount: 0, totalAmount};
     }
   }
 }

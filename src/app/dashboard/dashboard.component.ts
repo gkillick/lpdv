@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { FormControl } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Subject } from 'rxjs';
+import {combineLatest, Observable, Subject} from 'rxjs';
 import { DataService } from '../services/data.service';
 import { NgZone } from '@angular/core';
 import { ItemsService } from '../services/items.service';
@@ -16,7 +16,6 @@ import { Order } from '../models/order.interface';
 import { map, tap } from 'rxjs/operators';
 import { Item } from '../models/item.interface';
 import {EditOrderComponent} from "../edit-order/edit-order.component";
-import {OrderFormComponent} from "../order-form/order-form.component";
 import {NewOrderComponent} from "../new-order/new-order.component";
 
 
@@ -31,15 +30,16 @@ export class DashboardComponent implements OnInit {
   orders: Order[]
   items: Item[]
   combinedNames: string;
-  all_orders: MatTableDataSource<any> = new MatTableDataSource<any>()
+  all_orders: MatTableDataSource<any> = new MatTableDataSource<any>();
   orderItemCountsList = []
-  ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>()
-  orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>()
+  ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>();
+  orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>();
   displayedColumns = ["name", "type", "amount", "sliced_amount"];
   displayedOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"]
   displayedAllOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"]
   orderDateFooterColumnsToDisplay = ["total"]
   currentlySelctedDate: Date
+  dateObservable: Subject<Date> = new Subject<Date>();
   dateForm: FormControl
   activeTab: string = "All Orders"
   itemOrders: ItemOrder[] = []
@@ -53,156 +53,119 @@ export class DashboardComponent implements OnInit {
   };
 
 
-  applyFilter() {
-    var filterValue = this.searchText
+  applyFilter(): void {
+    let filterValue = this.searchText;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.all_orders.filter = filterValue;
     this.orderItemCounts.filter = filterValue;
-    this.stringDate = new Date(this.currentlySelctedDate.setHours(0,0,0,0) ).toISOString()
-    this.filteredValues.date = new Date(this.currentlySelctedDate.setHours(0,0,0,0) ).toISOString()
-    this.filteredValues.searchText = this.searchText
-    this.ordersByDate.filter = JSON.stringify(this.filteredValues)
-
-
+    this.ordersByDate.filter = filterValue;
+    this.total_for_date = this.calculateTotal(this.ordersByDate);
   }
 
   constructor(private datePipe: DatePipe,
               private itemsService: ItemsService,
               private ordersService: OrderService,
               private itemOrdersService: ItemOrdersService,
-              public dialog: MatDialog,
-              private dataService: DataService,
-              private changeDetection: ChangeDetectorRef,
-              private zone: NgZone ) {
+              public dialog: MatDialog) {
 
   }
 
   ngOnInit(): void {
-    // this.ordersByDate.filterPredicate = this.customFilterPredicate;
-
     this.currentlySelctedDate = new Date();
     this.currentlySelctedDate.setDate(new Date().getDate() + 1);
-
     this.currentlySelctedDate.setHours(0,  0,  0, 0);
+    this.dateObservable.next(this.currentlySelctedDate);
     this.dateForm = new FormControl(this.currentlySelctedDate);
 
     this.ordersService.orders.subscribe(orders => {
       this.orders = orders;
       this.all_orders = new MatTableDataSource(this.orders);
       this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
-
-      this.changeDetection.detectChanges();
-
-      this.orderItemCountsList = [];
-      this.orderItemCounts.data = this.orderItemCountsList;
+      this.orderItemCounts = new MatTableDataSource(this.orderItemCountsList);
+      this.applyFilter();
     });
 
-    this.itemsService.items.pipe(tap(items => {
-
-    })).subscribe(items => {
-      this.items = items;
-    });
-
-    this.itemOrdersService.itemOrders.pipe(map(itemOrders => {
-
-    }))
-
-    const itemOrderObservable = this.itemOrdersService.itemOrders
-    .pipe(map(itemOrders => {
-      return itemOrders.map(itemOrder => {
-        const item = this.items.find((item: Item) => item.id === itemOrder.item_id);
+    combineLatest(this.itemOrdersService.itemOrders, this.itemsService.items, this.dateObservable).pipe(map(([itemOrders, items, date]) => {
+      const itemOrds = itemOrders.filter(itemOrder => {
+        const selectedDate = new Date(date);
+        const orderDate = itemOrder.date.toDate();
+        selectedDate.setHours(0,0,0,0);
+        orderDate.setHours(0,0,0,0);
+        return orderDate.toDateString() === selectedDate.toDateString();
+      }).map(itemOrder => {
+        const it = items.find((item: Item) => item.id === itemOrder.item_id);
         return {
-          name: item.name,
-          type: item.item_type,
-          combinedName: item.name,
+          name: it.name,
+          type: it.item_type,
+          combinedName: it.name,
           amount: itemOrder.amountTotal,
           sliced_amount: itemOrder.amountSliced
         };
-       });
-    }));
+      });
+      const distinctItemNames = {};
+      itemOrds.forEach(ord => {
+        if (!distinctItemNames[ord.name]){
+          distinctItemNames[ord.name] = ord;
+        }else {
+         distinctItemNames[ord.name].amount += ord.amount;
+         distinctItemNames[ord.name].sliced_amount += ord.sliced_amount;
+        }
+      });
+      const returnArray = [];
+      for (const key of Object.keys(distinctItemNames)){
+        returnArray.push(distinctItemNames[key]);
+      }
+      return returnArray;
+    })).subscribe((itemOrders) => {
+      this.orderItemCountsList = itemOrders;
 
-    itemOrderObservable.subscribe((itemOrders) => {
-      this.orderItemCounts = new MatTableDataSource(itemOrders)
-      this.applyFilter()
-    })
-
+      this.orderItemCounts = new MatTableDataSource(itemOrders);
+      this.applyFilter();
+    });
   }
 
-  getOrdersForDate(date: any, orders: Order[]){
-    var filteredOrders = orders.filter((order: Order) => {
-      let selectedDate = new Date(date)
-      let orderDate = order.date.toDate()
-      selectedDate.setHours(0,0,0,0)
-      orderDate.setHours(0,0,0,0)
-      return orderDate.toDateString() === selectedDate.toDateString()
-    })
+  getOrdersForDate(date: any, orders: Order[]): Order[] {
+    const filteredOrders = orders.filter((order: Order) => {
+      const selectedDate = new Date(date);
+      const orderDate = order.date.toDate();
+      selectedDate.setHours(0,0,0,0);
+      orderDate.setHours(0,0,0,0);
+      return orderDate.toDateString() === selectedDate.toDateString();
+    });
 
 
-    var orders = filteredOrders.sort((a,b) => {
-      return +a.id - +b.id
-    })
+    const sortedFilteredOrders = filteredOrders.sort((a,b) => {
+      return +a.id - +b.id;
+    });
 
-    return orders
+
+    return sortedFilteredOrders;
   }
 
 
-  onTabChange(event: MatTabChangeEvent) {
+  onTabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.tab.textLabel;
 
-    if(event.index == 1){
-        //update orders by date when Orders for Date tab is clicked
-        this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders))
+    if (event.index === 1){
+        // update orders by date when Orders for Date tab is clicked
+        this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
+        this.applyFilter();
     }
   }
 
 
-  onDateSelected(event){
-    this.currentlySelctedDate = event.value
-    this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders))
-    this.changeDetection.detectChanges()
+  onDateSelected(event): void{
+    this.currentlySelctedDate = event.value;
+    this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
+    this.dateObservable.next(this.currentlySelctedDate);
+    this.applyFilter();
   }
 
-  getOrdersForCurrentlySelectedDate(){
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-      for(let item of this.itemsService.items.s){
-        if(!item.sliced){
-          //this.orderItemCountsList.push({id: item.id, name: item['combined_name'], amount: 0, sliced_amount: 0, type: item.item_type})
-        }
-      }
-      */
-
-      var filteredItemOrders = this.itemOrders.filter(iorder => {
-        let selectedDate = new Date(this.currentlySelctedDate)
-        let orderDate = new Date(iorder.date)
-        selectedDate.setHours(0,0,0,0)
-        orderDate.setHours(0,0,0,0)
-        return orderDate.toDateString() === selectedDate.toDateString()
-      })
-
-
-    this.orderItemCounts.data = this.orderItemCountsList
-
-    this.applyFilter()
-
-  }
-
-  updateSearch(search: string){
+  updateSearch(search: string): void{
     this.searchText = search;
-    this.applyFilter()
+    this.applyFilter();
   }
 
 
@@ -218,14 +181,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-calculateTotal(source: MatTableDataSource<Order>){
-  let data = source.filteredData
-  var total = 0;
-  data.forEach((order) => total += order.total)
-  return total;
+  calculateTotal(source: MatTableDataSource<Order>): number{
+    const data = source.filteredData;
+    let total = 0;
+    data.forEach((order) => total += order.total);
+    return total;
   }
-*/
+
   openEditDialog(id: number): void {
 
     const dialogRef = this.dialog.open(EditOrderComponent, {
@@ -245,25 +207,27 @@ calculateTotal(source: MatTableDataSource<Order>){
 
   // one order summary no need for database
 
-  orderSummary(order: any){
-    if(order.itemOrders != null){
-    var itemOrders = order.itemOrders;
-    itemOrders.sort((a,b) => {
-      //not working
-      return ('' + a.itemName).localeCompare(b.itemName);
-    })
+  orderSummary(order: Order): string{
 
-
-    var summary = "";
-    for(let item_order of itemOrders){
-      if(item_order.amount > 0){
-          summary= summary+ item_order.amount+ " "
-          summary= summary+ item_order.itemName + ", "
+    const itemOrders = this.itemOrdersService.itemOrdersList.filter((itemOrder: ItemOrder) => {
+      return itemOrder.order_id === order.id;
+    });
+    itemOrders.sort((a, b) => {
+      const item1 = this.itemsService.itemsList.find((it) => it.id === a.item_id);
+      const item2 = this.itemsService.itemsList.find((it) => it.id === b.item_id);
+      return ('' + item1.name).localeCompare(item2.name);
+    });
+    let summary = '';
+    for (const [key, itemOrder] of itemOrders.entries()) {
+      if (itemOrder.amountTotal > 0) {
+        const item = this.itemsService.itemsList.find((it) => it.id === itemOrder.item_id);
+        summary = summary + item.name + ' ';
+        summary = summary + itemOrder.amountTotal + ' ';
+        if (key !== itemOrders.length - 1){
+          summary = summary + ', ';
+        }
       }
-  }
-}
-
-
+    }
     return summary;
   }
 

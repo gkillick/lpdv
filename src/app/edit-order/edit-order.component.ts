@@ -48,14 +48,13 @@ export class EditOrderComponent implements OnInit{
     const orderFound = this.orderService.ordersList.find((order: Order) => order.id === this.orderId);
     const {last_name, first_name, telephone, date, sub_total, tax, total} = orderForm.orderMetadata;
     const editedOrder = {...orderFound, last_name, first_name, telephone, date, sub_total, tax, total};
-    this.orderService.editOrder(editedOrder);
-    itemOrders.forEach((itemOrd: ItemOrder) => {
-      const order: ItemOrder = {...this.itemOrderService.itemOrdersList.find(item => item.item_id === itemOrd.item_id),
-        amountSliced: itemOrd.amountSliced, amountTotal: itemOrd.amountTotal};
-      this.itemOrderService.editItemOrder(order).then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
+    this.itemOrderService.deleteItemOrdersForOrder(orderFound.id);
+    this.orderService.deleteOrder(orderFound.id).then(() => {
+      this.orderService.addOrder(editedOrder).then((id) => {
+        const orders = itemOrders.map(itemOrder => {
+          return {...itemOrder, order_id: id};
+        });
+        this.itemOrderService.addItemOrders(orders);
       });
     });
   }

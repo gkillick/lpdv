@@ -86,7 +86,7 @@
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
                             <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
-                            <td mat-footer-cell *matFooterCellDef> <b>{{ 10 | currency}} </b></td>
+                            <td mat-footer-cell *matFooterCellDef> <b>{{ total_for_date | currency}} </b></td>
                         </ng-container>
                         <ng-container matColumnDef="details">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-print"> Details </th>

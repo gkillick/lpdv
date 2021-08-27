@@ -42,13 +42,13 @@ export class ItemOrdersService {
   }
 
 
-  deleteItemOrdersForOrder(ordId: string): any{
-    return this.afs.collection<ItemOrder>('itemOrders',
+  deleteItemOrdersForOrder(ordId: string): void{
+    this.afs.collection<ItemOrder>('itemOrders',
         ref => ref.where('uid', '==', this.authService.user.uid) && ref.where('order_id', '==', ordId))
       .valueChanges().pipe(map((itemOrders: ItemOrder[]) => {
         itemOrders.forEach((itemOrder: ItemOrder) => {
           this.itemOrdersCollection.doc(itemOrder.id).delete();
       });
-    }));
+    })).subscribe();
   }
 }

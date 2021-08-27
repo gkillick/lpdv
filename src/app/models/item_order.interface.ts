@@ -6,5 +6,5 @@ export interface ItemOrder{
     item_id: string;
     amountSliced: number;
     amountTotal: number;
-    date: Date;
+    date: any;
 }

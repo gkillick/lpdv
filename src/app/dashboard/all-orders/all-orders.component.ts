@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Order} from "../../models/order.interface";
 import {ItemOrder} from "../../models/item_order.interface";
 import {ItemOrdersService} from "../../services/item-orders.service";
@@ -12,10 +12,12 @@ import {MatTableDataSource} from "@angular/material/table";
   templateUrl: './all-orders.component.html',
   styleUrls: ['./all-orders.component.scss']
 })
-export class AllOrdersComponent implements OnInit {
+export class AllOrdersComponent implements OnInit, OnChanges{
 
   @Input() allOrders: MatTableDataSource<any>;
   @Input() forDate: boolean;
+  @Input() betweenDates;
+  @Input() filterString: string;
   @Input() columns: string[];
 
 
@@ -26,6 +28,15 @@ export class AllOrdersComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  ngOnChanges(): void{
+    console.log(this.filterString);
+    this.allOrders.filter = this.filterString;
+
+  }
+
+
+
 
   orderSummary(order: Order): string{
 
@@ -64,5 +75,13 @@ export class AllOrdersComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+
+  calculateTotal(source: MatTableDataSource<Order>): number{
+    const data = source.filteredData;
+    let total = 0;
+    data.forEach((order) => total += order.total);
+    return total;
   }
 }

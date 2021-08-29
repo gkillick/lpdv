@@ -2,32 +2,55 @@
     <div class="row no-print">
         <div class="col-sm header-bar">
             <button (click)="openDialog()" class=" btn btn-primary v-top">New Order</button>
-
-
             <mat-form-field class="ml-2">
                 <input matInput autocomplete="off" placeholder="Filter items" (keyup)="updateSearch($event.target.value)">
             </mat-form-field>
-
             <mat-form-field class="ml-2 mr-2" [class.hidden-item]="activeTab == 'All Orders'">
-                <mat-label>Choose a date</mat-label>
-                <input matInput [matDatepicker]="picker" (dateChange)="onDateSelected($event)" [formControl]="dateForm">
+                <mat-label *ngIf="!this.twoDateSelectors">Choose a date</mat-label>
+                <mat-label *ngIf="this.twoDateSelectors">Choose a start date</mat-label>
+              <input matInput [matDatepicker]="picker" (dateChange)="onDateSelected($event)" [formControl]="dateForm">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
+          <mat-form-field class="ml-2 mr-2" *ngIf="this.twoDateSelectors">
+            <mat-label>Choose a end date</mat-label>
+            <input matInput [matDatepicker]="picker" (dateChange)="onEndDateSelected($event)" [formControl]="dateForm">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
         </div>
     </div>
     <div class="row">
         <div class="col-sm">
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="All Orders">
-                  <app-all-orders [allOrders] = "allOrders" [forDate]="false" [columns]="allOrderColumns"></app-all-orders>
+                  <app-all-orders
+                    [allOrders] = "allOrders"
+                    [forDate]="false"
+                    [columns]="allOrderColumns"
+                    [filterString]="this.searchText"></app-all-orders>
                 </mat-tab>
                 <mat-tab label="Orders for Date" id="ordersForDate">
-                  <app-all-orders [allOrders] = "ordersByDate" [forDate]="true" [columns]="dateOrderColumns"></app-all-orders>
+                  <app-all-orders
+                    [allOrders] = "ordersByDate"
+                    [forDate]="true"
+                    [columns]="dateOrderColumns"
+                    [filterString]="this.searchText"></app-all-orders>
                 </mat-tab>
                 <mat-tab label="Production Quantities" id="productionQuantities">
-                  <app-production-quantities [productionQuantitesData]="orderItemCounts"></app-production-quantities>
+                  <app-production-quantities [productionQuantitesData]="orderItemCounts"
+                                             [filterString]="this.searchText"
+                                             [forDate]="true"
+                                             [dateStart]="this.currentlySelctedDate"></app-production-quantities>
                 </mat-tab>
+              <mat-tab label="Orders Between Dates" id="ordersBetweenDates">
+                <app-production-quantities [productionQuantitesData]="orderItemCounts"
+                                           [filterString]="this.searchText"
+                                           [forDate]="false"
+                                           [dateStart]="this.currentlySelctedDate"
+                                           [dateEnd]="this.currentlySelctedEndDate"
+                ></app-production-quantities>
+              </mat-tab>
             </mat-tab-group>
         </div>
     </div>

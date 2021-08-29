@@ -15,7 +15,6 @@ import { ItemOrder } from '../models/item_order.interface';
 import { Order } from '../models/order.interface';
 import { map, tap } from 'rxjs/operators';
 import { Item } from '../models/item.interface';
-import {EditOrderComponent} from "../edit-order/edit-order.component";
 import {NewOrderComponent} from "../new-order/new-order.component";
 
 
@@ -34,7 +33,6 @@ export class DashboardComponent implements OnInit {
   orderItemCountsList = []
   ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>();
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>();
-  displayedColumns = ["name", "type", "amount", "sliced_amount"];
   dateOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"];
   allOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"];
   orderDateFooterColumnsToDisplay = ["total"]
@@ -45,6 +43,9 @@ export class DashboardComponent implements OnInit {
   itemOrders: ItemOrder[] = []
   searchText: string = ""
   total_for_date = 0;
+  currentlySelctedEndDate: Date;
+  endDateObservable: Subject<Date>;
+  twoDateSelectors = false;
   stringDate = ""
   filteredValues =
   {
@@ -53,15 +54,6 @@ export class DashboardComponent implements OnInit {
   };
 
 
-  applyFilter(): void {
-    let filterValue = this.searchText;
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.allOrders.filter = filterValue;
-    this.orderItemCounts.filter = filterValue;
-    this.ordersByDate.filter = filterValue;
-    this.total_for_date = this.calculateTotal(this.ordersByDate);
-  }
 
   constructor(private datePipe: DatePipe,
               private itemsService: ItemsService,
@@ -83,45 +75,16 @@ export class DashboardComponent implements OnInit {
       this.allOrders = new MatTableDataSource(this.orders);
       this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
       this.orderItemCounts = new MatTableDataSource(this.orderItemCountsList);
-      this.applyFilter();
     });
 
-    combineLatest(this.itemOrdersService.itemOrders, this.itemsService.items, this.dateObservable).pipe(map(([itemOrders, items, date]) => {
-      const itemOrds = itemOrders.filter(itemOrder => {
-        const selectedDate = new Date(date);
-        const orderDate = itemOrder.date.toDate();
-        selectedDate.setHours(0,0,0,0);
-        orderDate.setHours(0,0,0,0);
-        return orderDate.toDateString() === selectedDate.toDateString();
-      }).map(itemOrder => {
-        const it = items.find((item: Item) => item.id === itemOrder.item_id);
-        return {
-          name: it.name,
-          type: it.item_type,
-          combinedName: it.name,
-          amount: itemOrder.amountTotal,
-          sliced_amount: itemOrder.amountSliced
-        };
-      });
-      const distinctItemNames = {};
-      itemOrds.forEach(ord => {
-        if (!distinctItemNames[ord.name]){
-          distinctItemNames[ord.name] = ord;
-        }else {
-         distinctItemNames[ord.name].amount += ord.amount;
-         distinctItemNames[ord.name].sliced_amount += ord.sliced_amount;
-        }
-      });
-      const returnArray = [];
-      for (const key of Object.keys(distinctItemNames)){
-        returnArray.push(distinctItemNames[key]);
-      }
-      return returnArray;
-    })).subscribe((itemOrders) => {
+      this.itemOrdersService.formattedItemOrdersForProductionTable(
+        (x, y, z) => { x.toDateString() === y.toDateString()},
+        this.currentlySelctedDate,
+        null).subscribe((itemOrders) => {
       this.orderItemCountsList = itemOrders;
+      console.log(this.orderItemCountsList);
 
       this.orderItemCounts = new MatTableDataSource(itemOrders);
-      this.applyFilter();
     });
   }
 
@@ -133,7 +96,6 @@ export class DashboardComponent implements OnInit {
       orderDate.setHours(0,0,0,0);
       return orderDate.toDateString() === selectedDate.toDateString();
     });
-
 
     const sortedFilteredOrders = filteredOrders.sort((a,b) => {
       return +a.id - +b.id;
@@ -147,25 +109,30 @@ export class DashboardComponent implements OnInit {
   onTabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.tab.textLabel;
 
-    if (event.index === 1){
-        // update orders by date when Orders for Date tab is clicked
-        this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
-        this.applyFilter();
+    if (event.index === 1) {
+      // update orders by date when Orders for Date tab is clicked
+      this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
     }
-  }
+
+    if (event.index === 3 || event.index === 4) {
+      this.twoDateSelectors = true;
+    }else{
+      this.twoDateSelectors = false;
+    }
+  };
+
+
 
 
   onDateSelected(event): void{
     this.currentlySelctedDate = event.value;
     this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
     this.dateObservable.next(this.currentlySelctedDate);
-    this.applyFilter();
   }
 
 
   updateSearch(search: string): void{
-    this.searchText = search;
-    this.applyFilter();
+    this.searchText = search.trim().toLowerCase();
   }
 
 
@@ -181,15 +148,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  calculateTotal(source: MatTableDataSource<Order>): number{
-    const data = source.filteredData;
-    let total = 0;
-    data.forEach((order) => total += order.total);
-    return total;
+
+  onEndDateSelected(event): void{
+    this.currentlySelctedEndDate = event.value;
+    this.endDateObservable.next(this.currentlySelctedDate);
   }
-
-
-
 
 
   // one order summary no need for database

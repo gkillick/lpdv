@@ -30,13 +30,13 @@ export class DashboardComponent implements OnInit {
   orders: Order[]
   items: Item[]
   combinedNames: string;
-  all_orders: MatTableDataSource<any> = new MatTableDataSource<any>();
+  allOrders: MatTableDataSource<any> = new MatTableDataSource<any>();
   orderItemCountsList = []
   ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>();
   orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>();
   displayedColumns = ["name", "type", "amount", "sliced_amount"];
-  displayedOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"]
-  displayedAllOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"]
+  dateOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"];
+  allOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"];
   orderDateFooterColumnsToDisplay = ["total"]
   currentlySelctedDate: Date
   dateObservable: Subject<Date> = new Subject<Date>();
@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     let filterValue = this.searchText;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.all_orders.filter = filterValue;
+    this.allOrders.filter = filterValue;
     this.orderItemCounts.filter = filterValue;
     this.ordersByDate.filter = filterValue;
     this.total_for_date = this.calculateTotal(this.ordersByDate);
@@ -80,7 +80,7 @@ export class DashboardComponent implements OnInit {
 
     this.ordersService.orders.subscribe(orders => {
       this.orders = orders;
-      this.all_orders = new MatTableDataSource(this.orders);
+      this.allOrders = new MatTableDataSource(this.orders);
       this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
       this.orderItemCounts = new MatTableDataSource(this.orderItemCountsList);
       this.applyFilter();
@@ -188,48 +188,12 @@ export class DashboardComponent implements OnInit {
     return total;
   }
 
-  openEditDialog(id: number): void {
 
-    const dialogRef = this.dialog.open(EditOrderComponent, {
-      width: '100%',
-      height: '98%',
-      data: {
-       orderId: id
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
 
 
 
   // one order summary no need for database
 
-  orderSummary(order: Order): string{
-
-    const itemOrders = this.itemOrdersService.itemOrdersList.filter((itemOrder: ItemOrder) => {
-      return itemOrder.order_id === order.id;
-    });
-    itemOrders.sort((a, b) => {
-      const item1 = this.itemsService.itemsList.find((it) => it.id === a.item_id);
-      const item2 = this.itemsService.itemsList.find((it) => it.id === b.item_id);
-      return ('' + item1.name).localeCompare(item2.name);
-    });
-    let summary = '';
-    for (const [key, itemOrder] of itemOrders.entries()) {
-      if (itemOrder.amountTotal > 0) {
-        const item = this.itemsService.itemsList.find((it) => it.id === itemOrder.item_id);
-        summary = summary + item.name + ' ';
-        summary = summary + itemOrder.amountTotal + ' ';
-        if (key !== itemOrders.length - 1){
-          summary = summary + ', ';
-        }
-      }
-    }
-    return summary;
-  }
 
 
 /*

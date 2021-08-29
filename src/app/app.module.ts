@@ -39,6 +39,8 @@ import { AngularFireStorageModule} from '@angular/fire/storage'
 import { environment } from 'src/environments/environment';
 import { EditOrderComponent } from './edit-order/edit-order.component';
 import { OrderFormComponent } from './order-form/order-form.component';
+import { ProductionQuantitiesComponent } from './dashboard/production-quantities/production-quantities.component';
+import { AllOrdersComponent } from './dashboard/all-orders/all-orders.component';
 
 
 
@@ -60,6 +62,8 @@ import { OrderFormComponent } from './order-form/order-form.component';
     SearchFilterPipe,
     EditOrderComponent,
     OrderFormComponent,
+    ProductionQuantitiesComponent,
+    AllOrdersComponent,
   ],
   imports: [
     FormsModule,

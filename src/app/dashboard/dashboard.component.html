@@ -20,119 +20,13 @@
         <div class="col-sm">
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="All Orders">
-                    <table mat-table #firstTable #firstTableSort="matSort" [dataSource]="all_orders" matSort class="mat-elevation-z8 mt-3 table-max">
-                        <ng-container matColumnDef="first_name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-                            <td mat-cell *matCellDef="let item"> {{item.first_name}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="last_name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-                            <td mat-cell *matCellDef="let item"> {{item.last_name}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="telephone">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> telephone </th>
-                            <td mat-cell *matCellDef="let item"> {{item.telephone}} </td>
-                        </ng-container>
-
-                        <!-- Count -->
-                        <ng-container matColumnDef="summary">
-                            <th mat-header-cell *matHeaderCellDef> Summary </th>
-                            <td mat-cell *matCellDef="let item"> {{ orderSummary(item)}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="total">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-                            <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                            <td mat-cell *matCellDef="let item"> {{ item.date.toDate() | date :'mediumDate'}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="details">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-print"> Details </th>
-                            <td class="no-print" mat-cell *matCellDef="let item"> <button (click)="openEditDialog(item.id)" class="btn btn-primary">Edit</button> </td>
-                        </ng-container>
-
-
-
-
-                        <tr mat-header-row *matHeaderRowDef="displayedAllOrderColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedAllOrderColumns;"></tr>
-                    </table>
+                  <app-all-orders [allOrders] = "allOrders" [forDate]="false" [columns]="allOrderColumns"></app-all-orders>
                 </mat-tab>
                 <mat-tab label="Orders for Date" id="ordersForDate">
-                    <table mat-table #secondTable #secondTableSort="matSort" [dataSource]="ordersByDate" matSort class="mat-elevation-z8 mt-3 table-max">
-                        <ng-container matColumnDef="first_name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-                            <td mat-cell *matCellDef="let item"> {{item.first_name}} </td>
-                            <td mat-footer-cell *matFooterCellDef></td>
-                        </ng-container>
-                        <ng-container matColumnDef="last_name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-                            <td mat-cell *matCellDef="let item"> {{item.last_name}} </td>
-                            <td mat-footer-cell *matFooterCellDef></td>
-                        </ng-container>
-                        <ng-container matColumnDef="telephone">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> telephone </th>
-                            <td mat-cell *matCellDef="let item"> {{item.telephone}} </td>
-                            <td mat-footer-cell *matFooterCellDef></td>
-                        </ng-container>
-
-                        <!-- Count -->
-                        <ng-container matColumnDef="summary">
-                            <th mat-header-cell *matHeaderCellDef> Summary </th>
-                            <td mat-cell *matCellDef="let item"> {{ orderSummary(item)}} </td>
-                            <td mat-footer-cell *matFooterCellDef></td>
-                        </ng-container>
-                        <ng-container matColumnDef="total">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-                            <td mat-cell *matCellDef="let item"> {{ item.total | currency }} </td>
-                            <td mat-footer-cell *matFooterCellDef> <b>{{ total_for_date | currency}} </b></td>
-                        </ng-container>
-                        <ng-container matColumnDef="details">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-print"> Details </th>
-                            <td mat-cell *matCellDef="let item"> <button (click)="openEditDialog(item.id)" class="no-print btn btn-primary">Edit</button> </td>
-                            <td mat-footer-cell *matFooterCellDef></td>
-                        </ng-container>
-
-
-
-
-                        <tr mat-header-row *matHeaderRowDef="displayedOrderColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedOrderColumns;"></tr>
-                        <tr mat-footer-row *matFooterRowDef="displayedOrderColumns"></tr>
-                    </table>
+                  <app-all-orders [allOrders] = "ordersByDate" [forDate]="true" [columns]="dateOrderColumns"></app-all-orders>
                 </mat-tab>
-                <mat-tab label="Production Quantities">
-
-                    <table id="orderAmountTable" #thirdTable #thirdTableSort="matSort" mat-table [dataSource]="orderItemCounts" matSort class="mat-elevation-z8 mt-3 table-max">
-
-                        <!-- Item name -->
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                            <td mat-cell *matCellDef="let item"> {{item.name}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="type">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> type </th>
-                            <td mat-cell *matCellDef="let item"> {{item.type}} </td>
-                        </ng-container>
-
-                        <!-- Count -->
-                        <ng-container matColumnDef="amount">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
-                            <td mat-cell *matCellDef="let item"> {{item.amount}} </td>
-                        </ng-container>
-
-                        <!-- Count -->
-                        <ng-container matColumnDef="sliced_amount">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> tranché </th>
-                            <td mat-cell *matCellDef="let item"> {{item.sliced_amount > 0 ? item.sliced_amount : ""}} </td>
-                        </ng-container>
-
-
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
+                <mat-tab label="Production Quantities" id="productionQuantities">
+                  <app-production-quantities [productionQuantitesData]="orderItemCounts"></app-production-quantities>
                 </mat-tab>
             </mat-tab-group>
         </div>

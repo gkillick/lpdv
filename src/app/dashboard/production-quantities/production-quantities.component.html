@@ -1,0 +1,29 @@
+<table id="orderAmountTable" #thirdTable #thirdTableSort="matSort" mat-table [dataSource]="productionQuantitesData" matSort class="mat-elevation-z8 mt-3 table-max">
+  <!-- Item name -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+    <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> type </th>
+    <td mat-cell *matCellDef="let item"> {{item.type}} </td>
+  </ng-container>
+
+  <!-- Count -->
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
+    <td mat-cell *matCellDef="let item"> {{item.amount}} </td>
+  </ng-container>
+
+  <!-- Count -->
+  <ng-container matColumnDef="sliced_amount">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> tranché </th>
+    <td mat-cell *matCellDef="let item"> {{item.sliced_amount > 0 ? item.sliced_amount : ""}} </td>
+  </ng-container>
+
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+

@@ -57,6 +57,12 @@ export class OrderService {
     this.itemOrderService.deleteItemOrdersForOrder(orderId);
     return this.ordersCollection.doc(orderId).delete();
   }
+
+
+  getOrdersWithFilter(func: (date1: Date, date2: Date, date3: Date) => boolean, startDate, endDate): Observable<any> {
+
+  }
+
   getPopulatedItemsForm(orderId: string): Observable<ItemFormInfo[]>{
     return combineLatest(this.itemsService.items, this.itemOrderService.itemOrders).pipe(map(([items, itemOrders]) => {
       const relevantOrders = itemOrders.filter((itemOrder: ItemOrder) => itemOrder.order_id === orderId );

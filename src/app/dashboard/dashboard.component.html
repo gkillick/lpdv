@@ -38,14 +38,12 @@
                     [filterString]="this.searchText"></app-all-orders>
                 </mat-tab>
                 <mat-tab label="Production Quantities" id="productionQuantities">
-                  <app-production-quantities [productionQuantitesData]="orderItemCounts"
-                                             [filterString]="this.searchText"
+                  <app-production-quantities [filterString]="this.searchText"
                                              [forDate]="true"
                                              [dateStart]="this.currentlySelctedDate"></app-production-quantities>
                 </mat-tab>
               <mat-tab label="Orders Between Dates" id="ordersBetweenDates">
-                <app-production-quantities [productionQuantitesData]="orderItemCounts"
-                                           [filterString]="this.searchText"
+                <app-production-quantities [filterString]="this.searchText"
                                            [forDate]="false"
                                            [dateStart]="this.currentlySelctedDate"
                                            [dateEnd]="this.currentlySelctedEndDate"

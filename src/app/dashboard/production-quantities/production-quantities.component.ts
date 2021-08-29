@@ -9,7 +9,7 @@ import {ItemOrdersService} from "../../services/item-orders.service";
 })
 export class ProductionQuantitiesComponent implements OnInit, OnChanges{
 
-  @Input() productionQuantitesData: MatTableDataSource<any>;
+  productionQuantitesData: MatTableDataSource<any>;
   @Input() filterString: string;
   @Input() forDate: boolean;
   @Input() dateStart: Date;
@@ -19,16 +19,16 @@ export class ProductionQuantitiesComponent implements OnInit, OnChanges{
   constructor(private itemOrdersService: ItemOrdersService) { }
 
   ngOnInit(): void {
+    this.generateData();
   }
 
   ngOnChanges(): void {
-    this.productionQuantitesData.filter = this.filterString;
-
-
+    this.generateData();
+  }
+  generateData(): void{
     const betweenDates = (date1: Date, date2: Date, date3: Date) => {
       return date1 >= date2 && date1 <= date3;
     };
-
 
     const forDate = (date1: Date, date2: Date, date3: Date) => {
       return date1.toDateString() === date2.toDateString();

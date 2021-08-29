@@ -32,10 +32,9 @@ export class DashboardComponent implements OnInit {
   allOrders: MatTableDataSource<any> = new MatTableDataSource<any>();
   orderItemCountsList = []
   ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>();
-  orderItemCounts: MatTableDataSource<any> = new MatTableDataSource<any>();
   dateOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"];
   allOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"];
-  orderDateFooterColumnsToDisplay = ["total"]
+  orderDateFooterColumnsToDisplay = ["total"];
   currentlySelctedDate: Date
   dateObservable: Subject<Date> = new Subject<Date>();
   dateForm: FormControl
@@ -58,7 +57,6 @@ export class DashboardComponent implements OnInit {
   constructor(private datePipe: DatePipe,
               private itemsService: ItemsService,
               private ordersService: OrderService,
-              private itemOrdersService: ItemOrdersService,
               public dialog: MatDialog) {
 
   }
@@ -74,17 +72,6 @@ export class DashboardComponent implements OnInit {
       this.orders = orders;
       this.allOrders = new MatTableDataSource(this.orders);
       this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
-      this.orderItemCounts = new MatTableDataSource(this.orderItemCountsList);
-    });
-
-      this.itemOrdersService.formattedItemOrdersForProductionTable(
-        (x, y, z) => { x.toDateString() === y.toDateString()},
-        this.currentlySelctedDate,
-        null).subscribe((itemOrders) => {
-      this.orderItemCountsList = itemOrders;
-      console.log(this.orderItemCountsList);
-
-      this.orderItemCounts = new MatTableDataSource(itemOrders);
     });
   }
 

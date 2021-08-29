@@ -115,7 +115,6 @@ export class AllOrdersComponent implements OnInit, OnChanges{
     const data = source.filteredData;
     let total = 0;
     data.forEach((order) => total += order.total);
-    console.log(total);
     return total;
   }
 }

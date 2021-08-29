@@ -91,7 +91,7 @@ import { AllOrdersComponent } from './dashboard/all-orders/all-orders.component'
     AngularFireStorageModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
+    //{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

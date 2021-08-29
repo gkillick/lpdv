@@ -3,18 +3,20 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { Observable } from 'rxjs';
 import { map, tap} from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import {AngularFireAuth} from "@angular/fire/auth";
 
 @Injectable({providedIn: 'root'})
 
 export class LoginGaurdService implements CanActivate{
 
-    constructor(private authService: AuthService, private router: Router){
+    constructor(private afAuth: AngularFireAuth, private router: Router){
 
     }
 
     canActivate(route: ActivatedRouteSnapshot, router: RouterStateSnapshot): boolean | Promise<boolean> | Observable<boolean>{
 
-        return this.authService.userData.pipe(map(user => {
+        return this.afAuth.authState.pipe(map(user => {
+          console.log(user);
             return !user;
         }), tap(isAuth => {
             if (!isAuth) {

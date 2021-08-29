@@ -18,7 +18,7 @@ export class ItemsComponent implements OnInit {
 
   errorMessage: string
 
-  constructor(private itemService: ItemsService,public dialog: MatDialog, private changeDetection: ChangeDetectorRef, private zone: NgZone) { }
+  constructor(private itemService: ItemsService, public dialog: MatDialog, private changeDetection: ChangeDetectorRef, private zone: NgZone) { }
 
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>()
 
@@ -57,7 +57,7 @@ export class ItemsComponent implements OnInit {
 
     var dialogRef
     this.zone.run(() => {
-      
+
       dialogRef = this.dialog.open(EditItemComponent, {
         width: '250px',
         data: {

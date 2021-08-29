@@ -16,7 +16,6 @@ export class LoginGaurdService implements CanActivate{
     canActivate(route: ActivatedRouteSnapshot, router: RouterStateSnapshot): boolean | Promise<boolean> | Observable<boolean>{
 
         return this.afAuth.authState.pipe(map(user => {
-          console.log(user);
             return !user;
         }), tap(isAuth => {
             if (!isAuth) {

@@ -14,7 +14,7 @@ import {OrderService} from "../../services/order.service";
   styleUrls: ['./all-orders.component.scss']
 })
 export class AllOrdersComponent implements OnInit, OnChanges{
-
+  totalCost: number = 0;
   allOrders: MatTableDataSource<any>;
   @Input() forDate: boolean;
   @Input() betweenDates: boolean;
@@ -50,6 +50,8 @@ export class AllOrdersComponent implements OnInit, OnChanges{
 
       this.allOrders = new MatTableDataSource(sortedFilteredOrders);
       this.allOrders.filter = this.filterString;
+
+      this.totalCost = this.calculateTotal(this.allOrders);
     });
   }
 
@@ -113,6 +115,7 @@ export class AllOrdersComponent implements OnInit, OnChanges{
     const data = source.filteredData;
     let total = 0;
     data.forEach((order) => total += order.total);
+    console.log(total);
     return total;
   }
 }

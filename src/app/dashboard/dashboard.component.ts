@@ -16,7 +16,6 @@ export class DashboardComponent implements OnInit {
 
   dateOrderColumns = ['first_name','last_name','telephone', 'summary', 'total', 'details'];
   allOrderColumns = ['first_name','last_name','telephone', 'summary', 'total',  'date', 'details'];
-  orderDateFooterColumnsToDisplay = ['total'];
   currentlySelctedDate: Date;
   currentlySelctedEndDate: Date;
   dateForm: FormControl;

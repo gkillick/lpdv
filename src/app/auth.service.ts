@@ -1,11 +1,6 @@
-import { Injectable, NgZone } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http'
-import {catchError, tap} from 'rxjs/operators'
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import jwt_decode from 'jwt-decode'
+import { Injectable } from '@angular/core';
+import {BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { ItemsService } from './services/items.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from './models/user.interface';
 

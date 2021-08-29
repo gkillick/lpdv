@@ -4,23 +4,23 @@
   <div class="row top">
     <div class="col-sm">
       <mat-form-field>
-        <input matInput placeholder="First Name" formControlName="first_name">
+        <input matInput placeholder="Prénom" formControlName="first_name">
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Last Name" formControlName="last_name">
+        <input matInput placeholder="Nom de famille" formControlName="last_name">
       </mat-form-field>
 
       <mat-form-field>
         <input type="telephone" matInput placeholder="téléphone" formControlName="telephone">
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Choose a date</mat-label>
+        <mat-label>choisir une date</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="date">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Filter organizedItems" [ngModelOptions]="{standalone: true}" [(ngModel)]="searchText">
+        <input matInput placeholder="Filtrer les éléments " [ngModelOptions]="{standalone: true}" [(ngModel)]="searchText">
       </mat-form-field>
       <!-- Don't think we need this field
       <mat-form-field>
@@ -97,9 +97,9 @@
     </div>
     <div class="col-custom ">
       <div class="total_price ">
-        <span class="subheading ">Subtotal: </span><span class="subheadingbold ">{{ subTotal | currency }} </span>
-        <span class="subheading ">Tax: </span><span class="subheadingbold ">{{tax | currency }} </span>
-        <span class="subheading ">Total: </span><span class="subheadingbold ">{{ total | currency }} </span>
+        <span class="subheading ">Sous-total: </span><span class="subheadingbold ">${{ subTotal | currency:'CAD':'':'':'fr'  }} </span>
+        <span class="subheading ">Taxe: </span><span class="subheadingbold ">${{tax | currency:'CAD':'':'':'fr'  }} </span>
+        <span class="subheading ">Total: </span><span class="subheadingbold ">${{ total | currency:'CAD':'':'':'fr'  }} </span>
 
       </div>
     </div>

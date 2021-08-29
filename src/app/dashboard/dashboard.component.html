@@ -1,19 +1,19 @@
 <div class="container-fluid mt-3">
     <div class="row no-print">
         <div class="col-sm header-bar">
-            <button (click)="openDialog()" class=" btn btn-primary v-top">New Order</button>
+            <button (click)="openDialog()" class=" btn btn-primary v-top">Nouvel Ordre</button>
             <mat-form-field class="ml-2">
-                <input matInput autocomplete="off" placeholder="Filter items" (keyup)="updateSearch($event.target.value)">
+                <input matInput autocomplete="off" placeholder="Filtrer les éléments" (keyup)="updateSearch($event.target.value)">
             </mat-form-field>
             <mat-form-field class="ml-2 mr-2" [class.hidden-item]="activeTab == 'All Orders'">
-                <mat-label *ngIf="!this.twoDateSelectors">Choose a date</mat-label>
-                <mat-label *ngIf="this.twoDateSelectors">Choose a start date</mat-label>
+                <mat-label *ngIf="!this.twoDateSelectors">Choisissez une date</mat-label>
+                <mat-label *ngIf="this.twoDateSelectors">Choisissez une date de début</mat-label>
               <input matInput [matDatepicker]="picker" (dateChange)="onDateSelected($event)" [formControl]="dateForm">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           <mat-form-field class="ml-2 mr-2" *ngIf="this.twoDateSelectors">
-            <mat-label>Choose a end date</mat-label>
+            <mat-label>Choisissez une date de fin</mat-label>
             <input matInput [matDatepicker]="picker" (dateChange)="onEndDateSelected($event)" [formControl]="dateEndForm">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-sm">
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
-                <mat-tab label="All Orders">
+                <mat-tab label="Toutes Les Commandes">
                   <app-all-orders
                     [forDate]="false"
                     [columns]="allOrderColumns"
@@ -31,26 +31,26 @@
                     [dateStart]="this.currentlySelctedDate"
                   ></app-all-orders>
                 </mat-tab>
-                <mat-tab label="Orders for Date" id="ordersForDate">
+                <mat-tab label="Ordres Pour Date" id="ordersForDate">
                   <app-all-orders
                     [forDate]="true"
                     [columns]="dateOrderColumns"
                     [dateStart]="this.currentlySelctedDate"
                     [filterString]="this.searchText"></app-all-orders>
                 </mat-tab>
-                <mat-tab label="Production Quantities" id="productionQuantities">
+                <mat-tab label="Quantités De Production" id="productionQuantities">
                   <app-production-quantities [filterString]="this.searchText"
                                              [forDate]="true"
                                              [dateStart]="this.currentlySelctedDate"></app-production-quantities>
                 </mat-tab>
-              <mat-tab label="Production Quantities Between Dates" id="productionQuantitiesBetweenDates">
+              <mat-tab label="Quantités De Production Entre Dates" id="productionQuantitiesBetweenDates">
                 <app-production-quantities [filterString]="this.searchText"
                                            [forDate]="false"
                                            [dateStart]="this.currentlySelctedDate"
                                            [dateEnd]="this.currentlySelctedEndDate"
                 ></app-production-quantities>
               </mat-tab>
-              <mat-tab label="Orders Between Dates" id="ordersBetweenDates">
+              <mat-tab label="Ordres Entre Dates" id="ordersBetweenDates">
                 <app-all-orders [filterString]="this.searchText"
                                            [forDate]="false"
                                             [betweenDates]="true"

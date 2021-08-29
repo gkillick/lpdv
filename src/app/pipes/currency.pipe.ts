@@ -7,13 +7,13 @@ export class CurrencyPipe implements PipeTransform {
 
   transform(value: number, ...args: unknown[]): unknown {
 
-    let formatter = new Intl.NumberFormat('en-US', {
+    let formatter = new Intl.NumberFormat('fr-CA', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'CAD',
     });
 
 
-    
+
     return formatter.format(value);
   }
 

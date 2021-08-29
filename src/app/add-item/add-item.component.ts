@@ -23,8 +23,8 @@ export class AddItemComponent implements OnInit {
   ];
   tax_classifications: any[] = [
     {value: 'normal', viewValue: 'normal'},
-    {value: 'no_tax_6', viewValue: 'tax before 6'},
-    {value: 'no_tax', viewValue: 'no tax'},
+    {value: 'no_tax_6', viewValue: 'taxe avant 6'},
+    {value: 'no_tax', viewValue: 'aucune taxe'},
   ]
 
   constructor(private itemsService: ItemsService, private fb: FormBuilder, private dialogRef: MatDialogRef<AddItemComponent>) { }

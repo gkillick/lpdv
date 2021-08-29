@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -41,7 +41,9 @@ import { EditOrderComponent } from './edit-order/edit-order.component';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { ProductionQuantitiesComponent } from './dashboard/production-quantities/production-quantities.component';
 import { AllOrdersComponent } from './dashboard/all-orders/all-orders.component';
-
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr, 'fr');
 
 
 
@@ -91,7 +93,7 @@ import { AllOrdersComponent } from './dashboard/all-orders/all-orders.component'
     AngularFireStorageModule
   ],
   providers: [
-    //{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
+    {provide: LOCALE_ID, useValue: 'fr' }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,23 +1,23 @@
 <table id="orderAmountTable" #thirdTable #thirdTableSort="matSort" mat-table [dataSource]="productionQuantitesData" matSort class="mat-elevation-z8 mt-3 table-max">
   <!-- Item name -->
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
     <td mat-cell *matCellDef="let item"> {{item.name}} </td>
   </ng-container>
   <ng-container matColumnDef="type">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> type </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
     <td mat-cell *matCellDef="let item"> {{item.type}} </td>
   </ng-container>
 
   <!-- Count -->
   <ng-container matColumnDef="amount">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantité </th>
     <td mat-cell *matCellDef="let item"> {{item.amount}} </td>
   </ng-container>
 
   <!-- Count -->
   <ng-container matColumnDef="sliced_amount">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> tranché </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tranché </th>
     <td mat-cell *matCellDef="let item"> {{item.sliced_amount > 0 ? item.sliced_amount : ""}} </td>
   </ng-container>
 

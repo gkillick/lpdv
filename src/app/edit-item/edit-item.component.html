@@ -2,39 +2,42 @@
     Edit Item</H1>
 <form [formGroup]="myForm" (ngSubmit)="submitHandler()">
 
-    <mat-form-field>
-        <input matInput placeholder="name" formControlName="name">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-        <mat-label>Type of item</mat-label>
-        <mat-select formControlName="item_type">
-            <mat-option *ngFor="let type of types" [value]="type.value">
-                {{type.viewValue}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-        <mat-label>Tax classification</mat-label>
-        <mat-select formControlName="tax_catagory">
-            <mat-option *ngFor="let type of tax_classifications" [value]="type.value">
-                {{type.viewValue}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field>
+    <mat-label>Nom</mat-label>
+    <input matInput  formControlName="name">
+  </mat-form-field>
   <mat-form-field appearance="fill">
+    <mat-label>Type d'aliment</mat-label>
+    <mat-select formControlName="item_type">
+      <mat-option *ngFor="let type of types" [value]="type.value">
+        {{type.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Classification des taxes</mat-label>
+    <mat-select formControlName="tax_catagory">
+      <mat-option *ngFor="let type of tax_classifications" [value]="type.value">
+        {{type.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>choisir l'option de tranche</mat-label>
     <mat-select formControlName="sliced_option">
       <mat-option [value]="false">
-        No Slice Option
+        Option sans tranche
       </mat-option>
       <mat-option [value]="true">
-        Include sliced Option
+        Inclure l'option tranchée
       </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="price" formControlName="price">
-    </mat-form-field>
+    <mat-label>Prix</mat-label>
+    <input matInput  formControlName="price">
+  </mat-form-field>
 
-    <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Item</button>
-    <button mat-button class="ml-2 btn btn-danger" color="primary" type="button" (click)="delete()">Delete</button>
+    <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Enregistrer</button>
+    <button mat-button class="ml-2 btn btn-danger" color="primary" type="button" (click)="delete()">Supprimer</button>
 </form>

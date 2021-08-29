@@ -59,11 +59,43 @@
   </div>
 
   <div class="row">
-    <div class="col">
+    <div class="col" style="display:inline-flex;">
       <button mat-button class="btn btn-primary" color="primary" type="submit" [disabled]="myForm.invalid">Save Order</button>
       <button type="button" *ngIf="edit" mat-button class="btn btn-danger ml-1" (click)="delete()">Delete</button>
+      <mat-form-field appearance="fill"  style="width: 90px; margin-left: 10px;">
+        <mat-label>AM/PM</mat-label>
+        <mat-select>
+          <mat-option  [value]="'AM'">
+            AM
+          </mat-option>
+          <mat-option  [value]="'AM'">
+            PM
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill"  style="width: 140px; margin-left: 10px;">
+        <mat-label>Payé/Non Payé</mat-label>
+        <mat-select>
+          <mat-option  [value]="true">
+            Payé
+          </mat-option>
+          <mat-option  [value]="false">
+            Non Payé
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  appearance="fill" style="margin-left: 10px; flex:1">
+        <mat-label>Notes</mat-label>
+        <textarea matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+
     </div>
-    <div class="col-sm ">
+    <div class="col-custom ">
       <div class="total_price ">
         <span class="subheading ">Subtotal: </span><span class="subheadingbold ">{{ subTotal | currency }} </span>
         <span class="subheading ">Tax: </span><span class="subheadingbold ">{{tax | currency }} </span>

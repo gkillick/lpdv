@@ -67,3 +67,17 @@ mat-form-field {
 .flex-row {
   flex: 1;
 }
+
+::ng-deep.mat-form-field-wrapper{
+  padding-bottom: 0px;
+}
+::ng-deep.mat-form-field-underline{
+  bottom:0px;
+}
+.col-custom{
+  flex-grow: 0;
+  flex-basis: auto;
+  width: 290px;
+  display: flex;
+  justify-content: center;
+}

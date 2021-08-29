@@ -37,7 +37,8 @@ export class DashboardComponent implements OnInit {
   orderDateFooterColumnsToDisplay = ["total"];
   currentlySelctedDate: Date
   dateObservable: Subject<Date> = new Subject<Date>();
-  dateForm: FormControl
+  dateForm: FormControl;
+  dateEndForm: FormControl;
   activeTab: string = "All Orders"
   itemOrders: ItemOrder[] = []
   searchText: string = ""
@@ -65,8 +66,12 @@ export class DashboardComponent implements OnInit {
     this.currentlySelctedDate = new Date();
     this.currentlySelctedDate.setDate(new Date().getDate() + 1);
     this.currentlySelctedDate.setHours(0,  0,  0, 0);
-    this.dateObservable.next(this.currentlySelctedDate);
     this.dateForm = new FormControl(this.currentlySelctedDate);
+    this.currentlySelctedEndDate = new Date();
+    this.currentlySelctedEndDate.setDate(new Date().getDate() + 1);
+    this.currentlySelctedEndDate.setHours(0,  0,  0, 0);
+    this.dateEndForm = new FormControl(this.currentlySelctedEndDate);
+
 
     this.ordersService.orders.subscribe(orders => {
       this.orders = orders;
@@ -113,8 +118,6 @@ export class DashboardComponent implements OnInit {
 
   onDateSelected(event): void{
     this.currentlySelctedDate = event.value;
-    this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
-    this.dateObservable.next(this.currentlySelctedDate);
   }
 
 
@@ -138,7 +141,6 @@ export class DashboardComponent implements OnInit {
 
   onEndDateSelected(event): void{
     this.currentlySelctedEndDate = event.value;
-    this.endDateObservable.next(this.currentlySelctedDate);
   }
 
 

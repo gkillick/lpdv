@@ -63,10 +63,6 @@ export class ItemOrdersService {
         selectedDate1.setHours(0,0,0,0);
         selectedDate2.setHours(0,0,0,0);
         orderDate.setHours(0,0,0,0);
-        console.log(selectedDate1);
-        console.log(orderDate);
-        console.log(func);
-        console.log(func(orderDate, selectedDate1, selectedDate2));
         return func(orderDate, selectedDate1, selectedDate2);
       }).map(itemOrder => {
         const it = items.find((item: Item) => item.id === itemOrder.item_id);

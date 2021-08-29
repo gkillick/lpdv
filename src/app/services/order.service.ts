@@ -4,7 +4,7 @@ import { DataService } from './data.service';
 import {SENDING_ITEM, GET_KEYS, RESPONSE_KEYS, REQUEST_ITEM, RESPONSE_ITEM} from '../../message-types'
 import { AuthService } from '../auth.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import {catchError, map, tap} from 'rxjs/operators'
+import {catchError, map, take, tap} from 'rxjs/operators'
 import { ItemOrdersService } from './item-orders.service';
 import { User } from '../models/user.interface';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -60,7 +60,17 @@ export class OrderService {
 
 
   getOrdersWithFilter(func: (date1: Date, date2: Date, date3: Date) => boolean, startDate, endDate): Observable<any> {
-
+    return this.orders.pipe(take(1), map((orders: Order[]) => {
+      return orders.filter(order => {
+        const selectedDate1 = new Date(startDate);
+        const selectedDate2 = new Date(endDate);
+        const orderDate = order.date.toDate();
+        selectedDate1.setHours(0,0,0,0);
+        selectedDate2.setHours(0,0,0,0);
+        orderDate.setHours(0,0,0,0);
+        return func(orderDate, selectedDate1, selectedDate2);
+      });
+    }));
   }
 
   getPopulatedItemsForm(orderId: string): Observable<ItemFormInfo[]>{

@@ -6,6 +6,7 @@ import {ItemsService} from "../../services/items.service";
 import {EditOrderComponent} from "../../edit-order/edit-order.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatTableDataSource} from "@angular/material/table";
+import {OrderService} from "../../services/order.service";
 
 @Component({
   selector: 'app-all-orders',
@@ -14,29 +15,58 @@ import {MatTableDataSource} from "@angular/material/table";
 })
 export class AllOrdersComponent implements OnInit, OnChanges{
 
-  @Input() allOrders: MatTableDataSource<any>;
+  allOrders: MatTableDataSource<any>;
   @Input() forDate: boolean;
-  @Input() betweenDates;
+  @Input() betweenDates: boolean;
   @Input() filterString: string;
   @Input() columns: string[];
+  @Input() dateStart: Date;
+  @Input() dateEnd: Date;
 
 
   constructor(private itemOrdersService: ItemOrdersService,
               private itemsService: ItemsService,
+              private ordersService: OrderService,
               public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
+    this.updateTableData();
   }
 
   ngOnChanges(): void{
-    console.log(this.filterString);
-    this.allOrders.filter = this.filterString;
+    this.updateTableData();
 
   }
 
+  updateTableData(): void{
+    console.log(this.dateStart)
+    const betweenDates = (date1: Date, date2: Date, date3: Date) => {
+      return date1 >= date2 && date1 <= date3;
+    };
+
+    const forDate = (date1: Date, date2: Date, date3: Date) => {
+      return date1.toDateString() === date2.toDateString();
+    };
 
 
+    if (this.forDate){
+      this.ordersService.getOrdersWithFilter(forDate, this.dateStart, this.dateEnd).subscribe(orders => {
+        this.allOrders = new MatTableDataSource(orders);
+        this.allOrders.filter = this.filterString;
+      });
+    }else if(this.betweenDates){
+      this.ordersService.getOrdersWithFilter(betweenDates, this.dateStart, this.dateEnd).subscribe(orders => {
+        this.allOrders = new MatTableDataSource(orders);
+        this.allOrders.filter = this.filterString;
+      });
+    }else{
+      this.ordersService.getOrdersWithFilter(() => true, this.dateStart, this.dateEnd).subscribe(orders => {
+        this.allOrders = new MatTableDataSource(orders);
+        this.allOrders.filter = this.filterString;
+      });
+    }
+  }
 
   orderSummary(order: Order): string{
 

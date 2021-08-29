@@ -14,7 +14,7 @@
             </mat-form-field>
           <mat-form-field class="ml-2 mr-2" *ngIf="this.twoDateSelectors">
             <mat-label>Choose a end date</mat-label>
-            <input matInput [matDatepicker]="picker" (dateChange)="onEndDateSelected($event)" [formControl]="dateForm">
+            <input matInput [matDatepicker]="picker" (dateChange)="onEndDateSelected($event)" [formControl]="dateEndForm">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -25,16 +25,17 @@
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="All Orders">
                   <app-all-orders
-                    [allOrders] = "allOrders"
                     [forDate]="false"
                     [columns]="allOrderColumns"
-                    [filterString]="this.searchText"></app-all-orders>
+                    [filterString]="this.searchText"
+                    [dateStart]="this.currentlySelctedDate"
+                  ></app-all-orders>
                 </mat-tab>
                 <mat-tab label="Orders for Date" id="ordersForDate">
                   <app-all-orders
-                    [allOrders] = "ordersByDate"
                     [forDate]="true"
                     [columns]="dateOrderColumns"
+                    [dateStart]="this.currentlySelctedDate"
                     [filterString]="this.searchText"></app-all-orders>
                 </mat-tab>
                 <mat-tab label="Production Quantities" id="productionQuantities">
@@ -42,12 +43,21 @@
                                              [forDate]="true"
                                              [dateStart]="this.currentlySelctedDate"></app-production-quantities>
                 </mat-tab>
-              <mat-tab label="Orders Between Dates" id="ordersBetweenDates">
+              <mat-tab label="Production Quantities Between Dates" id="productionQuantitiesBetweenDates">
                 <app-production-quantities [filterString]="this.searchText"
                                            [forDate]="false"
                                            [dateStart]="this.currentlySelctedDate"
                                            [dateEnd]="this.currentlySelctedEndDate"
                 ></app-production-quantities>
+              </mat-tab>
+              <mat-tab label="Orders Between Dates" id="ordersBetweenDates">
+                <app-all-orders [filterString]="this.searchText"
+                                           [forDate]="false"
+                                            [betweenDates]="true"
+                                           [dateStart]="this.currentlySelctedDate"
+                                           [columns]="allOrderColumns"
+                                            [dateEnd]="this.currentlySelctedEndDate"
+                ></app-all-orders>
               </mat-tab>
             </mat-tab-group>
         </div>

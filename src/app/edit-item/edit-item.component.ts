@@ -37,7 +37,7 @@ export class EditItemComponent implements OnInit {
       name: [this.item.name, Validators.required],
       item_type: [this.item.item_type, Validators.required],
       price: [this.item.price, Validators.required],
-      sliced_option: ['', Validators.required],
+      sliced_option: [this.item.sliced_option, Validators.required],
       tax_catagory: [this.item.tax_catagory, Validators.required]
     });
   }

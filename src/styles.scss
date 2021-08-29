@@ -62,3 +62,7 @@ input[type=number]:hover::-webkit-inner-spin-button {
 .item-field:hover .incrementers {
     visibility: visible;
 }
+
+.active{
+  font-weight: bold;
+}

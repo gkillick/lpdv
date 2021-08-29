@@ -1,64 +1,33 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import {combineLatest, Observable, Subject} from 'rxjs';
-import { DataService } from '../services/data.service';
-import { NgZone } from '@angular/core';
-import { ItemsService } from '../services/items.service';
-import { OrderService } from '../services/order.service';
+import {MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ItemOrdersService } from '../services/item-orders.service';
-import { MatSort } from '@angular/material/sort';
 import { DatePipe } from '@angular/common';
-import { ItemOrder } from '../models/item_order.interface';
-import { Order } from '../models/order.interface';
-import { map, tap } from 'rxjs/operators';
-import { Item } from '../models/item.interface';
-import {NewOrderComponent} from "../new-order/new-order.component";
+import {NewOrderComponent} from '../new-order/new-order.component';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers:[DatePipe]
+  providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
 
-  orders: Order[]
-  items: Item[]
-  combinedNames: string;
-  allOrders: MatTableDataSource<any> = new MatTableDataSource<any>();
-  orderItemCountsList = []
-  ordersByDate: MatTableDataSource<any> = new MatTableDataSource<any>();
-  dateOrderColumns = ["first_name","last_name","telephone", "summary", "total", "details"];
-  allOrderColumns = ["first_name","last_name","telephone", "summary", "total",  "date", "details"];
-  orderDateFooterColumnsToDisplay = ["total"];
-  currentlySelctedDate: Date
-  dateObservable: Subject<Date> = new Subject<Date>();
+  dateOrderColumns = ['first_name','last_name','telephone', 'summary', 'total', 'details'];
+  allOrderColumns = ['first_name','last_name','telephone', 'summary', 'total',  'date', 'details'];
+  orderDateFooterColumnsToDisplay = ['total'];
+  currentlySelctedDate: Date;
+  currentlySelctedEndDate: Date;
   dateForm: FormControl;
   dateEndForm: FormControl;
-  activeTab: string = "All Orders"
-  itemOrders: ItemOrder[] = []
-  searchText: string = ""
-  total_for_date = 0;
-  currentlySelctedEndDate: Date;
-  endDateObservable: Subject<Date>;
+  activeTab = 'All Orders';
+  searchText = '';
   twoDateSelectors = false;
-  stringDate = ""
-  filteredValues =
-  {
-    date: '',
-    searchText: '',
-  };
 
 
 
-  constructor(private datePipe: DatePipe,
-              private itemsService: ItemsService,
-              private ordersService: OrderService,
-              public dialog: MatDialog) {
+  constructor(public dialog: MatDialog) {
 
   }
 
@@ -71,60 +40,30 @@ export class DashboardComponent implements OnInit {
     this.currentlySelctedEndDate.setDate(new Date().getDate() + 1);
     this.currentlySelctedEndDate.setHours(0,  0,  0, 0);
     this.dateEndForm = new FormControl(this.currentlySelctedEndDate);
-
-
-    this.ordersService.orders.subscribe(orders => {
-      this.orders = orders;
-      this.allOrders = new MatTableDataSource(this.orders);
-      this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
-    });
-  }
-
-  getOrdersForDate(date: any, orders: Order[]): Order[] {
-    const filteredOrders = orders.filter((order: Order) => {
-      const selectedDate = new Date(date);
-      const orderDate = order.date.toDate();
-      selectedDate.setHours(0,0,0,0);
-      orderDate.setHours(0,0,0,0);
-      return orderDate.toDateString() === selectedDate.toDateString();
-    });
-
-    const sortedFilteredOrders = filteredOrders.sort((a,b) => {
-      return +a.id - +b.id;
-    });
-
-
-    return sortedFilteredOrders;
   }
 
 
   onTabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.tab.textLabel;
 
-    if (event.index === 1) {
-      // update orders by date when Orders for Date tab is clicked
-      this.ordersByDate = new MatTableDataSource(this.getOrdersForDate(this.currentlySelctedDate, this.orders));
-    }
-
     if (event.index === 3 || event.index === 4) {
       this.twoDateSelectors = true;
     }else{
       this.twoDateSelectors = false;
     }
-  };
-
-
-
+  }
 
   onDateSelected(event): void{
     this.currentlySelctedDate = event.value;
   }
 
+  onEndDateSelected(event): void{
+    this.currentlySelctedEndDate = event.value;
+  }
 
   updateSearch(search: string): void{
     this.searchText = search.trim().toLowerCase();
   }
-
 
 
   openDialog(): void {
@@ -137,16 +76,7 @@ export class DashboardComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
-
-
-  onEndDateSelected(event): void{
-    this.currentlySelctedEndDate = event.value;
-  }
-
-
   // one order summary no need for database
-
-
 
 /*
   printPage(){

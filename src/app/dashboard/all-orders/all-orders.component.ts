@@ -40,32 +40,33 @@ export class AllOrdersComponent implements OnInit, OnChanges{
   }
 
   updateTableData(): void{
-    console.log(this.dateStart)
-    const betweenDates = (date1: Date, date2: Date, date3: Date) => {
-      return date1 >= date2 && date1 <= date3;
-    };
+    const func = this.getFunction(this.betweenDates, this.forDate);
 
-    const forDate = (date1: Date, date2: Date, date3: Date) => {
-      return date1.toDateString() === date2.toDateString();
-    };
+    this.ordersService.getOrdersWithFilter(func, this.dateStart, this.dateEnd).subscribe(orders => {
 
-
-    if (this.forDate){
-      this.ordersService.getOrdersWithFilter(forDate, this.dateStart, this.dateEnd).subscribe(orders => {
-        this.allOrders = new MatTableDataSource(orders);
-        this.allOrders.filter = this.filterString;
+      const sortedFilteredOrders = orders.sort((a,b) => {
+        return +a.id - +b.id;
       });
-    }else if(this.betweenDates){
-      this.ordersService.getOrdersWithFilter(betweenDates, this.dateStart, this.dateEnd).subscribe(orders => {
-        this.allOrders = new MatTableDataSource(orders);
-        this.allOrders.filter = this.filterString;
-      });
+
+      this.allOrders = new MatTableDataSource(sortedFilteredOrders);
+      this.allOrders.filter = this.filterString;
+    });
+  }
+
+
+  getFunction(betweenDates: boolean, forDate: boolean): (date1: Date, date2: Date, date3: Date) => boolean {
+    if (betweenDates){
+      return (date1: Date, date2: Date, date3: Date) => {
+       return  date1 >= date2 && date1 <= date3;
+      };
+    }else if (forDate){
+      return (date1: Date, date2: Date, date3: Date) => {
+        return date1.toDateString() === date2.toDateString();
+      };
     }else{
-      this.ordersService.getOrdersWithFilter(() => true, this.dateStart, this.dateEnd).subscribe(orders => {
-        this.allOrders = new MatTableDataSource(orders);
-        this.allOrders.filter = this.filterString;
-      });
+      return () => true;
     }
+
   }
 
   orderSummary(order: Order): string{

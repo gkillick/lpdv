@@ -32,6 +32,9 @@ export class AllOrdersComponent implements OnInit, OnChanges{
 
   ngOnInit(): void {
     this.updateTableData();
+    this.ordersService.orders.subscribe(() => {
+      this.updateTableData();
+    });
   }
 
   ngOnChanges(): void{

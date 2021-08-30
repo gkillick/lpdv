@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-sm mt-3">
             <button (click)="openDialog()" class=" btn-grad">Ajouter Aliment</button>
-            <table mat-table [dataSource]="dataSource" matSort class="table-max mat-elevation-z8 mt-3 table-max">
+            <table mat-table [dataSource]="dataSource" matSort class="table-max  mt-1 table-max">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom </th>
                     <td mat-cell *matCellDef="let item"> {{item.name | capitalize}} </td>

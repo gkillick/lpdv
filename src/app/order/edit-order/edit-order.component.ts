@@ -1,12 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {OrderService} from '../services/order.service';
-import {Order} from '../models/order.interface';
-import {ItemOrdersService} from '../services/item-orders.service';
-import {ItemOrder} from '../models/item_order.interface';
+import {OrderService} from '../../services/order.service';
+import {Order} from '../../models/order.interface';
+import {ItemOrdersService} from '../../services/item-orders.service';
+import {ItemOrder} from '../../models/item_order.interface';
 import {combineLatest} from 'rxjs';
-import {SubmitFormData} from '../models/form.interface';
+import {SubmitFormData} from '../../models/form.interface';
 
 @Component({
   selector: 'app-edit-order',

@@ -1,9 +1,9 @@
 import { Component, Inject, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Item, ItemForm } from '../models/item.interface';
-import { DataService } from '../services/data.service';
-import { ItemsService } from '../services/items.service';
+import { Item, ItemForm } from '../../models/item.interface';
+import { DataService } from '../../services/data.service';
+import { ItemsService } from '../../services/items.service';
 
 @Component({
   selector: 'app-edit-item',

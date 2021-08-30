@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes, RoutesRecognized} from '@angular/router';
-import { AddItemComponent } from './add-item/add-item.component';
+import { AddItemComponent } from './items/add-item/add-item.component';
 import { AuthGaurdService } from './auth-gaurd.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ItemsComponent } from './items/items.component';

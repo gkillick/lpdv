@@ -3,7 +3,7 @@ import {Order} from "../../models/order.interface";
 import {ItemOrder} from "../../models/item_order.interface";
 import {ItemOrdersService} from "../../services/item-orders.service";
 import {ItemsService} from "../../services/items.service";
-import {EditOrderComponent} from "../../edit-order/edit-order.component";
+import {EditOrderComponent} from "../../order/edit-order/edit-order.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatTableDataSource} from "@angular/material/table";
 import {OrderService} from "../../services/order.service";

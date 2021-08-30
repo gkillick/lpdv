@@ -10,14 +10,14 @@ import {
   OnDestroy
 } from '@angular/core';
 import {map, tap} from 'rxjs/operators';
-import {ItemsService} from '../services/items.service';
+import {ItemsService} from '../../services/items.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {OrderService} from '../services/order.service';
-import {Order} from '../models/order.interface';
+import {OrderService} from '../../services/order.service';
+import {Order} from '../../models/order.interface';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ItemOrder} from '../models/item_order.interface';
-import {Item} from '../models/item.interface';
-import {CustomerFormData, ItemFormInfo, SubmitFormData} from '../models/form.interface';
+import {ItemOrder} from '../../models/item_order.interface';
+import {Item} from '../../models/item.interface';
+import {CustomerFormData, ItemFormInfo, SubmitFormData} from '../../models/form.interface';
 import {Subscription} from "rxjs";
 
 @Component({

@@ -1,12 +1,12 @@
-import {ItemOrder} from "../models/item_order.interface";
-import {SubmitFormData} from "../models/form.interface";
-import {Order} from "../models/order.interface";
+import {ItemOrder} from "../../models/item_order.interface";
+import {SubmitFormData} from "../../models/form.interface";
+import {Order} from "../../models/order.interface";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ItemsService} from "../services/items.service";
+import {ItemsService} from "../../services/items.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Component, Inject, OnInit} from "@angular/core";
-import {ItemOrdersService} from "../services/item-orders.service";
-import {OrderService} from "../services/order.service";
+import {ItemOrdersService} from "../../services/item-orders.service";
+import {OrderService} from "../../services/order.service";
 
 
 @Component({

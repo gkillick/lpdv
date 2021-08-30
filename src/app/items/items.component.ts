@@ -2,11 +2,11 @@ import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angula
 import { ɵBrowserDomAdapter } from '@angular/platform-browser';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table'
-import { AddItemComponent } from '../add-item/add-item.component';
+import { AddItemComponent } from './add-item/add-item.component';
 import { ItemsService } from '../services/items.service';
 import {Item} from '../models/item.model'
 import { DataService } from '../services/data.service';
-import { EditItemComponent } from '../edit-item/edit-item.component';
+import { EditItemComponent } from './edit-item/edit-item.component';
 import { MatSort } from '@angular/material/sort';
 
 @Component({

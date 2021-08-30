@@ -13,15 +13,15 @@ import { ItemsComponent } from './items/items.component';
 import { RoutingModule } from './router.module';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
-import { AddItemComponent } from './add-item/add-item.component';
+import { AddItemComponent } from './items/add-item/add-item.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { NewOrderComponent } from './new-order/new-order.component';
+import { NewOrderComponent } from './order/new-order/new-order.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {EditItemComponent} from './edit-item/edit-item.component'
+import {EditItemComponent} from './items/edit-item/edit-item.component'
 import {MatTabsModule} from '@angular/material/tabs';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -37,12 +37,13 @@ import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFireStorageModule} from '@angular/fire/storage'
 
 import { environment } from 'src/environments/environment';
-import { EditOrderComponent } from './edit-order/edit-order.component';
-import { OrderFormComponent } from './order-form/order-form.component';
+import { EditOrderComponent } from './order/edit-order/edit-order.component';
+import { OrderFormComponent } from './order/order-form/order-form.component';
 import { ProductionQuantitiesComponent } from './dashboard/production-quantities/production-quantities.component';
 import { AllOrdersComponent } from './dashboard/all-orders/all-orders.component';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { DashboardMenuComponent } from './dashboard/dashboard-menu/dashboard-menu.component';
 registerLocaleData(localeFr, 'fr');
 
 
@@ -66,6 +67,7 @@ registerLocaleData(localeFr, 'fr');
     OrderFormComponent,
     ProductionQuantitiesComponent,
     AllOrdersComponent,
+    DashboardMenuComponent,
   ],
   imports: [
     FormsModule,

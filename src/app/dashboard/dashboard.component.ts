@@ -3,7 +3,8 @@ import { FormControl } from '@angular/forms';
 import {MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DatePipe } from '@angular/common';
-import {NewOrderComponent} from '../new-order/new-order.component';
+import {NewOrderComponent} from '../order/new-order/new-order.component';
+import {DashboardServiceService} from "./dashboard-service.service";
 
 
 @Component({
@@ -26,7 +27,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private dashboardService: DashboardServiceService) {
 
   }
 
@@ -47,8 +48,10 @@ export class DashboardComponent implements OnInit {
 
     if (event.index === 3 || event.index === 4) {
       this.twoDateSelectors = true;
+      this.dashboardService.setTwoFiltersDisplayed(true);
     }else{
       this.twoDateSelectors = false;
+      this.dashboardService.setTwoFiltersDisplayed(false);
     }
   }
 

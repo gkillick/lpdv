@@ -1,30 +1,7 @@
 <div class="container-fluid mt-3">
-    <div class="row no-print">
-
-
-
-
-
-        <div class="col-sm header-bar">
-            <button (click)="openDialog()" class=" btn btn-primary v-top">Nouvel Ordre</button>
-            <mat-form-field class="ml-2">
-                <input matInput autocomplete="off" placeholder="Filtrer les éléments" (keyup)="updateSearch($event.target.value)">
-            </mat-form-field>
-            <mat-form-field class="ml-2 mr-2" [class.hidden-item]="activeTab == 'All Orders'">
-                <mat-label *ngIf="!this.twoDateSelectors">Choisissez une date</mat-label>
-                <mat-label *ngIf="this.twoDateSelectors">Choisissez une date de début</mat-label>
-              <input matInput [matDatepicker]="picker" (dateChange)="onDateSelected($event)" [formControl]="dateForm">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          <mat-form-field class="ml-2 mr-2" *ngIf="this.twoDateSelectors">
-            <mat-label>Choisissez une date de fin</mat-label>
-            <input matInput [matDatepicker]="picker" (dateChange)="onEndDateSelected($event)" [formControl]="dateEndForm">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
-    </div>
+   <div class="row">
+     <app-dashboard-menu class="content-mobile"></app-dashboard-menu>
+   </div>
     <div class="row">
         <div class="col-sm">
             <mat-tab-group (selectedTabChange)="onTabChange($event)">

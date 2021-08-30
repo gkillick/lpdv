@@ -1,0 +1,16 @@
+:host{
+  display: flex;
+  align-items: center;
+}
+
+.hidden-item {
+  visibility: hidden;
+}
+
+::ng-deep.mat-form-field-appearance-legacy .mat-form-field-wrapper{
+  padding-bottom: 0px;
+}
+::ng-deep.mat-form-field-appearance-legacy .mat-form-field-underline{
+  bottom:0px;
+}
+

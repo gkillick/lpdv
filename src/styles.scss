@@ -66,3 +66,63 @@ input[type=number]:hover::-webkit-inner-spin-button {
 .active{
   font-weight: bold;
 }
+
+
+.btn-grad:focus { outline: none; }
+.btn-grad {background-image: linear-gradient(to right, #1FA2FF 0%, #12D8FA  51%, #1FA2FF  100%)}
+.btn-grad {
+  outline: none;
+  border: none;
+  padding: 10px 13px;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: .25rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.btn-grad:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.content-desktop {display: block;}
+.content-mobile {display: none!important;}
+
+@media screen and (max-width: 938px) {
+
+  .content-desktop {display: none!important;}
+  .content-mobile {display: inline-block!important;}
+
+}
+@media (min-width: 1244px){
+  .navbar-expand-custom {
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+  }
+  .navbar-expand-custom .navbar-nav {
+    flex-direction: row;
+  }
+  .navbar-expand-custom .dropdown-menu {
+    position: absolute;
+  }
+  .navbar-expand-custom .nav-link {
+    padding-right: .5rem!important;
+    padding-left: .5rem!important;
+  }
+  .navbar-expand-custom > .container {
+    flex-wrap: nowrap;
+  }
+  .navbar-expand-custom .navbar-collapse {
+    display: flex!important;
+    flex-basis: auto;
+  }
+  .navbar-expand-custom .navbar-toggler {
+    display: none;
+  }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 import { DataService } from './services/data.service';
-import { ItemsService } from './services/items.service';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -12,12 +12,20 @@ import { ItemsService } from './services/items.service';
 export class AppComponent implements OnInit {
   title = 'lpdv';
   isCollapsed = true;
+  mobileView = false;
 
-  constructor(private dataService: DataService, private authService: AuthService){}
+
 
   ngOnInit(): void{}
 
-  logout(): void{
+
+  constructor(
+    private dataService: DataService,
+    private authService: AuthService,
+    public router: Router,
+  ){}
+
+  logout(): void {
     this.authService.logout();
   }
 }

@@ -1,0 +1,20 @@
+<div class="col-sm header-bar">
+  <button (click)="openDialog()" class=" btn-grad v-top">Nouvel Ordre</button>
+  <mat-form-field class="ml-2">
+    <input matInput autocomplete="off" placeholder="Filtrer les éléments" (keyup)="updateSearch($event.target.value)">
+  </mat-form-field>
+  <mat-form-field class="ml-2 mr-2" [class.hidden-item]="activeTab == 'Toutes Les Commandes'">
+    <mat-label *ngIf="!this.twoDateSelectors">Choisissez une date</mat-label>
+    <mat-label *ngIf="this.twoDateSelectors">Choisissez une date de début</mat-label>
+    <input matInput [matDatepicker]="picker" (dateChange)="onDateSelected($event)" [formControl]="dateForm">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="ml-2 mr-2" *ngIf="this.twoDateSelectors">
+    <mat-label>Choisissez une date de fin</mat-label>
+    <input matInput [matDatepicker]="picker" (dateChange)="onEndDateSelected($event)" [formControl]="dateEndForm">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
+

@@ -4,7 +4,7 @@ import {MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DatePipe } from '@angular/common';
 import {NewOrderComponent} from '../order/new-order/new-order.component';
-import {DashboardServiceService} from "./dashboard-service.service";
+import {DashboardServiceService} from './dashboard-service.service';
 
 
 @Component({
@@ -15,13 +15,13 @@ import {DashboardServiceService} from "./dashboard-service.service";
 })
 export class DashboardComponent implements OnInit {
 
-  dateOrderColumns = ['first_name','last_name','telephone', 'summary', 'total', 'details'];
-  allOrderColumns = ['first_name','last_name','telephone', 'summary', 'total',  'date', 'details'];
+  dateOrderColumns = ['first_name', 'last_name', 'telephone', 'summary', 'total', 'details'];
+  allOrderColumns = ['first_name', 'last_name', 'telephone', 'summary', 'total',  'date', 'details'];
   currentlySelctedDate: Date;
   currentlySelctedEndDate: Date;
   dateForm: FormControl;
   dateEndForm: FormControl;
-  activeTab = 'All Orders';
+  activeTab = 'Toutes Les Commandes';
   searchText = '';
   twoDateSelectors = false;
 
@@ -32,19 +32,17 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentlySelctedDate = new Date();
-    this.currentlySelctedDate.setDate(new Date().getDate() + 1);
-    this.currentlySelctedDate.setHours(0,  0,  0, 0);
+    this.dashboardService.sharedSelectedDate.subscribe((date) => this.currentlySelctedDate = date);
+    this.dashboardService.sharedEndDateSelected.subscribe((date) => this.currentlySelctedEndDate = date);
+    this.dashboardService.sharedFilterText.subscribe((text) => this.searchText = text);
     this.dateForm = new FormControl(this.currentlySelctedDate);
-    this.currentlySelctedEndDate = new Date();
-    this.currentlySelctedEndDate.setDate(new Date().getDate() + 1);
-    this.currentlySelctedEndDate.setHours(0,  0,  0, 0);
     this.dateEndForm = new FormControl(this.currentlySelctedEndDate);
   }
 
 
   onTabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.tab.textLabel;
+    this.dashboardService.setActiveTab(this.activeTab);
 
     if (event.index === 3 || event.index === 4) {
       this.twoDateSelectors = true;
@@ -57,6 +55,7 @@ export class DashboardComponent implements OnInit {
 
   onDateSelected(event): void{
     this.currentlySelctedDate = event.value;
+    this.dashboardService.setSelectedDate(event.value);
   }
 
   onEndDateSelected(event): void{

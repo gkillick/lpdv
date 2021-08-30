@@ -1,15 +1,19 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-custom navbar-light bg-light">
   <img src="assets/images/logofinal.png" style="height: 40px">
+
+  <app-dashboard-menu class="content-desktop" *ngIf="router.url == '/dashboard'"></app-dashboard-menu>
+  <div [hidden]="!isCollapsed" style="flex:1;display: flex; justify-content: flex-end;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="isCollapsed = !isCollapsed">
     <span class="navbar-toggler-icon"></span>
   </button>
+  </div>
 
     <div [isAnimated]="true" [collapse]="isCollapsed" class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
         </ul>
         <ul class="navbar-nav navbar-right">
           <li class="nav-item " [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active">
-            <a class="nav-link" routerLink="" routerLinkActive="active">Tableau De Bord</a>
+            <a class="nav-link" [routerLinkActiveOptions]="{ exact: true }" routerLink="/dashboard" routerLinkActive="active">Tableau De Bord</a>
           </li>
           <li class="nav-item" >
             <a class="nav-link" routerLink="items" routerLinkActive="active">Produits Alimentaires</a>

@@ -6,7 +6,7 @@
       <mat-label>Nom</mat-label>
         <input matInput  formControlName="name">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="mt-4">
         <mat-label>Type d'aliment</mat-label>
         <mat-select formControlName="item_type">
             <mat-option *ngFor="let type of types" [value]="type.value">

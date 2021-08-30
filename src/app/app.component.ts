@@ -13,16 +13,11 @@ export class AppComponent implements OnInit {
   title = 'lpdv';
   isCollapsed = true;
 
+  constructor(private dataService: DataService, private authService: AuthService){}
 
-  constructor(private dataService: DataService, private authService: AuthService){
+  ngOnInit(): void{}
 
-  }
-
-  ngOnInit(){
-    //this.dataService.getStoredData()
-  }
-
-  logout(){
-    this.authService.logout()
+  logout(): void{
+    this.authService.logout();
   }
 }

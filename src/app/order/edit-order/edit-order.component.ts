@@ -39,6 +39,9 @@ export class EditOrderComponent implements OnInit{
         last_name: [this.order.last_name, Validators.required],
         telephone: [this.order.telephone, Validators.required],
         date: [this.order.date.toDate(), Validators.required],
+        timeOfDay: [this.order.timeOfDay, Validators.required],
+        payed: [this.order.payed, Validators.required],
+        notes: [this.order.notes, Validators.required],
         ...obj
       });
     });
@@ -46,8 +49,8 @@ export class EditOrderComponent implements OnInit{
   submitForm(orderForm: SubmitFormData): any {
     const itemOrders = orderForm.itemOrders;
     const orderFound = this.orderService.ordersList.find((order: Order) => order.id === this.orderId);
-    const {last_name, first_name, telephone, date, sub_total, tax, total} = orderForm.orderMetadata;
-    const editedOrder = {...orderFound, last_name, first_name, telephone, date, sub_total, tax, total};
+    const {last_name, first_name, telephone, date, sub_total, tax, total, timeOfDay, payed, notes} = orderForm.orderMetadata;
+    const editedOrder = {...orderFound, last_name, first_name, telephone, date, sub_total, tax, total, timeOfDay, payed, notes};
     this.itemOrderService.deleteItemOrdersForOrder(orderFound.id);
     this.orderService.deleteOrder(orderFound.id).then(() => {
       this.orderService.addOrder(editedOrder).then((id) => {

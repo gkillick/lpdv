@@ -9,6 +9,9 @@ export interface Order {
     sub_total: number;
     tax: number;
     total: number;
+    timeOfDay: string;
+    payed: boolean;
+    notes: string;
 }
 
 export interface OrderForm {

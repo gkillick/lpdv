@@ -8,6 +8,9 @@ export interface CustomerFormData {
   total: number;
   sub_total: number;
   tax: number;
+  timeOfDay: string;
+  payed: boolean;
+  notes: string;
 }
 
 

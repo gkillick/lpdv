@@ -38,6 +38,9 @@ export class NewOrderComponent implements OnInit{
         last_name: ['', Validators.required],
         telephone: ['', Validators.required],
         date: ['', Validators.required],
+        timeOfDay: ['AM', Validators.required],
+        payed: ['', Validators.required],
+        notes: ['', Validators.required],
         ...obj
       });
     });

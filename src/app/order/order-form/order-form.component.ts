@@ -166,9 +166,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getPersonalData(form: FormGroup): CustomerFormData {
-    const {first_name, last_name, telephone, date} = form.value;
-    console.log(form.value);
-    return {first_name, last_name, telephone, date, sub_total: this.subTotal, tax: this.tax, total: this.total};
+    const {first_name, last_name, telephone, date, timeOfDay, payed, notes } = form.value;
+    return {first_name, last_name, telephone, date, sub_total: this.subTotal, tax: this.tax, total: this.total, timeOfDay, payed, notes};
   }
 
   getAmounts(orderElements: ItemFormInfo[], form: FormGroup): any {

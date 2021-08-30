@@ -99,30 +99,6 @@ input[type=number]:hover::-webkit-inner-spin-button {
   .content-mobile {display: inline-block!important;}
 
 }
-@media (min-width: 1244px){
-  .navbar-expand-custom {
-    flex-direction: row;
-    flex-wrap: nowrap;
 
-  }
-  .navbar-expand-custom .navbar-nav {
-    flex-direction: row;
-  }
-  .navbar-expand-custom .dropdown-menu {
-    position: absolute;
-  }
-  .navbar-expand-custom .nav-link {
-    padding-right: .5rem!important;
-    padding-left: .5rem!important;
-  }
-  .navbar-expand-custom > .container {
-    flex-wrap: nowrap;
-  }
-  .navbar-expand-custom .navbar-collapse {
-    display: flex!important;
-    flex-basis: auto;
-  }
-  .navbar-expand-custom .navbar-toggler {
-    display: none;
-  }
-}
+
+

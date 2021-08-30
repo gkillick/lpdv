@@ -1,13 +1,8 @@
-<nav class="navbar navbar-expand-custom navbar-light bg-light">
-  <img src="assets/images/logofinal.png" style="height: 40px">
+<nav class="navbar navbar-expand-xl navbar-light bg-light">
+  <div style="display:flex;"><img src="assets/images/logofinal.png" style="height: 40px">
 
   <app-dashboard-menu class="content-desktop" *ngIf="router.url == '/dashboard'"></app-dashboard-menu>
-  <div [hidden]="!isCollapsed" style="flex:1;display: flex; justify-content: flex-end;">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="isCollapsed = !isCollapsed">
-    <span class="navbar-toggler-icon"></span>
-  </button>
   </div>
-
     <div [isAnimated]="true" [collapse]="isCollapsed" class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
         </ul>
@@ -23,6 +18,10 @@
             </li>
         </ul>
     </div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="isCollapsed = !isCollapsed">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 </nav>
 
 

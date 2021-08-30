@@ -22,6 +22,7 @@ export interface ItemFormInfo {
   item_type: string;
   tax_category: string;
   price: number;
+
 }
 
 export interface SubmitFormData {

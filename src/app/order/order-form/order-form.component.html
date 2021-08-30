@@ -1,7 +1,7 @@
 <h1>{{viewClass}}</h1>
 
 <form [formGroup]="myForm" (ngSubmit)="submitHandler()" *ngIf="formIsReady()" class="form-flex">
-  <div class="row top">
+  <div class="row top mb-2">
     <div class="col-sm">
       <mat-form-field>
         <input matInput placeholder="Prénom" formControlName="first_name">
@@ -41,9 +41,9 @@
     </div>
     <div class="col-6 wrap">
       <h4>Pains</h4>
-      <mat-dialog-content>
-        <mat-form-field class="w-100" *ngFor="let item of organizedItems.pains| searchFilter: searchText " [class.sliced]="item.sliced_option">
-          <input type="number" autocomplete="off" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
+      <mat-dialog-content class="two-column-grid">
+        <mat-form-field class="w-100" *ngFor="let item of organizedItems.pains| searchFilter: searchText " >
+        {{item |json}}<input type="number" autocomplete="off" matInput placeholder=" {{item.name}} " formControlName="{{item.name}}">
         </mat-form-field>
       </mat-dialog-content>
     </div>

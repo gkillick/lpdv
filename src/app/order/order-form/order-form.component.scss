@@ -82,3 +82,13 @@ mat-form-field {
   justify-content: center;
   align-items: center;
 }
+
+.two-column-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+.unsliced{
+  grid-column-start: 1;
+  grid-column-end: 3;
+}

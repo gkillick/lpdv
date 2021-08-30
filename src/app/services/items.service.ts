@@ -39,7 +39,7 @@ export class ItemsService {
 
 
   getFormattedItems(): Observable<ItemFormInfo[]>{
-    // This function will create a list of objects with sliced and unsliced variaties
+    // This function will create a list of objects with sliced and unsliced varieties
     return this.items.pipe(map(items => {
       return items.filter(item => item.sliced_option).map(item => {
         return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};

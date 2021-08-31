@@ -120,4 +120,16 @@ export class AllOrdersComponent implements OnInit, OnChanges{
     data.forEach((order) => total += order.total);
     return total;
   }
+
+  truncateChar(text: string): string {
+    const charlimit = 50;
+    if (!text || text.length <= charlimit )
+    {
+      return text;
+    }
+
+    const withoutHtml = text.replace(/<(?:.|\n)*?>/gm, '');
+    const shortened = withoutHtml.substring(0, charlimit) + '...';
+    return shortened;
+  }
 }

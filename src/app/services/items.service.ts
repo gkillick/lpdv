@@ -42,10 +42,23 @@ export class ItemsService {
     // This function will create a list of objects with sliced and unsliced varieties
     return this.items.pipe(map(items => {
       return items.filter(item => item.sliced_option).map(item => {
-        return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};
+        return {name: item.name + ' Tr.', id: item.id, number: 0, sliced: true, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price, sliced_option: true};
       }).concat(items.map(item => {
-        return  {name: item.name, id: item.id, number: 0, sliced: false, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price};
-      }));
+        if(item.sliced_option){
+          return  {name: item.name, id: item.id, number: 0, sliced: false, item_type: item.item_type, tax_category: item.tax_catagory, price: item.price, sliced_option: true};
+        }else {
+          return {
+            name: item.name,
+            id: item.id,
+            number: 0,
+            sliced: false,
+            item_type: item.item_type,
+            tax_category: item.tax_catagory,
+            price: item.price,
+            sliced_option: false
+          };
+        }
+        }));
     }));
   }
 

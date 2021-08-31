@@ -68,10 +68,10 @@ mat-form-field {
   flex: 1;
 }
 
-::ng-deep.mat-form-field-wrapper{
+::ng-deep .order-form .mat-form-field-wrapper{
   padding-bottom: 0px;
 }
-::ng-deep.mat-form-field-underline{
+::ng-deep .order-form .mat-form-field-underline{
   bottom:0px;
 }
 .col-custom{

@@ -15,8 +15,8 @@ import {DashboardServiceService} from './dashboard-service.service';
 })
 export class DashboardComponent implements OnInit {
 
-  dateOrderColumns = ['first_name', 'last_name', 'telephone', 'summary', 'total', 'details'];
-  allOrderColumns = ['first_name', 'last_name', 'telephone', 'summary', 'total',  'date', 'details'];
+  dateOrderColumns = ['first_name', 'last_name', 'telephone', 'summary', 'notes', 'total',  'paid', 'timeOfDay', 'details'];
+  allOrderColumns = ['first_name', 'last_name', 'telephone', 'summary', 'notes', 'total', 'paid',  'date', 'timeOfDay', 'details'];
   currentlySelctedDate: Date;
   currentlySelctedEndDate: Date;
   dateForm: FormControl;
@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
+
   // one order summary no need for database
 
 /*

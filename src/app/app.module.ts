@@ -44,6 +44,7 @@ import { AllOrdersComponent } from './dashboard/all-orders/all-orders.component'
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { DashboardMenuComponent } from './dashboard/dashboard-menu/dashboard-menu.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 registerLocaleData(localeFr, 'fr');
 
 
@@ -69,31 +70,32 @@ registerLocaleData(localeFr, 'fr');
     AllOrdersComponent,
     DashboardMenuComponent,
   ],
-  imports: [
-    FormsModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    RoutingModule,
-    MatIconModule,
-    MatMenuModule,
-    CollapseModule.forRoot(),
-    MatTableModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatTabsModule,
-    HttpClientModule,
-    MatSortModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule
-  ],
+    imports: [
+        FormsModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        RoutingModule,
+        MatIconModule,
+        MatMenuModule,
+        CollapseModule.forRoot(),
+        MatTableModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatTabsModule,
+        HttpClientModule,
+        MatSortModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireAuthModule,
+        AngularFirestoreModule,
+        AngularFireStorageModule,
+        MatTooltipModule
+    ],
   providers: [
     {provide: LOCALE_ID, useValue: 'fr' }
   ],

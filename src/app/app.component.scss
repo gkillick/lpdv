@@ -9,3 +9,7 @@
   text-align: right;
   margin-right:10px;
 }
+::ng-deep th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
+  padding-left:10px!important;
+  padding-right: 10px!important;
+}

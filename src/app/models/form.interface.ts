@@ -22,7 +22,6 @@ export interface ItemFormInfo {
   item_type: string;
   tax_category: string;
   price: number;
-  sliced_option: boolean;
 }
 
 export interface SubmitFormData {

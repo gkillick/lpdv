@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc} from "firebase/firestore";
 import * as fs from 'fs'
+import { v4 as uuidv4 } from 'uuid';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -29,7 +30,7 @@ const db = getFirestore(app);
 
 
 async function addList(el, db) {
-    const docRef = await addDoc(collection(db, "items"), el);
+    const docRef = await setDoc(doc(db, "items", el.id), el);
 }
 
 
@@ -38,7 +39,7 @@ fs.readFile("items.json", "utf8", (err, jsonString) => {
 
   data.forEach(el => {
     console.log(el)
-    const element = {...el, uid: "PcUGtclKf4bU5ovcWCgtvIrVc0H2"}
+    const element = {...el, uid: "HnxUQ3MhngSoWzph3aZI8cPNXyq2", id: uuidv4()}
     addList(element, db)
   })
 })

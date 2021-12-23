@@ -45,7 +45,9 @@ const db2 = getFirestore(app2);
 
 getCities(db2).then((items) => {
   const itemList = []
-  items.forEach(item => {
+  items.filter(item => {
+    return !item.sliced
+  }).forEach(item => {
     if(item.user_id == "limgh6ru2iEXMHaWDlOU"){
       if(item.sliced_option) {
         const sliced = {
@@ -54,18 +56,8 @@ getCities(db2).then((items) => {
           price: parseFloat(item.price),
           sliced_option: true,
           tax_catagory: item.tax_catagory,
-          id: uuidv4()
-        }
-        const notSliced = {
-          item_type: item.item_type,
-          name: item.name,
-          price: parseFloat(item.price),
-          sliced_option: false,
-          tax_catagory: item.tax_catagory,
-          id: uuidv4()
         }
         itemList.push(sliced)
-        itemList.push(notSliced)
       } else {
         const notSliced = {
           item_type: item.item_type,
@@ -73,7 +65,6 @@ getCities(db2).then((items) => {
           price: parseFloat(item.price),
           sliced_option: false,
           tax_catagory: item.tax_catagory,
-          id: uuidv4()
         }
         itemList.push(notSliced)
       }

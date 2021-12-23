@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node transfer.js"
+    "start": "node index.js",
+    "start2": "node transfer.js"
   },
   "author": "",
   "license": "ISC",

@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
     this.activeTab = event.tab.textLabel;
     this.dashboardService.setActiveTab(this.activeTab);
 
-    if (event.index === 3 || event.index === 4) {
+    if (event.index === 2 || event.index === 4) {
       this.twoDateSelectors = true;
       this.dashboardService.setTwoFiltersDisplayed(true);
     }else{

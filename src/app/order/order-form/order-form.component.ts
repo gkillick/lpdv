@@ -106,6 +106,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       "normal": {"count": 0, "total": 0},
       "no_tax_6": {"count": 0, "total": 0}
     };
+    //populate tax items for calculation
     const formValue = form.value;
     for (const key in this.organizedItems) {
       for (const item of this.organizedItems[key]) {

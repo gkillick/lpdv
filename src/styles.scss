@@ -68,9 +68,9 @@ input[type=number]:hover::-webkit-inner-spin-button {
 }
 
 
-.btn-grad:focus { outline: none; }
-.btn-grad {background-image: linear-gradient(to right, #1FA2FF 0%, #12D8FA  51%, #1FA2FF  100%)}
-.btn-grad {
+.btn-blue:focus { outline: none; }
+.btn-blue {background: #0090ff;}
+.btn-blue {
   outline: none;
   border: none;
   padding: 10px 13px;
@@ -84,7 +84,7 @@ input[type=number]:hover::-webkit-inner-spin-button {
   letter-spacing: 0.2px;
 }
 
-.btn-grad:hover {
+.btn-blue:hover {
   background-position: right center; /* change the direction of the change here */
   color: #fff;
   text-decoration: none;

@@ -40,7 +40,7 @@ export class NewOrderComponent implements OnInit{
         date: ['', Validators.required],
         timeOfDay: ['AM', Validators.required],
         payed: ['', Validators.required],
-        notes: ['', Validators.required],
+        notes: [''],
         ...obj
       });
     });

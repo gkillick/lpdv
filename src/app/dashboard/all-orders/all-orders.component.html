@@ -5,7 +5,7 @@
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
   <ng-container matColumnDef="last_name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom de Famille </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom de famille </th>
     <td mat-cell *matCellDef="let item"> {{item.last_name}} </td>
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
@@ -17,12 +17,12 @@
 
   <!-- Count -->
   <ng-container matColumnDef="summary">
-    <th mat-header-cell *matHeaderCellDef> Résumé </th>
+    <th mat-header-cell *matHeaderCellDef> Sommaire </th>
     <td mat-cell *matCellDef="let item"> {{ orderSummary(item)}} </td>
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>
   <ng-container matColumnDef="notes">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Notes </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Commentaires </th>
     <td  mat-cell *matCellDef="let item"> <span *ngIf="item.notes && item.notes.length <= 50">{{item.notes}}</span><span *ngIf="item.notes && item.notes.length > 50" matTooltip="{{item.notes}}" >{{truncateChar(item.notes)}}</span> </td>
     <td mat-footer-cell *matFooterCellDef></td>
   </ng-container>

@@ -1,4 +1,4 @@
-<H1>Ajouter Aliment</H1>
+<H1>Ajouter un produit</H1>
 
 <form [formGroup]="myForm" (ngSubmit)="submitHandler()">
 
@@ -7,7 +7,7 @@
         <input matInput  formControlName="name">
     </mat-form-field>
     <mat-form-field appearance="fill" class="mt-4">
-        <mat-label>Type d'aliment</mat-label>
+        <mat-label>Type de produit</mat-label>
         <mat-select formControlName="item_type">
             <mat-option *ngFor="let type of types" [value]="type.value">
                 {{type.viewValue}}
@@ -23,13 +23,13 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>choisir l'option de tranche</mat-label>
+      <mat-label>Choisir l'option de trancher</mat-label>
         <mat-select formControlName="sliced_option">
             <mat-option [value]="false">
-              Option sans tranche
+              Non tranché
             </mat-option>
             <mat-option [value]="true">
-              Inclure l'option tranchée
+              Tranché
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -38,5 +38,5 @@
         <input matInput  formControlName="price">
     </mat-form-field>
 
-    <button mat-button class="btn btn-primary mt-2" color="primary" type="submit" [disabled]="myForm.invalid">Ajouter Aliment</button>
+    <button mat-button class="btn btn-primary mt-2" color="primary" type="submit" [disabled]="myForm.invalid">Ajouter un produit</button>
 </form>

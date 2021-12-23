@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-sm">
             <mat-tab-group (selectedTabChange)="onTabChange($event)">
-                <mat-tab label="Toutes Les Commandes">
+                <mat-tab label="Toutes les commandes">
                   <app-all-orders
                     [forDate]="false"
                     [columns]="allOrderColumns"
@@ -13,33 +13,33 @@
                     [dateStart]="this.currentlySelctedDate"
                   ></app-all-orders>
                 </mat-tab>
-                <mat-tab label="Ordres Pour Date" id="ordersForDate">
+                <mat-tab label="Commandes par date" id="ordersForDate">
                   <app-all-orders
                     [forDate]="true"
                     [columns]="dateOrderColumns"
                     [dateStart]="this.currentlySelctedDate"
                     [filterString]="this.searchText"></app-all-orders>
                 </mat-tab>
-                <mat-tab label="Quantités De Production" id="productionQuantities">
+              <mat-tab label="Commandes pour une période" id="ordersBetweenDates">
+                <app-all-orders [filterString]="this.searchText"
+                                [forDate]="false"
+                                [betweenDates]="true"
+                                [dateStart]="this.currentlySelctedDate"
+                                [columns]="allOrderColumns"
+                                [dateEnd]="this.currentlySelctedEndDate"
+                ></app-all-orders>
+              </mat-tab>
+                <mat-tab label="Quantités de production" id="productionQuantities">
                   <app-production-quantities [filterString]="this.searchText"
                                              [forDate]="true"
                                              [dateStart]="this.currentlySelctedDate"></app-production-quantities>
                 </mat-tab>
-              <mat-tab label="Quantités De Production Entre Dates" id="productionQuantitiesBetweenDates">
+              <mat-tab label="Quantités de production pour une période" id="productionQuantitiesBetweenDates">
                 <app-production-quantities [filterString]="this.searchText"
                                            [forDate]="false"
                                            [dateStart]="this.currentlySelctedDate"
                                            [dateEnd]="this.currentlySelctedEndDate"
                 ></app-production-quantities>
-              </mat-tab>
-              <mat-tab label="Ordres Entre Dates" id="ordersBetweenDates">
-                <app-all-orders [filterString]="this.searchText"
-                                           [forDate]="false"
-                                            [betweenDates]="true"
-                                           [dateStart]="this.currentlySelctedDate"
-                                           [columns]="allOrderColumns"
-                                            [dateEnd]="this.currentlySelctedEndDate"
-                ></app-all-orders>
               </mat-tab>
             </mat-tab-group>
         </div>

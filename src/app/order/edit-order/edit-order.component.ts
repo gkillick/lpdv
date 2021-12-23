@@ -41,7 +41,7 @@ export class EditOrderComponent implements OnInit{
         date: [this.order.date.toDate(), Validators.required],
         timeOfDay: [this.order.timeOfDay, Validators.required],
         payed: [this.order.payed, Validators.required],
-        notes: [this.order.notes, Validators.required],
+        notes: [this.order.notes],
         ...obj
       });
     });

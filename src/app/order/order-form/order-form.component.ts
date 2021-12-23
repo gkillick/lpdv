@@ -51,10 +51,10 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     if (data) {
       this.orderId = data.orderId;
       this.edit = true;
-      this.viewClass = 'Ordre de Modification';
+      this.viewClass = 'Modification de la commande';
     } else {
       this.edit = false;
-      this.viewClass = 'Nouvel Ordre';
+      this.viewClass = 'Nouvelle Commande';
     }
   }
 

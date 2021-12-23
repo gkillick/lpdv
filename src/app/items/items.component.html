@@ -5,7 +5,7 @@
     </div>
     <div class="row">
         <div class="col-sm mt-3">
-            <button (click)="openDialog()" class=" btn-grad">Ajouter Aliment</button>
+            <button (click)="openDialog()" class=" btn-grad">Ajouter un produit</button>
             <table mat-table [dataSource]="dataSource" matSort class="table-max  mt-1 table-max">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom </th>
@@ -13,13 +13,13 @@
                 </ng-container>
                 <!-- Item name -->
                 <ng-container matColumnDef="item_type">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> type </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
                     <td mat-cell *matCellDef="let item"> {{item.item_type | capitalize}} </td>
                 </ng-container>
 
                 <!-- Count -->
                 <ng-container matColumnDef="price">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> prix </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
                     <td mat-cell *matCellDef="let item"> ${{item.price |currency:'CAD':'':'':'fr' }} </td>
                 </ng-container>
                 <ng-container matColumnDef="edit">

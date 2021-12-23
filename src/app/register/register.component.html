@@ -46,8 +46,8 @@
                 </div>
                 <span *ngIf="!passwordConf.valid && passwordConf.touched" class="help-block alert alert-danger">Le mot de passe doit comporter au moins 6 caractères</span>
                 <div>
-                    <button class="btn btn-primary" type="submit" [disabled]="authForm.invalid">Submit</button>
-                    <button class="btn btn-primary" type="button" (click)="login()" style="margin-left: 10px;">Login</button>
+                    <button class="btn btn-primary" type="submit" [disabled]="authForm.invalid">Soumettre</button>
+                    <button class="btn btn-primary" type="button" (click)="login()" style="margin-left: 10px;">Se connecter</button>
                 </div>
             </form>
         </div>
